@@ -1,0 +1,636 @@
+{% comment %}
+  Aura Commerce - Multi-Step Routine & Bundle Builder
+  100% Original OS 2.0 Section
+{% endcomment %}
+
+<section
+  class="section-routine-builder color-{{ section.settings.color_scheme }}"
+  id="RoutineBuilder-{{ section.id }}"
+  data-section-id="{{ section.id }}"
+  data-discount-tier-1-min="{{ section.settings.discount_tier_1_min }}"
+  data-discount-tier-1-pct="{{ section.settings.discount_tier_1_pct }}"
+  data-discount-tier-2-min="{{ section.settings.discount_tier_2_min }}"
+  data-discount-tier-2-pct="{{ section.settings.discount_tier_2_pct }}"
+  data-discount-tier-3-min="{{ section.settings.discount_tier_3_min }}"
+  data-discount-tier-3-pct="{{ section.settings.discount_tier_3_pct }}"
+>
+  <div class="page-width section-spacing">
+    {% # Header & Progress %}
+    <div class="routine-builder__header text-center">
+      {%- if section.settings.subheading != blank -%}
+        <span class="text-subheading">{{ section.settings.subheading | escape }}</span>
+      {%- endif -%}
+      <h2 class="h2" style="margin-bottom: 0.5rem;">{{ section.settings.title | default: 'Build Your Custom Routine' | escape }}</h2>
+      {%- if section.settings.subtitle != blank -%}
+        <p class="text-muted routine-builder__subtitle">{{ section.settings.subtitle | escape }}</p>
+      {%- endif -%}
+
+      {% # Discount Tier Banner %}
+      <div class="routine-discount-banner" id="DiscountBanner-{{ section.id }}">
+        <span class="routine-discount-icon">✨</span>
+        <span class="routine-discount-msg" id="DiscountMsg-{{ section.id }}">
+          Select {{ section.settings.discount_tier_1_min }} or more products to unlock {{ section.settings.discount_tier_1_pct }}% OFF
+        </span>
+      </div>
+
+      {% # Step Nav Tabs %}
+      <div class="routine-steps-nav" role="tablist">
+        {%- for block in section.blocks -%}
+          <button
+            type="button"
+            class="routine-step-btn {% if forloop.first %}is-active{% endif %}"
+            data-step-index="{{ forloop.index0 }}"
+            id="StepBtn-{{ section.id }}-{{ forloop.index0 }}"
+            role="tab"
+            aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+            {{ block.shopify_attributes }}
+          >
+            <span class="routine-step-num">{{ forloop.index }}</span>
+            <span class="routine-step-name">{{ block.settings.step_name | default: block.settings.collection.title | default: 'Step' }}</span>
+            <span class="routine-step-check is-hidden" id="StepCheck-{{ section.id }}-{{ forloop.index0 }}">✓</span>
+          </button>
+        {%- endfor -%}
+      </div>
+    </div>
+
+    {% # Step Panels %}
+    <div class="routine-panels-wrap">
+      {%- for block in section.blocks -%}
+        {%- assign collection = block.settings.collection -%}
+        <div
+          class="routine-panel {% if forloop.first %}is-active{% endif %}"
+          id="RoutinePanel-{{ section.id }}-{{ forloop.index0 }}"
+          data-step="{{ forloop.index0 }}"
+          data-step-name="{{ block.settings.step_name | default: collection.title | escape }}"
+        >
+          <div class="routine-panel__desc text-center" style="margin-bottom: 2rem;">
+            <h3 class="h4" style="margin-bottom: 0.25rem;">Step {{ forloop.index }}: {{ block.settings.step_name | default: collection.title }}</h3>
+            {%- if block.settings.step_desc != blank -%}
+              <p class="text-muted" style="max-width: 600px; margin: 0 auto;">{{ block.settings.step_desc | escape }}</p>
+            {%- endif -%}
+          </div>
+
+          <div class="grid grid--{{ section.settings.columns_desktop }}-col grid--gap-md">
+            {%- if collection != blank and collection.products_count > 0 -%}
+              {%- for product in collection.products limit: 8 -%}
+                <div class="grid__item">
+                  <div
+                    class="routine-product-card color-scheme-2"
+                    data-product-id="{{ product.id }}"
+                    data-variant-id="{{ product.first_available_variant.id }}"
+                    data-title="{{ product.title | escape }}"
+                    data-price="{{ product.price }}"
+                    data-step-index="{{ forloop.parentloop.index0 }}"
+                  >
+                    <div class="routine-product-card__media">
+                      {%- if product.featured_image -%}
+                        <img
+                          src="{{ product.featured_image | image_url: width: 500 }}"
+                          alt="{{ product.title | escape }}"
+                          width="250"
+                          height="300"
+                          loading="lazy"
+                        >
+                      {%- endif -%}
+                    </div>
+
+                    <div class="routine-product-card__info">
+                      <h4 class="routine-product-card__title">{{ product.title | escape }}</h4>
+                      <div class="routine-product-card__price">{{ product.price | money }}</div>
+
+                      <button
+                        type="button"
+                        class="button button--secondary button--sm button--full-width routine-select-btn"
+                      >
+                        Select
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              {%- endfor -%}
+            {%- else -%}
+              {%- for i in (1..4) -%}
+                <div class="grid__item">
+                  <div class="routine-product-card color-scheme-2" data-step-index="{{ forloop.parentloop.index0 }}" data-price="3200">
+                    <div class="routine-product-card__media">
+                      {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                    </div>
+                    <div class="routine-product-card__info">
+                      <h4 class="routine-product-card__title">Routine Product {{ i }}</h4>
+                      <div class="routine-product-card__price">$32.00</div>
+                      <button type="button" class="button button--secondary button--sm button--full-width routine-select-btn">Select</button>
+                    </div>
+                  </div>
+                </div>
+              {%- endfor -%}
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+
+    {% # Sticky Routine Summary Sticky Bar %}
+    <div class="routine-sticky-summary color-scheme-4" id="RoutineSummary-{{ section.id }}">
+      <div class="page-width routine-summary__inner">
+        <div class="routine-summary__items-preview" id="RoutineItemsPreview-{{ section.id }}">
+          <span class="text-muted">No products selected yet. Pick items to start your routine!</span>
+        </div>
+
+        <div class="routine-summary__pricing">
+          <div class="routine-summary__count" id="RoutineSelectedCount-{{ section.id }}">0 items selected</div>
+          <div class="routine-summary__prices">
+            <span class="routine-summary__price-compare is-hidden" id="RoutineComparePrice-{{ section.id }}">$0.00</span>
+            <span class="routine-summary__price-total" id="RoutineTotalPrice-{{ section.id }}">$0.00</span>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="button button--primary button--lg routine-summary__cta"
+          id="RoutineSubmitBtn-{{ section.id }}"
+          disabled
+        >
+          Add Routine to Cart
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .routine-builder__subtitle {
+    font-size: 1.05rem;
+    margin-bottom: 1.5rem;
+  }
+  .routine-discount-banner {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.5rem;
+    border-radius: var(--radius-badge);
+    background-color: var(--color-accent);
+    color: #FFFFFF;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 2.5rem;
+  }
+  .routine-steps-nav {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+  }
+  .routine-step-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.25rem;
+    border-radius: var(--radius-button);
+    border: 1px solid var(--color-border);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all var(--duration-fast);
+    white-space: nowrap;
+  }
+  .routine-step-btn.is-active,
+  .routine-step-btn:hover {
+    background-color: var(--color-text);
+    color: var(--color-bg);
+    border-color: var(--color-text);
+  }
+  .routine-step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.1);
+    font-size: 0.75rem;
+  }
+  .routine-step-btn.is-active .routine-step-num {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+  }
+  .routine-step-check {
+    color: #10B981;
+    font-weight: 800;
+  }
+  .routine-step-check.is-hidden {
+    display: none;
+  }
+  .routine-panel {
+    display: none;
+    animation: fadeIn var(--duration-normal) ease-in-out;
+  }
+  .routine-panel.is-active {
+    display: block;
+  }
+  .routine-product-card {
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    border: 2px solid transparent;
+    transition: all var(--duration-fast);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .routine-product-card.is-selected {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(46, 91, 255, 0.2);
+  }
+  .routine-product-card__media {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    border-radius: var(--radius-input);
+    margin-bottom: 0.75rem;
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+  .routine-product-card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .routine-product-card__title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+  .routine-product-card__price {
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+  .routine-product-card.is-selected .routine-select-btn {
+    background-color: #10B981;
+    color: #FFFFFF;
+    border-color: #10B981;
+  }
+
+  /* Summary Sticky Bar */
+  .routine-sticky-summary {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 90;
+    box-shadow: var(--shadow-xl);
+    border-top: 1px solid var(--color-border);
+    padding: 1rem 0;
+    margin-top: 4rem;
+  }
+  .routine-summary__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+  }
+  .routine-summary__items-preview {
+    font-size: 0.9rem;
+    flex-grow: 1;
+  }
+  .routine-summary__pricing {
+    text-align: right;
+  }
+  .routine-summary__count {
+    font-size: 0.8rem;
+    opacity: 0.8;
+  }
+  .routine-summary__price-total {
+    font-size: 1.35rem;
+    font-weight: 800;
+  }
+  .routine-summary__price-compare {
+    text-decoration: line-through;
+    opacity: 0.5;
+    margin-right: 0.35rem;
+    font-size: 0.95rem;
+  }
+  .routine-summary__price-compare.is-hidden {
+    display: none;
+  }
+</style>
+
+<script>
+  (function() {
+    const wrap = document.getElementById('RoutineBuilder-{{ section.id }}');
+    if (!wrap) return;
+
+    const stepBtns = wrap.querySelectorAll('.routine-step-btn');
+    const panels = wrap.querySelectorAll('.routine-panel');
+    const cards = wrap.querySelectorAll('.routine-product-card');
+    const countEl = document.getElementById('RoutineSelectedCount-{{ section.id }}');
+    const totalEl = document.getElementById('RoutineTotalPrice-{{ section.id }}');
+    const compareEl = document.getElementById('RoutineComparePrice-{{ section.id }}');
+    const submitBtn = document.getElementById('RoutineSubmitBtn-{{ section.id }}');
+    const previewEl = document.getElementById('RoutineItemsPreview-{{ section.id }}');
+    const discountMsg = document.getElementById('DiscountMsg-{{ section.id }}');
+
+    const t1Min = parseInt(wrap.dataset.discountTier1Min, 10) || 3;
+    const t1Pct = parseInt(wrap.dataset.discountTier1Pct, 10) || 10;
+    const t2Min = parseInt(wrap.dataset.discountTier2Min, 10) || 4;
+    const t2Pct = parseInt(wrap.dataset.discountTier2Pct, 10) || 15;
+    const t3Min = parseInt(wrap.dataset.discountTier3Min, 10) || 5;
+    const t3Pct = parseInt(wrap.dataset.discountTier3Pct, 10) || 20;
+
+    // Selected products map: stepIndex -> itemData
+    const selectedRoutine = {};
+
+    function switchStep(index) {
+      stepBtns.forEach(b => {
+        b.classList.remove('is-active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      panels.forEach(p => p.classList.remove('is-active'));
+
+      const activeBtn = wrap.querySelector(`#StepBtn-{{ section.id }}-${index}`);
+      const activePanel = wrap.querySelector(`#RoutinePanel-{{ section.id }}-${index}`);
+
+      if (activeBtn) {
+        activeBtn.classList.add('is-active');
+        activeBtn.setAttribute('aria-selected', 'true');
+      }
+      if (activePanel) activePanel.classList.add('is-active');
+    }
+
+    stepBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        switchStep(btn.dataset.stepIndex);
+      });
+    });
+
+    cards.forEach(card => {
+      const selectBtn = card.querySelector('.routine-select-btn');
+      selectBtn.addEventListener('click', () => {
+        const stepIndex = card.dataset.stepIndex;
+        const panel = card.closest('.routine-panel');
+        const stepName = panel ? panel.dataset.stepName : `Step ${parseInt(stepIndex, 10) + 1}`;
+
+        // Deselect other cards in this step
+        panel.querySelectorAll('.routine-product-card').forEach(c => {
+          c.classList.remove('is-selected');
+          c.querySelector('.routine-select-btn').textContent = 'Select';
+        });
+
+        // Select current card
+        card.classList.add('is-selected');
+        selectBtn.textContent = 'Selected ✓';
+
+        selectedRoutine[stepIndex] = {
+          stepName: stepName,
+          title: card.dataset.title || 'Product',
+          variantId: card.dataset.variantId,
+          price: parseInt(card.dataset.price, 10) || 0
+        };
+
+        // Update step checkmark
+        const checkEl = document.getElementById(`StepCheck-{{ section.id }}-${stepIndex}`);
+        if (checkEl) checkEl.classList.remove('is-hidden');
+
+        updateSummary();
+
+        // Auto advance to next step if not last
+        const nextStep = parseInt(stepIndex, 10) + 1;
+        if (nextStep < stepBtns.length) {
+          setTimeout(() => switchStep(nextStep), 350);
+        }
+      });
+    });
+
+    function updateSummary() {
+      const items = Object.values(selectedRoutine);
+      const count = items.length;
+
+      countEl.textContent = `${count} product${count === 1 ? '' : 's'} selected`;
+
+      if (count === 0) {
+        previewEl.innerHTML = '<span class="text-muted">No products selected yet. Pick items to start your routine!</span>';
+        totalEl.textContent = '$0.00';
+        compareEl.classList.add('is-hidden');
+        submitBtn.disabled = true;
+        return;
+      }
+
+      submitBtn.disabled = false;
+      const previewText = items.map(it => `<strong>${it.stepName}:</strong> ${it.title}`).join(' &bull; ');
+      previewEl.innerHTML = previewText;
+
+      let subtotal = items.reduce((sum, it) => sum + it.price, 0);
+      let currentDiscount = 0;
+
+      if (count >= t3Min) {
+        currentDiscount = t3Pct;
+        discountMsg.innerHTML = `🎉 <strong>${t3Pct}% Volume Discount Applied!</strong>`;
+      } else if (count >= t2Min) {
+        currentDiscount = t2Pct;
+        discountMsg.innerHTML = `🎉 <strong>${t2Pct}% Tier Discount Applied!</strong> Add ${t3Min - count} more for ${t3Pct}% OFF`;
+      } else if (count >= t1Min) {
+        currentDiscount = t1Pct;
+        discountMsg.innerHTML = `🎉 <strong>${t1Pct}% Tier Discount Applied!</strong> Add ${t2Min - count} more for ${t2Pct}% OFF`;
+      } else {
+        discountMsg.innerHTML = `Select ${t1Min - count} more product${t1Min - count === 1 ? '' : 's'} to unlock ${t1Pct}% OFF`;
+      }
+
+      if (currentDiscount > 0) {
+        const discounted = subtotal * (1 - (currentDiscount / 100));
+        totalEl.textContent = `$${(discounted / 100).toFixed(2)}`;
+        compareEl.textContent = `$${(subtotal / 100).toFixed(2)}`;
+        compareEl.classList.remove('is-hidden');
+      } else {
+        totalEl.textContent = `$${(subtotal / 100).toFixed(2)}`;
+        compareEl.classList.add('is-hidden');
+      }
+    }
+
+    if (submitBtn) {
+      submitBtn.addEventListener('click', async () => {
+        const items = Object.values(selectedRoutine);
+        if (items.length === 0) return;
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Adding Routine to Cart...';
+
+        const payloadItems = items.map((it, idx) => ({
+          id: parseInt(it.variantId, 10),
+          quantity: 1,
+          properties: {
+            '_routine_bundle': 'Custom Routine',
+            'Routine Step': `${idx + 1}. ${it.stepName}`
+          }
+        }));
+
+        try {
+          if (window.cartDrawer) {
+            await window.cartDrawer.addItem({ items: payloadItems });
+          } else {
+            await fetch('/cart/add.js', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ items: payloadItems })
+            });
+            window.location.href = '/cart';
+          }
+        } catch (err) {
+          console.error(err);
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Add Routine to Cart';
+        }
+      });
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Routine builder",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "scheme-1", "label": "Scheme 1" },
+        { "value": "scheme-2", "label": "Scheme 2" },
+        { "value": "scheme-3", "label": "Scheme 3" },
+        { "value": "scheme-4", "label": "Scheme 4" }
+      ],
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Customized Regimen"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Build Your Personalized Routine"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Select products across your regimen steps to unlock exclusive tiered discounts."
+    },
+    {
+      "type": "select",
+      "id": "columns_desktop",
+      "label": "Columns on desktop",
+      "options": [
+        { "value": "3", "label": "3 columns" },
+        { "value": "4", "label": "4 columns" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "header",
+      "content": "Tiered discounts"
+    },
+    {
+      "type": "range",
+      "id": "discount_tier_1_min",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "label": "Tier 1: Minimum items",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "discount_tier_1_pct",
+      "min": 5,
+      "max": 30,
+      "step": 5,
+      "unit": "%",
+      "label": "Tier 1: Discount percentage",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "discount_tier_2_min",
+      "min": 3,
+      "max": 6,
+      "step": 1,
+      "label": "Tier 2: Minimum items",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "discount_tier_2_pct",
+      "min": 10,
+      "max": 35,
+      "step": 5,
+      "unit": "%",
+      "label": "Tier 2: Discount percentage",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "discount_tier_3_min",
+      "min": 4,
+      "max": 8,
+      "step": 1,
+      "label": "Tier 3: Minimum items",
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "discount_tier_3_pct",
+      "min": 15,
+      "max": 40,
+      "step": 5,
+      "unit": "%",
+      "label": "Tier 3: Discount percentage",
+      "default": 20
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Routine step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "step_name",
+          "label": "Step name",
+          "default": "Cleanse"
+        },
+        {
+          "type": "text",
+          "id": "step_desc",
+          "label": "Step description",
+          "default": "Purify and prepare hair with gentle botanical cleansers."
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Routine builder",
+      "blocks": [
+        { "type": "step", "settings": { "step_name": "Cleanse", "step_desc": "Purify with gentle botanical cleansers." } },
+        { "type": "step", "settings": { "step_name": "Condition", "step_desc": "Restore moisture and detangle." } },
+        { "type": "step", "settings": { "step_name": "Treat", "step_desc": "Target specific concerns with active serums." } },
+        { "type": "step", "settings": { "step_name": "Protect", "step_desc": "Shield against thermal heat and UV rays." } },
+        { "type": "step", "settings": { "step_name": "Style", "step_desc": "Lock in your look with luminous shine." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

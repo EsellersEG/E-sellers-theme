@@ -1,0 +1,227 @@
+<section
+  class="section-tabs color-{{ section.settings.color_scheme }}"
+  id="Tabs-{{ section.id }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="page-width section-spacing">
+    {%- if section.settings.title != blank or section.settings.subheading != blank -%}
+      <div class="section-header text-center" style="margin-bottom: 2.5rem;">
+        {%- if section.settings.subheading != blank -%}
+          <span class="text-subheading">{{ section.settings.subheading | escape }}</span>
+        {%- endif -%}
+        <h2 class="h2" style="margin-bottom: 0.5rem;">{{ section.settings.title | escape }}</h2>
+      </div>
+    {%- endif -%}
+
+    <div class="tabs-container">
+      {% # Tab Navigation Buttons %}
+      <div class="tabs-nav" role="tablist">
+        {%- for block in section.blocks -%}
+          <button
+            type="button"
+            class="tab-nav-btn {% if forloop.first %}is-active{% endif %}"
+            role="tab"
+            aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+            aria-controls="TabPanel-{{ section.id }}-{{ forloop.index0 }}"
+            id="TabBtn-{{ section.id }}-{{ forloop.index0 }}"
+            data-index="{{ forloop.index0 }}"
+            {{ block.shopify_attributes }}
+          >
+            {{ block.settings.title | escape }}
+          </button>
+        {%- endfor -%}
+      </div>
+
+      {% # Tab Panels Content %}
+      <div class="tabs-content">
+        {%- for block in section.blocks -%}
+          <div
+            class="tab-panel color-scheme-2 {% if forloop.first %}is-active{% endif %}"
+            id="TabPanel-{{ section.id }}-{{ forloop.index0 }}"
+            role="tabpanel"
+            aria-labelledby="TabBtn-{{ section.id }}-{{ forloop.index0 }}"
+            tabindex="0"
+          >
+            <div class="tab-panel__inner">
+              <div class="tab-panel__text rte">
+                {{ block.settings.content }}
+                {{ block.settings.page.content }}
+              </div>
+              {%- if block.settings.image != blank -%}
+                <div class="tab-panel__media">
+                  <img
+                    src="{{ block.settings.image | image_url: width: 800 }}"
+                    alt="{{ block.settings.image.alt | default: block.settings.title | escape }}"
+                    width="400"
+                    height="300"
+                    loading="lazy"
+                    class="tab-panel__image"
+                  >
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .tabs-container {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .tabs-nav {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    overflow-x: auto;
+    margin-bottom: 2rem;
+    padding-bottom: 0.5rem;
+  }
+  .tab-nav-btn {
+    padding: 0.75rem 1.5rem;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: var(--radius-button);
+    border: 1px solid var(--color-border);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    cursor: pointer;
+    transition: all var(--duration-fast);
+    white-space: nowrap;
+  }
+  .tab-nav-btn:hover,
+  .tab-nav-btn.is-active {
+    background-color: var(--color-text);
+    color: var(--color-bg);
+    border-color: var(--color-text);
+  }
+  .tab-panel {
+    display: none;
+    padding: 2.5rem;
+    border-radius: var(--radius-card);
+    border: 1px solid var(--color-border);
+    animation: fadeIn var(--duration-normal) ease-in-out;
+  }
+  .tab-panel.is-active {
+    display: block;
+  }
+  .tab-panel__inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    align-items: center;
+  }
+  @media (min-width: 768px) {
+    .tab-panel:has(.tab-panel__media) .tab-panel__inner {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .tab-panel__image {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-input);
+    object-fit: cover;
+  }
+</style>
+
+<script>
+  (function() {
+    const wrap = document.getElementById('Tabs-{{ section.id }}');
+    if (!wrap) return;
+
+    const btns = wrap.querySelectorAll('.tab-nav-btn');
+    const panels = wrap.querySelectorAll('.tab-panel');
+
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const index = btn.dataset.index;
+        btns.forEach(b => {
+          b.classList.remove('is-active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        panels.forEach(p => p.classList.remove('is-active'));
+
+        btn.classList.add('is-active');
+        btn.setAttribute('aria-selected', 'true');
+        const targetPanel = wrap.querySelector(`#TabPanel-{{ section.id }}-${index}`);
+        if (targetPanel) targetPanel.classList.add('is-active');
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Tabs content",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "scheme-1", "label": "Scheme 1" },
+        { "value": "scheme-2", "label": "Scheme 2" },
+        { "value": "scheme-3", "label": "Scheme 3" },
+        { "value": "scheme-4", "label": "Scheme 4" }
+      ],
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Learn More"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Detailed Specifications"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Tab title",
+          "default": "Benefits"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Tab content",
+          "default": "<p>Discover the high-potency advantages of our carefully curated ingredients and formulas.</p>"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Tab image"
+        },
+        {
+          "type": "page",
+          "id": "page",
+          "label": "Content from page"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Tabs content",
+      "blocks": [
+        { "type": "tab", "settings": { "title": "How to Use" } },
+        { "type": "tab", "settings": { "title": "Key Ingredients" } },
+        { "type": "tab", "settings": { "title": "Clinical Results" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

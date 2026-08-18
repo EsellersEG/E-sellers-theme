@@ -1,0 +1,118 @@
+<article class="section-main-article color-{{ section.settings.color_scheme }}" id="MainArticle-{{ section.id }}" data-section-id="{{ section.id }}">
+  <div class="page-width page-width--narrow section-spacing">
+    <header class="article-header text-center" style="margin-bottom: 2.5rem;">
+      <h1 class="article-title">{{ article.title | escape }}</h1>
+      <div class="article-meta text-muted" style="margin-top: 0.5rem;">
+        <span>{{ article.published_at | date: '%B %d, %Y' }}</span>
+        {%- if article.author != blank -%}
+          <span>&bull;</span>
+          <span>{{ article.author }}</span>
+        {%- endif -%}
+      </div>
+    </header>
+
+    {%- if article.image -%}
+      <div class="article-featured-image" style="margin-bottom: 2.5rem; border-radius: var(--radius-card); overflow: hidden;">
+        <img
+          src="{{ article.image | image_url: width: 1200 }}"
+          alt="{{ article.image.alt | default: article.title | escape }}"
+          width="{{ article.image.width }}"
+          height="{{ article.image.height }}"
+          loading="eager"
+          style="width: 100%; height: auto; display: block;"
+        >
+      </div>
+    {%- endif -%}
+
+    <div class="article-content rte">
+      {{ article.content }}
+    </div>
+
+    {% # Comments Section (if enabled) %}
+    {%- if blog.comments_enabled? -%}
+      <section class="article-comments" id="comments" style="margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--color-border);">
+        {%- if article.comments_count > 0 -%}
+          <h2 class="h3" style="margin-bottom: 1.5rem;">{{ 'blog.comments_count' | t: count: article.comments_count }}</h2>
+          {%- paginate article.comments by 5 -%}
+            <div class="comments-list">
+              {%- for comment in article.comments -%}
+                <div class="comment-item" style="padding: 1.25rem 0; border-bottom: 1px solid var(--color-border);">
+                  <div class="comment-author" style="font-weight: 700;">{{ comment.author }}</div>
+                  <div class="comment-date text-muted" style="font-size: 0.82rem; margin-bottom: 0.5rem;">{{ comment.created_at | date: '%B %d, %Y' }}</div>
+                  <div class="comment-content rte">{{ comment.content }}</div>
+                </div>
+              {%- endfor -%}
+            </div>
+            {%- if paginate.pages > 1 -%}
+              <div class="collection-pagination" style="margin-top: 2rem;">
+                {{ paginate | default_pagination }}
+              </div>
+            {%- endif -%}
+          {%- endpaginate -%}
+        {%- endif -%}
+
+        {% # Comment form %}
+        <div class="comment-form-wrap" style="margin-top: 3rem;">
+          <h3 class="h4" style="margin-bottom: 1rem;">{{ 'blog.comment_form_title' | t }}</h3>
+
+          {%- form 'new_comment', article, id: 'comment_form' -%}
+            {%- if form.posted_successfully? -%}
+              <p class="form-success" style="color: #10B981; margin-bottom: 1rem;">
+                {%- if blog.moderated? -%}
+                  Your comment was submitted successfully and will be published after review.
+                {%- else -%}
+                  Your comment was posted successfully!
+                {%- endif -%}
+              </p>
+            {%- endif -%}
+
+            {%- if form.errors -%}
+              <p class="form-error" style="color: #EF4444; margin-bottom: 1rem;">
+                Please adjust your inputs to submit your comment.
+              </p>
+            {%- endif -%}
+
+            <div class="field">
+              <label for="CommentFormAuthor" class="field__label">{{ 'blog.comment_form_name' | t }} *</label>
+              <input type="text" name="comment[author]" id="CommentFormAuthor" class="field__input" value="{{ form.author }}" required>
+            </div>
+
+            <div class="field">
+              <label for="CommentFormEmail" class="field__label">{{ 'blog.comment_form_email' | t }} *</label>
+              <input type="email" name="comment[email]" id="CommentFormEmail" class="field__input" value="{{ form.email }}" required>
+            </div>
+
+            <div class="field">
+              <label for="CommentFormBody" class="field__label">{{ 'blog.comment_form_body' | t }} *</label>
+              <textarea rows="5" name="comment[body]" id="CommentFormBody" class="field__textarea" required>{{ form.body }}</textarea>
+            </div>
+
+            <button type="submit" class="button button--primary">
+              {{ 'blog.comment_form_submit' | t }}
+            </button>
+          {%- endform -%}
+        </div>
+      </section>
+    {%- endif -%}
+  </div>
+</article>
+
+{% schema %}
+{
+  "name": "Article content",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "scheme-1", "label": "Scheme 1" },
+        { "value": "scheme-2", "label": "Scheme 2" },
+        { "value": "scheme-3", "label": "Scheme 3" },
+        { "value": "scheme-4", "label": "Scheme 4" }
+      ],
+      "default": "scheme-1"
+    }
+  ]
+}
+{% endschema %}

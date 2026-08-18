@@ -1,17 +1,70 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "main": {
-      "type": "product",
-      "settings": {}
+      "type": "main-product",
+      "blocks": {
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "Premium Formulation",
+            "text_style": "text-subheading"
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "installments": {
+          "type": "installments",
+          "settings": {}
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "swatch"
+          }
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true
+          }
+        },
+        "pickup_availability": {
+          "type": "pickup_availability",
+          "settings": {}
+        },
+        "description": {
+          "type": "description",
+          "settings": {}
+        },
+        "collapsible_tab": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Shipping & returns",
+            "content": "<p>Free standard shipping on all orders over $100. Returns accepted within 30 days of delivery.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "text",
+        "title",
+        "price",
+        "installments",
+        "variant_picker",
+        "buy_buttons",
+        "pickup_availability",
+        "description",
+        "collapsible_tab"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "enable_video_looping": false
+      }
     }
   },
   "order": [

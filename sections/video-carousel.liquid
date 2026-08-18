@@ -1,0 +1,297 @@
+<section
+  class="section-video-carousel color-{{ section.settings.color_scheme }}"
+  id="VideoCarousel-{{ section.id }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="page-width section-spacing">
+    <div class="section-header text-center" style="margin-bottom: 3rem;">
+      {%- if section.settings.subheading != blank -%}
+        <span class="text-subheading">{{ section.settings.subheading | escape }}</span>
+      {%- endif -%}
+      <h2 class="h2" style="margin-bottom: 0.5rem;">{{ section.settings.title | default: 'Watch & Shop' | escape }}</h2>
+    </div>
+
+    <div class="video-carousel-track">
+      {%- for block in section.blocks -%}
+        {%- assign product = block.settings.product -%}
+        <div class="video-card" {{ block.shopify_attributes }}>
+          <div class="video-card__media-wrap">
+            {%- if block.settings.video_url != blank -%}
+              <video
+                src="{{ block.settings.video_url }}"
+                playsinline
+                loop
+                muted
+                preload="metadata"
+                class="video-card__video"
+                poster="{{ block.settings.cover_image | image_url: width: 600 }}"
+              ></video>
+            {%- elsif block.settings.cover_image != blank -%}
+              <img
+                src="{{ block.settings.cover_image | image_url: width: 600 }}"
+                alt="{{ block.settings.title | escape }}"
+                width="300"
+                height="533"
+                loading="lazy"
+                class="video-card__cover"
+              >
+            {%- else -%}
+              <div class="video-card__placeholder">
+                {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+              </div>
+            {%- endif -%}
+
+            {%- if block.settings.video_url != blank -%}
+              <button type="button" class="video-card__mute-btn" aria-label="Toggle mute">
+                <svg class="icon-mute" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+                <svg class="icon-unmute is-hidden" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+              </button>
+            {%- endif -%}
+
+            <div class="video-card__overlay">
+              <h3 class="video-card__title">{{ block.settings.title | escape }}</h3>
+
+              {%- if product != blank -%}
+                <div class="video-shoppable-pill color-scheme-1">
+                  {%- if product.featured_image -%}
+                    <img src="{{ product.featured_image | image_url: width: 80 }}" alt="{{ product.title | escape }}" width="36" height="36" loading="lazy" class="video-shoppable-pill__img">
+                  {%- endif -%}
+                  <div class="video-shoppable-pill__info">
+                    <div class="video-shoppable-pill__name">{{ product.title | truncate: 18 }}</div>
+                    <div class="video-shoppable-pill__price">{{ product.price | money }}</div>
+                  </div>
+                  <button
+                    type="button"
+                    class="button button--primary button--sm video-shoppable-pill__btn"
+                    onclick="window.cartDrawer && window.cartDrawer.addItem({ id: {{ product.first_available_variant.id }}, quantity: 1 })"
+                  >
+                    +
+                  </button>
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  .video-carousel-track {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 1.5rem;
+  }
+  .video-card {
+    flex: 0 0 280px;
+    scroll-snap-align: start;
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    position: relative;
+    box-shadow: var(--shadow-lg);
+  }
+  .video-card__media-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 9 / 16;
+    background-color: #111827;
+  }
+  .video-card__video,
+  .video-card__cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .video-card__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .video-card__placeholder svg {
+    width: 100%;
+    height: 100%;
+    opacity: 0.2;
+  }
+  .video-card__mute-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #FFFFFF;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+  }
+  .video-card__overlay {
+    position: absolute;
+    inset: 0;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.8) 100%);
+    pointer-events: none;
+    z-index: 2;
+  }
+  .video-card__title {
+    color: #FFFFFF;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0;
+  }
+  .video-shoppable-pill {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-badge);
+    box-shadow: var(--shadow-xl);
+  }
+  .video-shoppable-pill__img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .video-shoppable-pill__info {
+    flex-grow: 1;
+    overflow: hidden;
+  }
+  .video-shoppable-pill__name {
+    font-size: 0.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .video-shoppable-pill__price {
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  .video-shoppable-pill__btn {
+    padding: 0.25rem 0.6rem;
+    font-size: 1rem;
+    line-height: 1;
+    border-radius: 50%;
+  }
+</style>
+
+<script>
+  (function() {
+    const wrap = document.getElementById('VideoCarousel-{{ section.id }}');
+    if (!wrap) return;
+
+    const videos = wrap.querySelectorAll('.video-card__video');
+
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          const video = entry.target;
+          if (entry.isIntersecting) {
+            video.play().catch(() => {});
+          } else {
+            video.pause();
+          }
+        });
+      }, { threshold: 0.5 });
+
+      videos.forEach(v => observer.observe(v));
+    }
+
+    wrap.querySelectorAll('.video-card__mute-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const card = btn.closest('.video-card');
+        const video = card ? card.querySelector('.video-card__video') : null;
+        if (!video) return;
+
+        video.muted = !video.muted;
+        btn.querySelector('.icon-mute').classList.toggle('is-hidden', !video.muted);
+        btn.querySelector('.icon-unmute').classList.toggle('is-hidden', video.muted);
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Short-form video carousel",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "scheme-1", "label": "Scheme 1" },
+        { "value": "scheme-2", "label": "Scheme 2" },
+        { "value": "scheme-3", "label": "Scheme 3" },
+        { "value": "scheme-4", "label": "Scheme 4" }
+      ],
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Social Proof in Action"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Watch, Learn & Shop"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "video_item",
+      "name": "Video item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Video title",
+          "default": "Daily Glow Transformation"
+        },
+        {
+          "type": "url",
+          "id": "video_url",
+          "label": "MP4 video URL"
+        },
+        {
+          "type": "image_picker",
+          "id": "cover_image",
+          "label": "Cover poster image"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Tagged shoppable product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Short-form video carousel",
+      "blocks": [
+        { "type": "video_item", "settings": { "title": "Hydration Deep Dive" } },
+        { "type": "video_item", "settings": { "title": "5-Minute Scalp Massage" } },
+        { "type": "video_item", "settings": { "title": "Color Revitalizing Routine" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

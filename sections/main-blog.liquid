@@ -1,0 +1,120 @@
+{%- paginate blog.articles by 9 -%}
+  <section class="section-main-blog color-{{ section.settings.color_scheme }}" id="MainBlog-{{ section.id }}" data-section-id="{{ section.id }}">
+    <div class="page-width section-spacing">
+      <div class="blog-header text-center" style="margin-bottom: 3rem;">
+        <h1 class="blog-title">{{ blog.title | escape }}</h1>
+      </div>
+
+      <div class="grid grid--3-col grid--gap-lg">
+        {%- for article in blog.articles -%}
+          <article class="article-card">
+            {%- if article.image -%}
+              <a href="{{ article.url }}" class="article-card__media-link">
+                <img
+                  src="{{ article.image | image_url: width: 700 }}"
+                  alt="{{ article.image.alt | default: article.title | escape }}"
+                  width="350"
+                  height="220"
+                  loading="lazy"
+                  class="article-card__image"
+                >
+              </a>
+            {%- endif -%}
+
+            <div class="article-card__info">
+              <div class="article-card__meta text-muted">
+                <span>{{ article.published_at | date: '%B %d, %Y' }}</span>
+                {%- if article.author != blank -%}
+                  <span>&bull;</span>
+                  <span>{{ article.author }}</span>
+                {%- endif -%}
+              </div>
+
+              <h2 class="article-card__title">
+                <a href="{{ article.url }}">{{ article.title | escape }}</a>
+              </h2>
+
+              <p class="article-card__excerpt">
+                {{ article.excerpt_or_content | strip_html | truncate: 120 }}
+              </p>
+
+              <a href="{{ article.url }}" class="article-card__read-more">
+                {{ 'blog.read_more' | t }} &rarr;
+              </a>
+            </div>
+          </article>
+        {%- endfor -%}
+      </div>
+
+      {%- if paginate.pages > 1 -%}
+        <div class="collection-pagination" style="margin-top: 3rem;">
+          {{ paginate | default_pagination }}
+        </div>
+      {%- endif -%}
+    </div>
+  </section>
+{%- endpaginate -%}
+
+<style>
+  .article-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .article-card__media-link {
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    margin-bottom: 1rem;
+    display: block;
+  }
+  .article-card__image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-standard);
+  }
+  .article-card__media-link:hover .article-card__image {
+    transform: scale(1.03);
+  }
+  .article-card__meta {
+    font-size: 0.82rem;
+    display: flex;
+    gap: 0.35rem;
+    margin-bottom: 0.5rem;
+  }
+  .article-card__title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .article-card__excerpt {
+    font-size: 0.95rem;
+    opacity: 0.85;
+    margin-bottom: 1rem;
+  }
+  .article-card__read-more {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--color-accent);
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Blog posts",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "scheme-1", "label": "Scheme 1" },
+        { "value": "scheme-2", "label": "Scheme 2" },
+        { "value": "scheme-3", "label": "Scheme 3" },
+        { "value": "scheme-4", "label": "Scheme 4" }
+      ],
+      "default": "scheme-1"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,293 @@
+<section
+  class="section-ingredient-showcase color-{{ section.settings.color_scheme }}"
+  id="IngredientShowcase-{{ section.id }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="page-width section-spacing">
+    <div class="ingredient-showcase__grid">
+      {% # Left: Interactive Ingredient Trigger List %}
+      <div class="ingredient-showcase__triggers-col">
+        {%- if section.settings.subheading != blank -%}
+          <span class="text-subheading">{{ section.settings.subheading | escape }}</span>
+        {%- endif -%}
+        <h2 class="h2" style="margin-bottom: 2rem;">{{ section.settings.title | default: 'Pure, High-Potency Ingredients' | escape }}</h2>
+
+        <div class="ingredient-triggers-list">
+          {%- for block in section.blocks -%}
+            <div
+              class="ingredient-trigger {% if forloop.first %}is-active{% endif %}"
+              data-index="{{ forloop.index0 }}"
+              {{ block.shopify_attributes }}
+            >
+              <div class="ingredient-trigger__header">
+                <span class="ingredient-trigger__num">0{{ forloop.index }}</span>
+                <h3 class="ingredient-trigger__name">{{ block.settings.title | escape }}</h3>
+              </div>
+              <div class="ingredient-trigger__desc rte">
+                {{ block.settings.description }}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+
+      {% # Right: Image Visual Showcase with Blur & Scale Transitions %}
+      <div class="ingredient-showcase__visual-col">
+        <div class="ingredient-visual-wrap">
+          {%- for block in section.blocks -%}
+            <div
+              class="ingredient-visual-card {% if forloop.first %}is-active{% endif %}"
+              id="IngredientVisual-{{ section.id }}-{{ forloop.index0 }}"
+              data-index="{{ forloop.index0 }}"
+            >
+              {%- if block.settings.image != blank -%}
+                <img
+                  src="{{ block.settings.image | image_url: width: 1200 }}"
+                  alt="{{ block.settings.image.alt | default: block.settings.title | escape }}"
+                  width="600"
+                  height="700"
+                  loading="lazy"
+                  class="ingredient-visual__img"
+                >
+              {%- else -%}
+                <div class="ingredient-visual__placeholder color-scheme-2">
+                  <div class="placeholder-tag">{{ block.settings.title }}</div>
+                  {%- capture placeholder_index -%}{% cycle '1', '2', '3', '4' %}{%- endcapture -%}
+                  {{ 'collection-' | append: placeholder_index | placeholder_svg_tag: 'placeholder-svg' }}
+                </div>
+              {%- endif -%}
+
+              <div class="ingredient-visual__caption color-scheme-1">
+                <strong>{{ block.settings.title | escape }}</strong>
+                {%- if block.settings.source_origin != blank -%}
+                  <span class="text-muted" style="font-size: 0.8rem; display: block;">Origin: {{ block.settings.source_origin | escape }}</span>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ingredient-showcase__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+  @media (min-width: 990px) {
+    .ingredient-showcase__grid {
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 5rem;
+    }
+  }
+  .ingredient-triggers-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .ingredient-trigger {
+    padding: 1.5rem;
+    border-radius: var(--radius-card);
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+    transition: all var(--duration-normal) var(--ease-standard);
+  }
+  .ingredient-trigger__header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .ingredient-trigger__num {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-accent);
+  }
+  .ingredient-trigger__name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0;
+    transition: color var(--duration-fast);
+  }
+  .ingredient-trigger__desc {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-top: 0;
+    transition: all var(--duration-normal) var(--ease-standard);
+  }
+  .ingredient-trigger.is-active {
+    border-color: var(--color-accent);
+    background-color: var(--color-bg);
+    box-shadow: var(--shadow-md);
+  }
+  .ingredient-trigger.is-active .ingredient-trigger__name {
+    color: var(--color-accent);
+  }
+  .ingredient-trigger.is-active .ingredient-trigger__desc {
+    max-height: 200px;
+    opacity: 0.85;
+    margin-top: 0.75rem;
+  }
+
+  /* Right Visual Column */
+  .ingredient-visual-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    box-shadow: var(--shadow-xl);
+  }
+  .ingredient-visual-card {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    filter: blur(10px);
+    transform: scale(0.96);
+    transition: opacity var(--duration-slow) var(--ease-standard), filter var(--duration-slow) var(--ease-standard), transform var(--duration-slow) var(--ease-standard);
+    pointer-events: none;
+  }
+  .ingredient-visual-card.is-active {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1);
+    pointer-events: auto;
+  }
+  .ingredient-visual__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .ingredient-visual__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .placeholder-tag {
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  .ingredient-visual__placeholder svg {
+    width: 60%;
+    height: auto;
+    opacity: 0.3;
+  }
+  .ingredient-visual__caption {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    right: 1.5rem;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-input);
+    box-shadow: var(--shadow-md);
+  }
+</style>
+
+<script>
+  (function() {
+    const wrap = document.getElementById('IngredientShowcase-{{ section.id }}');
+    if (!wrap) return;
+
+    const triggers = wrap.querySelectorAll('.ingredient-trigger');
+    const visuals = wrap.querySelectorAll('.ingredient-visual-card');
+
+    function setActive(index) {
+      triggers.forEach(t => t.classList.remove('is-active'));
+      visuals.forEach(v => v.classList.remove('is-active'));
+
+      const activeTrigger = wrap.querySelector(`.ingredient-trigger[data-index="${index}"]`);
+      const activeVisual = wrap.querySelector(`#IngredientVisual-{{ section.id }}-${index}`);
+
+      if (activeTrigger) activeTrigger.classList.add('is-active');
+      if (activeVisual) activeVisual.classList.add('is-active');
+    }
+
+    triggers.forEach(trigger => {
+      trigger.addEventListener('mouseenter', () => setActive(trigger.dataset.index));
+      trigger.addEventListener('click', () => setActive(trigger.dataset.index));
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Ingredient showcase",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "scheme-1", "label": "Scheme 1" },
+        { "value": "scheme-2", "label": "Scheme 2" },
+        { "value": "scheme-3", "label": "Scheme 3" },
+        { "value": "scheme-4", "label": "Scheme 4" }
+      ],
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Active Bio-Botanicals"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Pure, High-Potency Ingredients"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "ingredient",
+      "name": "Ingredient",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Ingredient name",
+          "default": "Organic Milk Proteins"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "default": "<p>Deeply penetrates the cuticle to rebuild core strength and maintain optimal moisture balance.</p>"
+        },
+        {
+          "type": "text",
+          "id": "source_origin",
+          "label": "Origin / source",
+          "default": "Sustainably Harvested"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Ingredient image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ingredient showcase",
+      "blocks": [
+        { "type": "ingredient", "settings": { "title": "Organic Milk Proteins", "source_origin": "Sustainably Sourced" } },
+        { "type": "ingredient", "settings": { "title": "Organic Fruit Extracts", "source_origin": "Strawberry, Blueberry & Papaya" } },
+        { "type": "ingredient", "settings": { "title": "Integrity 41® Complex", "source_origin": "Sunflower Seed Extract" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

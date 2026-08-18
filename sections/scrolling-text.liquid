@@ -1,0 +1,192 @@
+<section
+  class="section-scrolling-text color-{{ section.settings.color_scheme }} full-width"
+  id="ScrollingText-{{ section.id }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="scrolling-text-wrap scrolling-text--{{ section.settings.direction }} {% if section.settings.pause_on_hover %}scrolling-text--pause{% endif %}" style="--speed: {{ section.settings.speed }}s;">
+    <div class="scrolling-text-track">
+      {%- for i in (1..4) -%}
+        <div class="scrolling-text-content" aria-hidden="{% if i > 1 %}true{% else %}false{% endif %}">
+          {%- for block in section.blocks -%}
+            <span class="scrolling-text-item" {{ block.shopify_attributes }}>
+              {%- if block.settings.link != blank -%}
+                <a href="{{ block.settings.link }}" class="scrolling-text-link">{{ block.settings.text | escape }}</a>
+              {%- else -%}
+                <span>{{ block.settings.text | escape }}</span>
+              {%- endif -%}
+              <span class="scrolling-text-separator">&bull;</span>
+            </span>
+          {%- endfor -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-scrolling-text {
+    overflow: hidden;
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .scrolling-text-wrap {
+    display: flex;
+    overflow: hidden;
+    user-select: none;
+  }
+  .scrolling-text-track {
+    display: flex;
+    white-space: nowrap;
+    animation: scrollLeft var(--speed) linear infinite;
+  }
+  .scrolling-text--right .scrolling-text-track {
+    animation-name: scrollRight;
+  }
+  .scrolling-text--pause:hover .scrolling-text-track {
+    animation-play-state: paused;
+  }
+  .scrolling-text-content {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .scrolling-text-item {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-heading-family);
+    font-size: {{ section.settings.font_size }}px;
+    font-weight: 700;
+    {% if section.settings.uppercase %}text-transform: uppercase; letter-spacing: 0.05em;{% endif %}
+    line-height: 1;
+  }
+  .scrolling-text-link {
+    color: inherit;
+    text-decoration: none;
+  }
+  .scrolling-text-separator {
+    margin: 0 1.5rem;
+    opacity: 0.4;
+  }
+  @keyframes scrollLeft {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes scrollRight {
+    from { transform: translateX(-50%); }
+    to { transform: translateX(0); }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Scrolling marquee text",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "scheme-1", "label": "Scheme 1" },
+        { "value": "scheme-2", "label": "Scheme 2" },
+        { "value": "scheme-3", "label": "Scheme 3" },
+        { "value": "scheme-4", "label": "Scheme 4" }
+      ],
+      "default": "scheme-3"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "min": 14,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "label": "Font size",
+      "default": 24
+    },
+    {
+      "type": "checkbox",
+      "id": "uppercase",
+      "label": "Uppercase text",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "direction",
+      "label": "Scroll direction",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "s",
+      "label": "Scroll duration",
+      "default": 25
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_on_hover",
+      "label": "Pause on hover",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 20
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text_item",
+      "name": "Text item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "100% Satisfaction Guaranteed"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scrolling marquee text",
+      "blocks": [
+        { "type": "text_item", "settings": { "text": "Free Worldwide Shipping" } },
+        { "type": "text_item", "settings": { "text": "Clinically Proven Formulations" } },
+        { "type": "text_item", "settings": { "text": "Cruelty-Free & Sustainable" } },
+        { "type": "text_item", "settings": { "text": "Award Winning Care" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,48 @@
+<section class="section-main-404 color-{{ section.settings.color_scheme }}" id="Main404-{{ section.id }}" data-section-id="{{ section.id }}">
+  <div class="page-width section-spacing text-center">
+    <div style="max-width: 600px; margin: 0 auto;">
+      <span class="text-subheading" style="font-size: 1.25rem;">404</span>
+      <h1 class="h1" style="margin-bottom: 1rem;">{{ '404.title' | t }}</h1>
+      <p class="text-muted" style="margin-bottom: 2rem;">{{ '404.subtext' | t }}</p>
+
+      <form action="{{ routes.search_url }}" method="get" role="search" class="search-form-404" style="margin-bottom: 2rem;">
+        <div class="field" style="display: flex; gap: 0.5rem;">
+          <input
+            type="search"
+            name="q"
+            placeholder="{{ 'search.placeholder' | t }}"
+            class="field__input"
+            required
+          >
+          <button type="submit" class="button button--secondary">
+            {{ 'search.submit' | t }}
+          </button>
+        </div>
+      </form>
+
+      <a href="{{ routes.root_url }}" class="button button--primary button--lg">
+        {{ '404.back_to_shopping' | t }}
+      </a>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "404 not found",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "scheme-1", "label": "Scheme 1" },
+        { "value": "scheme-2", "label": "Scheme 2" },
+        { "value": "scheme-3", "label": "Scheme 3" },
+        { "value": "scheme-4", "label": "Scheme 4" }
+      ],
+      "default": "scheme-1"
+    }
+  ]
+}
+{% endschema %}

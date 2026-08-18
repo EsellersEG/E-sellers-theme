@@ -1,0 +1,242 @@
+<section class="section-main-cart color-{{ section.settings.color_scheme }}" id="MainCart-{{ section.id }}" data-section-id="{{ section.id }}">
+  <div class="page-width section-spacing">
+    <h1 class="main-cart__title text-center">{{ 'cart.title' | t }}</h1>
+
+    {%- if cart.item_count == 0 -%}
+      <div class="main-cart__empty text-center">
+        <p>{{ 'cart.empty' | t }}</p>
+        <a href="{{ routes.all_products_collection_url }}" class="button button--primary" style="margin-top: 1.5rem;">
+          {{ 'cart.continue_shopping' | t }}
+        </a>
+      </div>
+    {%- else -%}
+      <form action="{{ routes.cart_url }}" method="post" id="cart" class="main-cart__form">
+        <div class="main-cart__grid">
+          {% # Line items table %}
+          <div class="main-cart__items-col">
+            <table class="main-cart__table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Quantity</th>
+                  <th class="text-right">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {%- for item in cart.items -%}
+                  <tr class="main-cart__row">
+                    <td class="main-cart__product-cell">
+                      <div class="main-cart__product-wrap">
+                        {%- if item.image -%}
+                          <a href="{{ item.url }}" class="main-cart__img-link">
+                            <img src="{{ item.image | image_url: width: 180 }}" alt="{{ item.title | escape }}" width="90" height="90" loading="lazy" class="main-cart__img">
+                          </a>
+                        {%- endif -%}
+                        <div class="main-cart__details">
+                          <a href="{{ item.url }}" class="main-cart__item-title">{{ item.product.title | escape }}</a>
+                          {%- unless item.product.has_only_default_variant -%}
+                            <p class="main-cart__variant-title text-muted">{{ item.variant.title }}</p>
+                          {%- endunless -%}
+
+                          {%- if item.properties.size > 0 -%}
+                            <div class="main-cart__properties text-muted">
+                              {%- for property in item.properties -%}
+                                {%- assign property_first_char = property.first | slice: 0 -%}
+                                {%- if property.last != blank and property_first_char != '_' -%}
+                                  <div>{{ property.first }}: {{ property.last }}</div>
+                                {%- endif -%}
+                              {%- endfor -%}
+                            </div>
+                          {%- endif -%}
+
+                          <div class="main-cart__item-price">
+                            {{ item.price | money }}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td class="main-cart__qty-cell">
+                      <div class="quantity-input">
+                        <a href="/cart/change?line={{ forloop.index }}&quantity={{ item.quantity | minus: 1 }}" class="quantity-input__btn" aria-label="Decrease quantity">-</a>
+                        <input type="text" name="updates[]" value="{{ item.quantity }}" class="quantity-input__field" aria-label="Quantity" readonly>
+                        <a href="/cart/change?line={{ forloop.index }}&quantity={{ item.quantity | plus: 1 }}" class="quantity-input__btn" aria-label="Increase quantity">+</a>
+                      </div>
+                      <div style="margin-top: 0.5rem;">
+                        <a href="/cart/change?line={{ forloop.index }}&quantity=0" class="main-cart__remove-link text-muted">
+                          {{ 'cart.remove' | t }}
+                        </a>
+                      </div>
+                    </td>
+
+                    <td class="main-cart__total-cell text-right">
+                      <span class="main-cart__line-price">{{ item.final_line_price | money }}</span>
+                    </td>
+                  </tr>
+                {%- endfor -%}
+              </tbody>
+            </table>
+
+            {%- if section.settings.show_cart_note -%}
+              <div class="main-cart__note-wrap" style="margin-top: 2rem;">
+                <label for="CartNote" class="field__label">{{ 'cart.note' | t }}</label>
+                <textarea name="note" id="CartNote" class="field__textarea" placeholder="{{ 'cart.note_placeholder' | t }}">{{ cart.note }}</textarea>
+              </div>
+            {%- endif -%}
+          </div>
+
+          {% # Cart Order Summary & Checkout Box %}
+          <div class="main-cart__summary-col">
+            <div class="main-cart__summary-box color-scheme-2">
+              <h2 class="main-cart__summary-title">Order summary</h2>
+
+              <div class="main-cart__summary-row">
+                <span>{{ 'cart.subtotal' | t }}</span>
+                <span class="main-cart__subtotal-val">{{ cart.total_price | money }}</span>
+              </div>
+
+              {%- if cart.taxes_included or shop.shipping_policy.body != blank -%}
+                <p class="main-cart__tax-notice text-muted">
+                  {{ 'cart.taxes_and_shipping_policy_at_checkout_html' | t }}
+                </p>
+              {%- endif -%}
+
+              <button type="submit" name="checkout" class="button button--primary button--full-width button--lg" style="margin-top: 1.5rem;">
+                {{ 'cart.checkout' | t }} &bull; {{ cart.total_price | money }}
+              </button>
+
+              {%- if additional_checkout_buttons -%}
+                <div class="additional-checkout-buttons" style="margin-top: 1rem;">
+                  {{ content_for_additional_checkout_buttons }}
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+      </form>
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+  .main-cart__title {
+    margin-bottom: 2.5rem;
+  }
+  .main-cart__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  @media (min-width: 990px) {
+    .main-cart__grid {
+      grid-template-columns: 1fr 380px;
+      align-items: start;
+    }
+  }
+  .main-cart__table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .main-cart__table th {
+    text-align: left;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.6;
+  }
+  .main-cart__row {
+    border-bottom: 1px solid var(--color-border);
+  }
+  .main-cart__product-cell {
+    padding: 1.5rem 0;
+  }
+  .main-cart__product-wrap {
+    display: flex;
+    gap: 1.25rem;
+  }
+  .main-cart__img {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: var(--radius-input);
+  }
+  .main-cart__item-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: inherit;
+    text-decoration: none;
+  }
+  .main-cart__variant-title,
+  .main-cart__properties {
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+  }
+  .main-cart__item-price {
+    font-weight: 600;
+    margin-top: 0.5rem;
+  }
+  .main-cart__qty-cell {
+    padding: 1.5rem 1rem;
+    vertical-align: middle;
+  }
+  .main-cart__total-cell {
+    padding: 1.5rem 0;
+    vertical-align: middle;
+  }
+  .main-cart__line-price {
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  .main-cart__remove-link {
+    font-size: 0.8rem;
+    text-decoration: underline;
+  }
+  .main-cart__summary-box {
+    padding: 2rem;
+    border-radius: var(--radius-card);
+    border: 1px solid var(--color-border);
+  }
+  .main-cart__summary-title {
+    font-size: 1.35rem;
+    margin-bottom: 1.5rem;
+  }
+  .main-cart__summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .main-cart__tax-notice {
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Cart page",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "scheme-1", "label": "Scheme 1" },
+        { "value": "scheme-2", "label": "Scheme 2" },
+        { "value": "scheme-3", "label": "Scheme 3" },
+        { "value": "scheme-4", "label": "Scheme 4" }
+      ],
+      "default": "scheme-1"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cart_note",
+      "label": "Enable cart note",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

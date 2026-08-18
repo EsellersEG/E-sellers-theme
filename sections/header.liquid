@@ -1,75 +1,485 @@
-<header>
-  <h2 class="header__title">
-    {{ shop.name | link_to: routes.root_url }}
-  </h2>
+{%- liquid
+  assign main_menu = section.settings.menu
+  assign logo = section.settings.logo
+-%}
 
-  <div class="header__menu">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
+<header
+  class="header color-{{ section.settings.color_scheme }} {% if section.settings.enable_sticky %}header--sticky{% endif %}"
+  id="SiteHeader-{{ section.id }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="page-width header__inner">
+    {% # Mobile Navigation Toggle %}
+    <div class="header__left">
+      <button
+        type="button"
+        class="header__icon-btn header__mobile-toggle"
+        id="MobileMenuToggle"
+        aria-expanded="false"
+        aria-controls="MobileNavDrawer"
+        aria-label="Toggle navigation menu"
+      >
+        <svg class="icon-hamburger" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        <svg class="icon-close is-hidden" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+
+      {% # Logo %}
+      <div class="header__logo-wrap">
+        <a href="{{ routes.root_url }}" class="header__logo-link">
+          {%- if logo != blank -%}
+            <img
+              src="{{ logo | image_url: width: 300 }}"
+              alt="{{ logo.alt | default: shop.name | escape }}"
+              width="{{ section.settings.logo_width }}"
+              height="{{ section.settings.logo_width | divided_by: logo.aspect_ratio | round }}"
+              class="header__logo-img"
+              loading="eager"
+            >
+          {%- else -%}
+            <span class="header__logo-text">{{ shop.name }}</span>
+          {%- endif -%}
+        </a>
+      </div>
+    </div>
+
+    {% # Desktop Navigation %}
+    <nav class="header__nav" aria-label="Main Navigation">
+      <ul class="header__nav-list">
+        {%- for link in main_menu.links -%}
+          <li class="header__nav-item {% if link.links != blank %}header__nav-item--has-dropdown{% endif %}">
+            <a href="{{ link.url }}" class="header__nav-link {% if link.active %}is-active{% endif %}">
+              <span>{{ link.title | escape }}</span>
+              {%- if link.links != blank -%}
+                <svg class="nav-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              {%- endif -%}
+            </a>
+
+            {%- if link.links != blank -%}
+              <div class="header__dropdown color-scheme-1">
+                <ul class="header__dropdown-list">
+                  {%- for childlink in link.links -%}
+                    <li class="header__dropdown-item">
+                      <a href="{{ childlink.url }}" class="header__dropdown-link {% if childlink.active %}is-active{% endif %}">
+                        {{ childlink.title | escape }}
+                      </a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              </div>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+
+    {% # Header Right Action Icons %}
+    <div class="header__right">
+      {% # Search Trigger %}
+      <button
+        type="button"
+        class="header__icon-btn"
+        data-action="open-search"
+        aria-label="{{ 'search.title' | t }}"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      </button>
+
+      {% # Shopify Account Component (Theme Store Mandatory Requirement) %}
+      <div class="header__account">
+        {%- if shop.customer_accounts_enabled -%}
+          <shopify-account menu="{{ section.settings.customer_account_menu }}">
+            <button type="button" class="header__icon-btn" aria-label="Account">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            </button>
+          </shopify-account>
+        {%- else -%}
+          <a href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}" class="header__icon-btn" aria-label="Account">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          </a>
+        {%- endif -%}
+      </div>
+
+      {% # Cart Trigger %}
+      <a
+        href="{{ routes.cart_url }}"
+        class="header__icon-btn header__cart-btn"
+        data-action="open-cart"
+        aria-label="{{ 'cart.title' | t }}"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        <span class="cart-count-bubble {% if cart.item_count == 0 %}is-hidden{% endif %}">
+          {{ cart.item_count }}
+        </span>
+      </a>
+    </div>
   </div>
 
-  <div class="header__icons">
-    {% if shop.customer_accounts_enabled %}
-      <shopify-account menu="{{ section.settings.customer_account_menu }}">
-        {{ 'icon-account.svg' | inline_asset_content }}
-      </shopify-account>
-    {% endif %}
+  {% # Mobile Navigation Drawer %}
+  <div class="mobile-nav-drawer" id="MobileNavDrawer" aria-hidden="true">
+    <div class="mobile-nav-drawer__backdrop" id="MobileNavBackdrop"></div>
+    <div class="mobile-nav-drawer__container color-scheme-1">
+      <div class="mobile-nav-drawer__header">
+        <span class="header__logo-text">{{ shop.name }}</span>
+        <button type="button" class="header__icon-btn" id="MobileNavClose" aria-label="Close menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
 
-    <a href="{{ routes.cart_url }}">
-      {% if cart.item_count > 0 %}
-        <sup>{{ cart.item_count }}</sup>
-      {% endif %}
+      <nav class="mobile-nav-drawer__content">
+        <ul class="mobile-nav__list">
+          {%- for link in main_menu.links -%}
+            <li class="mobile-nav__item">
+              {%- if link.links != blank -%}
+                <details class="mobile-nav__details">
+                  <summary class="mobile-nav__link mobile-nav__summary">
+                    <span>{{ link.title | escape }}</span>
+                    <svg class="nav-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                  </summary>
+                  <ul class="mobile-nav__sublist">
+                    {%- for childlink in link.links -%}
+                      <li class="mobile-nav__subitem">
+                        <a href="{{ childlink.url }}" class="mobile-nav__sublink">
+                          {{ childlink.title | escape }}
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                </details>
+              {%- else -%}
+                <a href="{{ link.url }}" class="mobile-nav__link">
+                  {{ link.title | escape }}
+                </a>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
 
-      {{ 'icon-cart.svg' | inline_asset_content }}
-    </a>
+      <div class="mobile-nav-drawer__footer">
+        {%- if shop.customer_accounts_enabled -%}
+          <shopify-account menu="{{ section.settings.customer_account_menu }}">
+            <button type="button" class="button button--secondary button--full-width button--sm" style="margin-bottom: 0.75rem;">
+              Sign in to Account
+            </button>
+          </shopify-account>
+        {%- endif -%}
+      </div>
+    </div>
   </div>
 </header>
 
-{% stylesheet %}
-  header {
-    height: 5rem;
+<style>
+  .header {
+    position: relative;
+    z-index: 100;
+    border-bottom: 1px solid var(--color-border);
+    transition: background-color var(--duration-fast), box-shadow var(--duration-fast);
+  }
+  .header--sticky {
+    position: sticky;
+    top: 0;
+    backdrop-filter: blur(8px);
+  }
+  .header__inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    min-height: 4.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
   }
-  header a {
+  .header__left,
+  .header__right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .header__logo-wrap {
+    display: flex;
+    align-items: center;
+  }
+  .header__logo-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+  }
+  .header__logo-text {
+    font-family: var(--font-heading-family);
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+  .header__logo-img {
+    display: block;
+    max-height: 50px;
+    width: auto;
+    object-fit: contain;
+  }
+  .header__nav {
+    display: none;
+  }
+  @media (min-width: 990px) {
+    .header__nav {
+      display: block;
+    }
+    .header__mobile-toggle {
+      display: none !important;
+    }
+  }
+  .header__nav-list {
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .header__nav-item {
+    position: relative;
+  }
+  .header__nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 0.5rem 0;
+    color: inherit;
+    text-decoration: none;
+  }
+  .header__nav-link.is-active {
+    color: var(--color-accent);
+  }
+  .header__dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 220px;
+    padding: 0.75rem 0;
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-input);
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition: all var(--duration-fast) var(--ease-standard);
+  }
+  .header__nav-item--has-dropdown:hover .header__dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .header__dropdown-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .header__dropdown-link {
+    display: block;
+    padding: 0.5rem 1.25rem;
+    font-size: 0.9rem;
+    color: inherit;
+    text-decoration: none;
+    transition: background-color var(--duration-fast);
+  }
+  .header__dropdown-link:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+    color: var(--color-accent);
+  }
+  .header__icon-btn {
+    background: transparent;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
     position: relative;
     text-decoration: none;
-    color: var(--color-foreground);
+    transition: background-color var(--duration-fast);
+  }
+  .header__icon-btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+  .cart-count-bubble {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: var(--color-accent);
+    color: #FFFFFF;
+    font-size: 0.7rem;
+    font-weight: 700;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  header a sup {
+  .cart-count-bubble.is-hidden {
+    display: none;
+  }
+
+  /* Mobile Drawer */
+  .mobile-nav-drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1001;
+    display: none;
+  }
+  .mobile-nav-drawer.is-open {
+    display: block;
+  }
+  .mobile-nav-drawer__backdrop {
     position: absolute;
-    left: 100%;
-    overflow: hidden;
-    max-width: var(--page-margin);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
   }
-  header svg {
-    width: 2rem;
-  }
-  header .header__menu,
-  header .header__icons {
+  .mobile-nav-drawer__container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 80%;
+    max-width: 320px;
+    height: 100%;
+    background-color: var(--color-bg);
     display: flex;
-    gap: 1rem;
+    flex-direction: column;
+    box-shadow: var(--shadow-xl);
+    animation: slideRight var(--duration-normal) var(--ease-standard);
   }
-{% endstylesheet %}
+  .mobile-nav-drawer__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .mobile-nav-drawer__content {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 1rem 1.25rem;
+  }
+  .mobile-nav__list,
+  .mobile-nav__sublist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .mobile-nav__link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: inherit;
+    text-decoration: none;
+  }
+  .mobile-nav__summary {
+    cursor: pointer;
+  }
+  .mobile-nav__sublist {
+    padding-left: 1rem;
+  }
+  .mobile-nav__sublink {
+    display: block;
+    padding: 0.5rem 0;
+    font-size: 0.95rem;
+    color: inherit;
+    opacity: 0.8;
+  }
+  .mobile-nav-drawer__footer {
+    padding: 1.25rem;
+    border-top: 1px solid var(--color-border);
+  }
+  @keyframes slideRight {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(0); }
+  }
+</style>
+
+<script>
+  (function() {
+    const toggle = document.getElementById('MobileMenuToggle');
+    const drawer = document.getElementById('MobileNavDrawer');
+    const closeBtn = document.getElementById('MobileNavClose');
+    const backdrop = document.getElementById('MobileNavBackdrop');
+
+    function openNav() {
+      if (!drawer) return;
+      drawer.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeNav() {
+      if (!drawer) return;
+      drawer.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    if (toggle) toggle.addEventListener('click', openNav);
+    if (closeBtn) closeBtn.addEventListener('click', closeNav);
+    if (backdrop) backdrop.addEventListener('click', closeNav);
+  })();
+</script>
 
 {% schema %}
 {
-  "name": "t:general.header",
+  "name": "Header",
   "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "scheme-1", "label": "Scheme 1" },
+        { "value": "scheme-2", "label": "Scheme 2" },
+        { "value": "scheme-3", "label": "Scheme 3" },
+        { "value": "scheme-4", "label": "Scheme 4" }
+      ],
+      "default": "scheme-1"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky",
+      "label": "Enable sticky header",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 50,
+      "max": 250,
+      "step": 10,
+      "unit": "px",
+      "label": "Custom logo width",
+      "default": 130
+    },
     {
       "type": "link_list",
       "id": "menu",
-      "label": "t:labels.menu"
+      "label": "Menu",
+      "default": "main-menu"
     },
     {
       "type": "link_list",
       "id": "customer_account_menu",
-      "label": "t:labels.customer_account_menu",
+      "label": "Customer account menu",
       "default": "customer-account-main-menu"
     }
   ]

@@ -1,18 +1,103 @@
 {% style %}
-  {% # Loads all font variantions with display: swap %}
-  {{ settings.type_primary_font | font_face: font_display: 'swap' }}
-  {{ settings.type_primary_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
-  {{ settings.type_primary_font | font_modify: 'weight', 'bold' | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
-  {{ settings.type_primary_font | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
+  {% # Load Heading Font Variants %}
+  {{ settings.heading_font | font_face: font_display: 'swap' }}
+  {%- assign heading_bold = settings.heading_font | font_modify: 'weight', 'bold' -%}
+  {%- if heading_bold -%}{{ heading_bold | font_face: font_display: 'swap' }}{%- endif -%}
+
+  {% # Load Body Font Variants %}
+  {{ settings.body_font | font_face: font_display: 'swap' }}
+  {%- assign body_bold = settings.body_font | font_modify: 'weight', 'bold' -%}
+  {%- if body_bold -%}{{ body_bold | font_face: font_display: 'swap' }}{%- endif -%}
+  {%- assign body_italic = settings.body_font | font_modify: 'style', 'italic' -%}
+  {%- if body_italic -%}{{ body_italic | font_face: font_display: 'swap' }}{%- endif -%}
 
   :root {
-    --font-primary--family: {{ settings.type_primary_font.family }}, {{ settings.type_primary_font.fallback_families }};
-    --font-primary--style: {{ settings.type_primary_font.style }};
-    --font-primary--weight: {{ settings.type_primary_font.weight }};
-    --page-width: {{ settings.max_page_width }};
-    --page-margin: {{ settings.min_page_margin }}px;
-    --color-background: {{ settings.background_color }};
-    --color-foreground: {{ settings.foreground_color }};
-    --style-border-radius-inputs: {{ settings.input_corner_radius }}px;
+    /* Fonts */
+    --font-heading-family: {{ settings.heading_font.family }}, {{ settings.heading_font.fallback_families }};
+    --font-heading-weight: {{ settings.heading_font.weight }};
+    --font-heading-style: {{ settings.heading_font.style }};
+    --font-heading-scale: {{ settings.heading_scale | divided_by: 100.0 }};
+
+    --font-body-family: {{ settings.body_font.family }}, {{ settings.body_font.fallback_families }};
+    --font-body-weight: {{ settings.body_font.weight }};
+    --font-body-style: {{ settings.body_font.style }};
+    --font-body-scale: {{ settings.body_scale | divided_by: 100.0 }};
+
+    /* Layout & Spacing */
+    --page-width: {{ settings.page_width }}px;
+    --page-gutter: {{ settings.page_gutter }}px;
+    --section-spacing-desktop: {{ settings.section_spacing_desktop }}px;
+    --section-spacing-mobile: {{ settings.section_spacing_mobile }}px;
+
+    /* Borders & Radius */
+    --radius-button: {{ settings.button_radius }}px;
+    --radius-input: {{ settings.input_radius }}px;
+    --radius-card: {{ settings.card_radius }}px;
+    --radius-badge: 9999px;
+
+    /* Badges */
+    --color-badge-sale-bg: {{ settings.badge_sale_bg }};
+    --color-badge-sale-text: {{ settings.badge_sale_text }};
+    --color-badge-soldout-bg: {{ settings.badge_soldout_bg }};
+    --color-badge-soldout-text: {{ settings.badge_soldout_text }};
+
+    /* Animation & Transitions */
+    --duration-fast: 150ms;
+    --duration-normal: 250ms;
+    --duration-slow: 400ms;
+    --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+    --ease-out: cubic-bezier(0, 0, 0.2, 1);
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+
+  /* Color Schemes */
+  .color-scheme-1,
+  :root {
+    --color-bg: {{ settings.color_scheme_1_bg }};
+    --color-text: {{ settings.color_scheme_1_text }};
+    --color-accent: {{ settings.color_scheme_1_accent }};
+    --color-border: {{ settings.color_scheme_1_border }};
+    --color-btn-bg: {{ settings.color_scheme_1_btn_bg }};
+    --color-btn-text: {{ settings.color_scheme_1_btn_text }};
+  }
+
+  .color-scheme-2 {
+    --color-bg: {{ settings.color_scheme_2_bg }};
+    --color-text: {{ settings.color_scheme_2_text }};
+    --color-accent: {{ settings.color_scheme_2_accent }};
+    --color-border: {{ settings.color_scheme_2_border }};
+    --color-btn-bg: {{ settings.color_scheme_2_btn_bg }};
+    --color-btn-text: {{ settings.color_scheme_2_btn_text }};
+  }
+
+  .color-scheme-3 {
+    --color-bg: {{ settings.color_scheme_3_bg }};
+    --color-text: {{ settings.color_scheme_3_text }};
+    --color-accent: {{ settings.color_scheme_3_accent }};
+    --color-border: {{ settings.color_scheme_3_border }};
+    --color-btn-bg: {{ settings.color_scheme_3_btn_bg }};
+    --color-btn-text: {{ settings.color_scheme_3_btn_text }};
+  }
+
+  .color-scheme-4 {
+    --color-bg: {{ settings.color_scheme_4_bg }};
+    --color-text: {{ settings.color_scheme_4_text }};
+    --color-accent: {{ settings.color_scheme_4_accent }};
+    --color-border: {{ settings.color_scheme_4_border }};
+    --color-btn-bg: {{ settings.color_scheme_4_btn_bg }};
+    --color-btn-text: {{ settings.color_scheme_4_btn_text }};
+  }
+
+  .color-scheme-1,
+  .color-scheme-2,
+  .color-scheme-3,
+  .color-scheme-4 {
+    background-color: var(--color-bg);
+    color: var(--color-text);
   }
 {% endstyle %}

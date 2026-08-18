@@ -1,12 +1,53 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
-  "current": {}
+  "current": {
+    "color_scheme_1_bg": "#FFFFFF",
+    "color_scheme_1_text": "#121212",
+    "color_scheme_1_accent": "#2E5BFF",
+    "color_scheme_1_border": "#E5E7EB",
+    "color_scheme_1_btn_bg": "#121212",
+    "color_scheme_1_btn_text": "#FFFFFF",
+    "color_scheme_2_bg": "#F9FAFB",
+    "color_scheme_2_text": "#1F2937",
+    "color_scheme_2_accent": "#2E5BFF",
+    "color_scheme_2_border": "#E5E7EB",
+    "color_scheme_2_btn_bg": "#1F2937",
+    "color_scheme_2_btn_text": "#FFFFFF",
+    "color_scheme_3_bg": "#EEF2FF",
+    "color_scheme_3_text": "#1E1B4B",
+    "color_scheme_3_accent": "#4338CA",
+    "color_scheme_3_border": "#C7D2FE",
+    "color_scheme_3_btn_bg": "#4338CA",
+    "color_scheme_3_btn_text": "#FFFFFF",
+    "color_scheme_4_bg": "#111827",
+    "color_scheme_4_text": "#F9FAFB",
+    "color_scheme_4_accent": "#818CF8",
+    "color_scheme_4_border": "#374151",
+    "color_scheme_4_btn_bg": "#FFFFFF",
+    "color_scheme_4_btn_text": "#111827",
+    "heading_font": "work_sans_n6",
+    "heading_scale": 100,
+    "body_font": "work_sans_n4",
+    "body_scale": 100,
+    "page_width": 1320,
+    "page_gutter": 24,
+    "section_spacing_desktop": 64,
+    "section_spacing_mobile": 40,
+    "button_radius": 8,
+    "button_uppercase": false,
+    "input_radius": 8,
+    "card_radius": 12,
+    "cart_type": "drawer",
+    "show_cart_note": true,
+    "show_free_shipping_bar": true,
+    "free_shipping_threshold": 100,
+    "product_card_image_ratio": "portrait",
+    "show_secondary_image_on_hover": true,
+    "show_vendor": false,
+    "show_swatches": true,
+    "show_quick_buy": true,
+    "badge_sale_bg": "#DC2626",
+    "badge_sale_text": "#FFFFFF",
+    "badge_soldout_bg": "#6B7280",
+    "badge_soldout_text": "#FFFFFF"
+  }
 }

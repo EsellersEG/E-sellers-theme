@@ -1,10 +1,9 @@
 {
   "sections": {
     "main": {
-      "type": "main-cart",
+      "type": "main-contact",
       "settings": {
-        "color_scheme": "scheme-1",
-        "show_cart_note": true
+        "color_scheme": "scheme-1"
       }
     }
   },

@@ -1,0 +1,253 @@
+<section
+  class="section-feature-chart color-{{ section.settings.color_scheme }}"
+  id="FeatureChart-{{ section.id }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="page-width section-spacing">
+    {%- if section.settings.title != blank or section.settings.subheading != blank -%}
+      <div class="section-header text-center" style="margin-bottom: 3rem;">
+        {%- if section.settings.subheading != blank -%}
+          <span class="text-subheading">{{ section.settings.subheading | escape }}</span>
+        {%- endif -%}
+        {%- if section.settings.title != blank -%}
+          <h2 class="h2" style="margin-bottom: 0.5rem;">{{ section.settings.title | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <div class="section-header__text text-muted rte" style="max-width: 600px; margin: 0 auto;">{{ section.settings.text }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="feature-chart-container">
+      <table class="feature-chart-table">
+        <thead>
+          <tr>
+            <th class="feature-chart__th-feature">Features & Benefits</th>
+            <th class="feature-chart__th-brand color-scheme-3">
+              <span class="brand-badge">Our Brand</span>
+              <div class="brand-title">{{ section.settings.our_brand_title | default: shop.name }}</div>
+            </th>
+            <th class="feature-chart__th-competitor">
+              <div>{{ section.settings.competitor_title | default: 'Other Brands' }}</div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {%- for block in section.blocks -%}
+            <tr {{ block.shopify_attributes }}>
+              <td class="feature-chart__td-name">
+                <strong>{{ block.settings.feature_name | escape }}</strong>
+                {%- if block.settings.feature_info != blank -%}
+                  <span class="feature-chart__info-text text-muted">{{ block.settings.feature_info | escape }}</span>
+                {%- endif -%}
+              </td>
+              <td class="feature-chart__td-brand color-scheme-3 text-center">
+                {%- if block.settings.our_brand_has_feature -%}
+                  <span class="icon-check">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  </span>
+                {%- else -%}
+                  <span class="icon-cross text-muted">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                  </span>
+                {%- endif -%}
+                {%- if block.settings.our_brand_text != blank -%}
+                  <div class="feature-val-text">{{ block.settings.our_brand_text }}</div>
+                {%- endif -%}
+              </td>
+              <td class="feature-chart__td-competitor text-center">
+                {%- if block.settings.competitor_has_feature -%}
+                  <span class="icon-check">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  </span>
+                {%- else -%}
+                  <span class="icon-cross text-muted">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                  </span>
+                {%- endif -%}
+                {%- if block.settings.competitor_text != blank -%}
+                  <div class="feature-val-text text-muted">{{ block.settings.competitor_text }}</div>
+                {%- endif -%}
+              </td>
+            </tr>
+          {%- endfor -%}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<style>
+  .feature-chart-container {
+    max-width: 900px;
+    margin: 0 auto;
+    overflow-x: auto;
+    border-radius: var(--radius-card);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-lg);
+  }
+  .feature-chart-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+  .feature-chart-table th,
+  .feature-chart-table td {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .feature-chart__th-feature {
+    width: 44%;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  .feature-chart__th-brand {
+    width: 28%;
+    text-align: center;
+    border-left: 2px solid var(--color-accent);
+    border-right: 2px solid var(--color-accent);
+  }
+  .feature-chart__th-competitor {
+    width: 28%;
+    text-align: center;
+    font-weight: 600;
+    opacity: 0.7;
+  }
+  .brand-badge {
+    display: inline-block;
+    padding: 0.25rem 0.65rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: var(--radius-badge);
+    background-color: var(--color-accent);
+    color: #FFFFFF;
+    margin-bottom: 0.25rem;
+  }
+  .brand-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+  .feature-chart__td-name strong {
+    display: block;
+    font-size: 1rem;
+  }
+  .feature-chart__info-text {
+    font-size: 0.82rem;
+    margin-top: 0.2rem;
+    display: block;
+  }
+  .feature-chart__td-brand {
+    border-left: 2px solid var(--color-accent);
+    border-right: 2px solid var(--color-accent);
+  }
+  .feature-val-text {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 0.35rem;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Comparison chart",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "scheme-1", "label": "Scheme 1" },
+        { "value": "scheme-2", "label": "Scheme 2" },
+        { "value": "scheme-3", "label": "Scheme 3" },
+        { "value": "scheme-4", "label": "Scheme 4" }
+      ],
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Why Choose Us"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "The Difference Is In The Details"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "our_brand_title",
+      "label": "Our brand label",
+      "default": "Our Formula"
+    },
+    {
+      "type": "text",
+      "id": "competitor_title",
+      "label": "Competitor label",
+      "default": "Standard Alternatives"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Feature row",
+      "settings": [
+        {
+          "type": "text",
+          "id": "feature_name",
+          "label": "Feature name",
+          "default": "100% Organic & Clean Ingredients"
+        },
+        {
+          "type": "text",
+          "id": "feature_info",
+          "label": "Feature sub-info",
+          "default": "Clinically certified without parabens or sulfates"
+        },
+        {
+          "type": "checkbox",
+          "id": "our_brand_has_feature",
+          "label": "Our brand includes this",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "our_brand_text",
+          "label": "Our brand extra note",
+          "default": "Full Transparency"
+        },
+        {
+          "type": "checkbox",
+          "id": "competitor_has_feature",
+          "label": "Competitor includes this",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "competitor_text",
+          "label": "Competitor extra note",
+          "default": "Synthetic Additives"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Comparison chart",
+      "blocks": [
+        { "type": "row", "settings": { "feature_name": "Active Bio-Nutrients", "our_brand_has_feature": true, "competitor_has_feature": false } },
+        { "type": "row", "settings": { "feature_name": "Cruelty-Free & Vegan Certified", "our_brand_has_feature": true, "competitor_has_feature": false } },
+        { "type": "row", "settings": { "feature_name": "Dermatologist Tested", "our_brand_has_feature": true, "competitor_has_feature": true } },
+        { "type": "row", "settings": { "feature_name": "Sustainably Sourced Packaging", "our_brand_has_feature": true, "competitor_has_feature": false } }
+      ]
+    }
+  ]
+}
+{% endschema %}

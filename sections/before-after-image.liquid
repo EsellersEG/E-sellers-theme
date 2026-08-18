@@ -1,0 +1,283 @@
+<section
+  class="section-before-after color-{{ section.settings.color_scheme }}"
+  id="BeforeAfter-{{ section.id }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="page-width section-spacing">
+    {%- if section.settings.title != blank or section.settings.subheading != blank -%}
+      <div class="section-header text-center" style="margin-bottom: 2.5rem;">
+        {%- if section.settings.subheading != blank -%}
+          <span class="text-subheading">{{ section.settings.subheading | escape }}</span>
+        {%- endif -%}
+        {%- if section.settings.title != blank -%}
+          <h2 class="h2" style="margin-bottom: 0.5rem;">{{ section.settings.title | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <div class="section-header__text text-muted rte" style="max-width: 600px; margin: 0 auto;">{{ section.settings.text }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="before-after-slider" id="Slider-{{ section.id }}">
+      <div class="before-after-slider__media-wrap">
+        {% # Before Image (Bottom layer) %}
+        <div class="before-after__layer before-after__layer--before">
+          {%- if section.settings.before_image != blank -%}
+            <img
+              src="{{ section.settings.before_image | image_url: width: 1800 }}"
+              alt="{{ section.settings.before_image.alt | default: 'Before' | escape }}"
+              width="{{ section.settings.before_image.width }}"
+              height="{{ section.settings.before_image.height }}"
+              loading="lazy"
+              class="before-after__image"
+            >
+          {%- else -%}
+            <div class="before-after__placeholder" style="background-color: #4B5563;">
+              {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+          {%- endif -%}
+          <span class="before-after__badge before-after__badge--before">{{ section.settings.before_label | default: 'Before' }}</span>
+        </div>
+
+        {% # After Image (Clipped top layer) %}
+        <div class="before-after__layer before-after__layer--after" id="AfterLayer-{{ section.id }}" style="clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);">
+          {%- if section.settings.after_image != blank -%}
+            <img
+              src="{{ section.settings.after_image | image_url: width: 1800 }}"
+              alt="{{ section.settings.after_image.alt | default: 'After' | escape }}"
+              width="{{ section.settings.after_image.width }}"
+              height="{{ section.settings.after_image.height }}"
+              loading="lazy"
+              class="before-after__image"
+            >
+          {%- else -%}
+            <div class="before-after__placeholder" style="background-color: #1F2937;">
+              {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+          {%- endif -%}
+          <span class="before-after__badge before-after__badge--after">{{ section.settings.after_label | default: 'After' }}</span>
+        </div>
+
+        {% # Draggable Divider Handle %}
+        <div class="before-after__handle" id="Handle-{{ section.id }}" style="left: 50%;">
+          <div class="before-after__handle-line"></div>
+          <div class="before-after__handle-button" aria-label="Drag to compare before and after">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </div>
+          <div class="before-after__handle-line"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .before-after-slider {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    user-select: none;
+    box-shadow: var(--shadow-xl);
+  }
+  .before-after-slider__media-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+  }
+  @media (max-width: 640px) {
+    .before-after-slider__media-wrap {
+      aspect-ratio: 4 / 3;
+    }
+  }
+  .before-after__layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .before-after__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .before-after__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .before-after__placeholder svg {
+    width: 100%;
+    height: 100%;
+    opacity: 0.2;
+  }
+  .before-after__badge {
+    position: absolute;
+    bottom: 1.25rem;
+    padding: 0.4rem 0.9rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background-color: rgba(0, 0, 0, 0.65);
+    color: #FFFFFF;
+    backdrop-filter: blur(4px);
+    border-radius: var(--radius-badge);
+    z-index: 2;
+  }
+  .before-after__badge--before {
+    left: 1.25rem;
+  }
+  .before-after__badge--after {
+    right: 1.25rem;
+  }
+  .before-after__handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    margin-left: -20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: ew-resize;
+    z-index: 5;
+  }
+  .before-after__handle-line {
+    width: 2px;
+    flex-grow: 1;
+    background-color: #FFFFFF;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+  }
+  .before-after__handle-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #FFFFFF;
+    color: #121212;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    flex-shrink: 0;
+    transition: transform var(--duration-fast);
+  }
+  .before-after__handle:hover .before-after__handle-button {
+    transform: scale(1.1);
+  }
+</style>
+
+<script>
+  (function() {
+    const slider = document.getElementById('Slider-{{ section.id }}');
+    if (!slider) return;
+
+    const afterLayer = document.getElementById('AfterLayer-{{ section.id }}');
+    const handle = document.getElementById('Handle-{{ section.id }}');
+    let isDragging = false;
+
+    function setPosition(xPos) {
+      const rect = slider.getBoundingClientRect();
+      let pos = (xPos - rect.left) / rect.width;
+      pos = Math.max(0, Math.min(1, pos));
+      const percent = pos * 100;
+
+      afterLayer.style.clipPath = `polygon(0 0, ${percent}% 0, ${percent}% 100%, 0 100%)`;
+      handle.style.left = `${percent}%`;
+    }
+
+    slider.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      setPosition(e.clientX);
+    });
+    window.addEventListener('mouseup', () => isDragging = false);
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      setPosition(e.clientX);
+    });
+
+    slider.addEventListener('touchstart', (e) => {
+      isDragging = true;
+      setPosition(e.touches[0].clientX);
+    }, { passive: true });
+    window.addEventListener('touchend', () => isDragging = false);
+    window.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      setPosition(e.touches[0].clientX);
+    }, { passive: true });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Before / after image",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "scheme-1", "label": "Scheme 1" },
+        { "value": "scheme-2", "label": "Scheme 2" },
+        { "value": "scheme-3", "label": "Scheme 3" },
+        { "value": "scheme-4", "label": "Scheme 4" }
+      ],
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Proven Results"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "See the Transformation"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Description",
+      "default": "<p>Drag the slider to see before and after treatment effects.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "before_image",
+      "label": "Before image"
+    },
+    {
+      "type": "text",
+      "id": "before_label",
+      "label": "Before label",
+      "default": "Before"
+    },
+    {
+      "type": "image_picker",
+      "id": "after_image",
+      "label": "After image"
+    },
+    {
+      "type": "text",
+      "id": "after_label",
+      "label": "After label",
+      "default": "After"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Before / after image"
+    }
+  ]
+}
+{% endschema %}

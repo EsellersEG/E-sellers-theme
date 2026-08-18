@@ -1,0 +1,241 @@
+<section
+  class="section-category-grid color-{{ section.settings.color_scheme }}"
+  id="CategoryGrid-{{ section.id }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="page-width section-spacing">
+    <div class="section-header text-center" style="margin-bottom: 3rem;">
+      {%- if section.settings.subheading != blank -%}
+        <span class="text-subheading">{{ section.settings.subheading | escape }}</span>
+      {%- endif -%}
+      <h2 class="h2" style="margin-bottom: 0.5rem;">{{ section.settings.title | default: 'Shop by Hair Solution' | escape }}</h2>
+      {%- if section.settings.subtitle != blank -%}
+        <p class="text-muted" style="max-width: 600px; margin: 0 auto;">{{ section.settings.subtitle | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="grid grid--{{ section.settings.columns_desktop }}-col grid--gap-md">
+      {%- for block in section.blocks -%}
+        {%- assign collection = block.settings.collection -%}
+        <div class="grid__item" {{ block.shopify_attributes }}>
+          <a
+            href="{{ block.settings.link | default: collection.url | default: '#' }}"
+            class="category-solution-card color-scheme-2"
+          >
+            <div class="category-solution-card__media">
+              {%- if block.settings.image != blank -%}
+                <img
+                  src="{{ block.settings.image | image_url: width: 600 }}"
+                  alt="{{ block.settings.image.alt | default: block.settings.title | escape }}"
+                  width="300"
+                  height="360"
+                  loading="lazy"
+                  class="category-solution-card__img"
+                >
+              {%- elsif collection.image != blank -%}
+                <img
+                  src="{{ collection.image | image_url: width: 600 }}"
+                  alt="{{ collection.title | escape }}"
+                  width="300"
+                  height="360"
+                  loading="lazy"
+                  class="category-solution-card__img"
+                >
+              {%- else -%}
+                <div class="category-solution-card__placeholder">
+                  {%- capture placeholder_index -%}{% cycle '1', '2', '3', '4', '5' %}{%- endcapture -%}
+                  {{ 'collection-' | append: placeholder_index | placeholder_svg_tag: 'placeholder-svg' }}
+                </div>
+              {%- endif -%}
+            </div>
+
+            <div class="category-solution-card__info">
+              <div class="category-solution-card__bar" style="background-color: {{ block.settings.accent_color | default: '#6366F1' }};"></div>
+              <h3 class="category-solution-card__title">{{ block.settings.title | default: collection.title | default: 'Solution' | escape }}</h3>
+              {%- if block.settings.subtitle != blank -%}
+                <p class="category-solution-card__subtitle text-muted">{{ block.settings.subtitle | escape }}</p>
+              {%- endif -%}
+              <span class="category-solution-card__cta">Explore &rarr;</span>
+            </div>
+          </a>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  .category-solution-card {
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    text-decoration: none;
+    color: inherit;
+    height: 100%;
+    transition: transform var(--duration-fast), box-shadow var(--duration-fast);
+  }
+  .category-solution-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+  }
+  .category-solution-card__media {
+    width: 100%;
+    aspect-ratio: 4 / 4.5;
+    overflow: hidden;
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+  .category-solution-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-standard);
+  }
+  .category-solution-card:hover .category-solution-card__img {
+    transform: scale(1.05);
+  }
+  .category-solution-card__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .category-solution-card__placeholder svg {
+    width: 60%;
+    height: auto;
+    opacity: 0.3;
+  }
+  .category-solution-card__info {
+    padding: 1.5rem 1.25rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  .category-solution-card__bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+  }
+  .category-solution-card__title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+  .category-solution-card__subtitle {
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    flex-grow: 1;
+  }
+  .category-solution-card__cta {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--color-accent);
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Category solutions grid",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "scheme-1", "label": "Scheme 1" },
+        { "value": "scheme-2", "label": "Scheme 2" },
+        { "value": "scheme-3", "label": "Scheme 3" },
+        { "value": "scheme-4", "label": "Scheme 4" }
+      ],
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Targeted Solutions"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Shop by Hair Concern"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Select your primary goal to find targeted formulations designed for your unique needs."
+    },
+    {
+      "type": "select",
+      "id": "columns_desktop",
+      "label": "Columns on desktop",
+      "options": [
+        { "value": "3", "label": "3 columns" },
+        { "value": "4", "label": "4 columns" },
+        { "value": "5", "label": "5 columns" }
+      ],
+      "default": "4"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category_card",
+      "name": "Category card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Category title",
+          "default": "Hydration & Moisture"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle",
+          "default": "Revitalize dry, parched strands"
+        },
+        {
+          "type": "color",
+          "id": "accent_color",
+          "label": "Accent bar color",
+          "default": "#3B82F6"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Custom card image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Custom link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Category solutions grid",
+      "blocks": [
+        { "type": "category_card", "settings": { "title": "Deep Moisture", "accent_color": "#3B82F6" } },
+        { "type": "category_card", "settings": { "title": "Volume & Lift", "accent_color": "#EC4899" } },
+        { "type": "category_card", "settings": { "title": "Color Radiance", "accent_color": "#8B5CF6" } },
+        { "type": "category_card", "settings": { "title": "Curl Perfection", "accent_color": "#F59E0B" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

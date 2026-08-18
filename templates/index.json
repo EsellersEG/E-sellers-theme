@@ -1,20 +1,40 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
-    "main": {
-      "type": "hello-world",
-      "settings": {}
+    "hero": {
+      "type": "hero-banner",
+      "settings": {
+        "color_scheme": "scheme-4",
+        "subheading": "Engineered for Performance",
+        "heading": "Elevate Your Everyday Ritual",
+        "text": "<p>Discover scientifically proven formulations designed to transform and nourish.</p>",
+        "content_max_width": 650,
+        "text_alignment": "center",
+        "vertical_alignment": "middle",
+        "button_1_label": "Shop collection",
+        "button_1_link": "/collections/all",
+        "button_2_label": "Explore routine",
+        "button_2_link": "#"
+      }
+    },
+    "featured_collection": {
+      "type": "featured-collection",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "subheading": "Curated Selection",
+        "title": "Featured Best Sellers",
+        "products_to_show": 4,
+        "columns_desktop": "4",
+        "show_view_all": true,
+        "image_ratio": "portrait",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_swatches": true,
+        "show_quick_buy": true
+      }
     }
   },
   "order": [
-    "main"
+    "hero",
+    "featured_collection"
   ]
 }

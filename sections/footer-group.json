@@ -1,21 +1,42 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "type": "footer",
-  "name": "t:general.footer",
+  "name": "Footer group",
   "sections": {
     "footer": {
       "type": "footer",
+      "blocks": {
+        "menu": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Quick links",
+            "menu": "footer"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "heading": "About our store",
+            "subtext": "<p>Discover premium products designed with care and crafted for everyday excellence.</p>"
+          }
+        },
+        "newsletter": {
+          "type": "newsletter",
+          "settings": {
+            "heading": "Stay in the loop",
+            "subtext": "<p>Subscribe to receive special offers, free giveaways, and once-in-a-lifetime deals.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "menu",
+        "text",
+        "newsletter"
+      ],
       "settings": {
-        "menu": "",
-        "show_payment_icons": true
+        "color_scheme": "scheme-4",
+        "show_payment_icons": true,
+        "show_social_icons": true,
+        "enable_follow_on_shop": true
       }
     }
   },

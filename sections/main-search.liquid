@@ -1,0 +1,94 @@
+{%- paginate search.results by 16 -%}
+  <section class="section-main-search color-{{ section.settings.color_scheme }}" id="MainSearch-{{ section.id }}" data-section-id="{{ section.id }}">
+    <div class="page-width section-spacing">
+      <div class="search-header text-center">
+        <h1 class="search-header__title">{{ 'search.title' | t }}</h1>
+
+        <form action="{{ routes.search_url }}" method="get" role="search" class="search-page-form">
+          <div class="field" style="max-width: 500px; margin: 1.5rem auto 0; display: flex; gap: 0.5rem;">
+            <input
+              type="search"
+              name="q"
+              value="{{ search.terms | escape }}"
+              placeholder="{{ 'search.placeholder' | t }}"
+              class="field__input"
+            >
+            <button type="submit" class="button button--primary">
+              {{ 'search.submit' | t }}
+            </button>
+          </div>
+        </form>
+
+        {%- if search.performed -%}
+          <p class="search-results-count text-muted" style="margin-top: 1rem;">
+            {%- if search.results_count == 0 -%}
+              {{ 'search.no_results_html' | t: terms: search.terms }}
+            {%- else -%}
+              {{ 'search.results_for_html' | t: terms: search.terms, count: search.results_count }}
+            {%- endif -%}
+          </p>
+        {%- endif -%}
+      </div>
+
+      {%- if search.performed and search.results_count > 0 -%}
+        <div class="grid grid--4-col grid--gap-md" style="margin-top: 3rem;">
+          {%- for item in search.results -%}
+            <div class="grid__item">
+              {%- case item.object_type -%}
+                {%- when 'product' -%}
+                  {% render 'product-card', product_card_product: item %}
+                {%- when 'article' -%}
+                  <div class="article-search-card color-scheme-2">
+                    <h3 class="h4"><a href="{{ item.url }}">{{ item.title | escape }}</a></h3>
+                    <p class="text-muted">{{ item.published_at | date: '%B %d, %Y' }}</p>
+                    <p>{{ item.content | strip_html | truncate: 120 }}</p>
+                  </div>
+                {%- when 'page' -%}
+                  <div class="page-search-card color-scheme-2">
+                    <h3 class="h4"><a href="{{ item.url }}">{{ item.title | escape }}</a></h3>
+                    <p>{{ item.content | strip_html | truncate: 120 }}</p>
+                  </div>
+              {%- endcase -%}
+            </div>
+          {%- endfor -%}
+        </div>
+
+        {%- if paginate.pages > 1 -%}
+          <div class="collection-pagination">
+            {{ paginate | default_pagination }}
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+  </section>
+{%- endpaginate -%}
+
+<style>
+  .article-search-card,
+  .page-search-card {
+    padding: 1.5rem;
+    border-radius: var(--radius-card);
+    height: 100%;
+    border: 1px solid var(--color-border);
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Search results",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "scheme-1", "label": "Scheme 1" },
+        { "value": "scheme-2", "label": "Scheme 2" },
+        { "value": "scheme-3", "label": "Scheme 3" },
+        { "value": "scheme-4", "label": "Scheme 4" }
+      ],
+      "default": "scheme-1"
+    }
+  ]
+}
+{% endschema %}
