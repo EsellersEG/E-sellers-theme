@@ -178,6 +178,17 @@
       "name": "Image with text",
       "presets": {
         "name": "Image with text"
+      },
+      "blocks": {
+        "heading": {
+          "name": "Heading"
+        },
+        "text": {
+          "name": "Text"
+        },
+        "button": {
+          "name": "Button"
+        }
       }
     },
     "image-banner": {
@@ -190,12 +201,34 @@
       "name": "Collage",
       "presets": {
         "name": "Collage"
+      },
+      "blocks": {
+        "image": {
+          "name": "Image"
+        },
+        "product": {
+          "name": "Product"
+        },
+        "collection": {
+          "name": "Collection"
+        }
       }
     },
     "multirow": {
       "name": "Multirow",
       "presets": {
         "name": "Multirow"
+      },
+      "blocks": {
+        "row": {
+          "name": "Row"
+        }
+      }
+    },
+    "featured-blog": {
+      "name": "Featured blog",
+      "presets": {
+        "name": "Featured blog"
       }
     },
     "slideshow": {

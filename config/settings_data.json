@@ -1,5 +1,15 @@
 {
   "current": {
+    "color_schemes": {
+      "scheme-1": {
+        "background": "#ffffff",
+        "text": "#121212",
+        "button": "#121212",
+        "button_label": "#ffffff",
+        "outline_button": "#121212",
+        "shadow": "#121212"
+      }
+    },
     "type_header_font": "sans-serif",
     "heading_scale": 100,
     "heading_text_transform": "none",
