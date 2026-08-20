@@ -1,176 +1,149 @@
-{%- if section.blocks.size > 0 -%}
-  <aside
-    class="announcement-bar color-{{ section.settings.color_scheme }}"
-    aria-label="Announcement"
-    id="AnnouncementBar-{{ section.id }}"
-    data-section-id="{{ section.id }}"
-    data-autoplay="{{ section.settings.auto_rotate }}"
-    data-speed="{{ section.settings.change_interval }}"
-  >
-    <div class="page-width announcement-bar__inner">
-      <div class="announcement-bar__slider">
-        {%- for block in section.blocks -%}
-          <div
-            class="announcement-bar__item {% if forloop.first %}is-active{% endif %}"
-            {{ block.shopify_attributes }}
-            data-index="{{ forloop.index0 }}"
-          >
-            {%- if block.settings.link != blank -%}
-              <a href="{{ block.settings.link }}" class="announcement-bar__link">
-                {{ block.settings.text | escape }}
-              </a>
-            {%- else -%}
-              <p class="announcement-bar__text">{{ block.settings.text | escape }}</p>
-            {%- endif -%}
-          </div>
-        {%- endfor -%}
-      </div>
+{%- comment -%}
+  Announcement Bar Section - E-sellers Professional (v4.9.0)
+{%- endcomment -%}
 
-      {%- if section.blocks.size > 1 -%}
-        <div class="announcement-bar__controls">
-          <button type="button" class="announcement-bar__btn announcement-bar__btn--prev" aria-label="Previous announcement">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-          </button>
-          <button type="button" class="announcement-bar__btn announcement-bar__btn--next" aria-label="Next announcement">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-          </button>
-        </div>
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    background-color: {{ section.settings.bg_color }};
+    color: {{ section.settings.text_color }};
+    border-bottom: 1px solid {{ section.settings.border_color }};
+    font-size: {{ section.settings.font_size }}px;
+  }
+
+  #shopify-section-{{ section.id }} a {
+    color: {{ section.settings.link_color }};
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .announcement-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 8px 16px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .announcement-bar__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+
+  .announcement-bar__socials {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    position: absolute;
+    left: 20px;
+  }
+
+  @media screen and (min-width: 990px) {
+    .announcement-bar__socials {
+      display: flex;
+    }
+  }
+
+  .announcement-bar__socials a {
+    color: {{ section.settings.text_color }} !important;
+    text-decoration: none !important;
+    display: flex;
+    transition: opacity 0.2s;
+  }
+
+  .announcement-bar__socials a:hover {
+    opacity: 0.7;
+  }
+{%- endstyle -%}
+
+<div class="announcement-bar page-width" role="region" aria-label="{{ 'sections.announcement.announcement' | t }}">
+  {%- if section.settings.show_social -%}
+    <div class="announcement-bar__socials">
+      {%- if settings.social_facebook_link != blank -%}
+        <a href="{{ settings.social_facebook_link }}" aria-label="Facebook">{% render 'icon', name: 'facebook' %}</a>
+      {%- endif -%}
+      {%- if settings.social_instagram_link != blank -%}
+        <a href="{{ settings.social_instagram_link }}" aria-label="Instagram">{% render 'icon', name: 'instagram' %}</a>
+      {%- endif -%}
+      {%- if settings.social_twitter_link != blank -%}
+        <a href="{{ settings.social_twitter_link }}" aria-label="Twitter">{% render 'icon', name: 'twitter' %}</a>
+      {%- endif -%}
+      {%- if settings.social_tiktok_link != blank -%}
+        <a href="{{ settings.social_tiktok_link }}" aria-label="TikTok">{% render 'icon', name: 'tiktok' %}</a>
       {%- endif -%}
     </div>
-  </aside>
-
-  <style>
-    .announcement-bar {
-      font-size: 0.85rem;
-      font-weight: 500;
-      letter-spacing: 0.02em;
-      position: relative;
-      z-index: 20;
-    }
-    .announcement-bar__inner {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      min-height: 2.5rem;
-      padding-top: 0.4rem;
-      padding-bottom: 0.4rem;
-    }
-    .announcement-bar__slider {
-      position: relative;
-      width: 100%;
-      text-align: center;
-    }
-    .announcement-bar__item {
-      display: none;
-      animation: fadeIn 300ms ease-in-out;
-    }
-    .announcement-bar__item.is-active {
-      display: block;
-    }
-    .announcement-bar__text,
-    .announcement-bar__link {
-      margin: 0;
-      color: inherit;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-    }
-    .announcement-bar__link:hover {
-      text-decoration: underline;
-    }
-    .announcement-bar__controls {
-      position: absolute;
-      right: var(--page-gutter);
-      display: flex;
-      gap: 0.25rem;
-    }
-    .announcement-bar__btn {
-      background: transparent;
-      border: none;
-      color: inherit;
-      cursor: pointer;
-      padding: 0.25rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0.7;
-      transition: opacity var(--duration-fast);
-    }
-    .announcement-bar__btn:hover {
-      opacity: 1;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
-
-  {%- if section.blocks.size > 1 -%}
-    <script>
-      (function() {
-        const bar = document.getElementById('AnnouncementBar-{{ section.id }}');
-        if (!bar) return;
-        const items = bar.querySelectorAll('.announcement-bar__item');
-        let current = 0;
-        const total = items.length;
-        const autoplay = bar.getAttribute('data-autoplay') === 'true';
-        const speed = parseInt(bar.getAttribute('data-speed'), 10) * 1000 || 5000;
-
-        function showSlide(index) {
-          items.forEach(item => item.classList.remove('is-active'));
-          current = (index + total) % total;
-          items[current].classList.add('is-active');
-        }
-
-        const prevBtn = bar.querySelector('.announcement-bar__btn--prev');
-        const nextBtn = bar.querySelector('.announcement-bar__btn--next');
-
-        if (prevBtn) prevBtn.addEventListener('click', () => showSlide(current - 1));
-        if (nextBtn) nextBtn.addEventListener('click', () => showSlide(current + 1));
-
-        if (autoplay) {
-          setInterval(() => showSlide(current + 1), speed);
-        }
-      })();
-    </script>
   {%- endif -%}
-{%- endif -%}
+
+  <div class="announcement-bar__content">
+    {%- for block in section.blocks -%}
+      <div class="announcement-bar__message" {{ block.shopify_attributes }}>
+        {%- if block.settings.link != blank -%}
+          <a href="{{ block.settings.link }}">
+            {{ block.settings.text | escape }}
+          </a>
+        {%- else -%}
+          <span>{{ block.settings.text | escape }}</span>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
 
 {% schema %}
 {
-  "name": "Announcement bar",
+  "name": "Announcement Bar",
   "max_blocks": 5,
   "settings": [
     {
-      "type": "select",
-      "id": "color_scheme",
-      "label": "Color scheme",
-      "options": [
-        { "value": "scheme-1", "label": "Scheme 1" },
-        { "value": "scheme-2", "label": "Scheme 2" },
-        { "value": "scheme-3", "label": "Scheme 3" },
-        { "value": "scheme-4", "label": "Scheme 4" }
-      ],
-      "default": "scheme-4"
+      "type": "header",
+      "content": "Section Colors"
     },
     {
-      "type": "checkbox",
-      "id": "auto_rotate",
-      "label": "Auto-rotate announcements",
-      "default": true
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "link_color",
+      "label": "Link color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Bottom border color",
+      "default": "transparent"
     },
     {
       "type": "range",
-      "id": "change_interval",
-      "min": 3,
-      "max": 10,
+      "id": "font_size",
+      "min": 11,
+      "max": 16,
       "step": 1,
-      "unit": "s",
-      "label": "Change message every",
-      "default": 5
+      "unit": "px",
+      "label": "Font size",
+      "default": 13
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "label": "Show social media icons on desktop",
+      "default": false
     }
   ],
   "blocks": [
@@ -182,12 +155,12 @@
           "type": "text",
           "id": "text",
           "label": "Announcement text",
-          "default": "Free worldwide shipping on all orders over $100"
+          "default": "⚡ FREE Express Shipping on all orders over $100!"
         },
         {
           "type": "url",
           "id": "link",
-          "label": "Link"
+          "label": "Link (optional)"
         }
       ]
     }

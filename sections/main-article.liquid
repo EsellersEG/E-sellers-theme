@@ -1,117 +1,145 @@
-<article class="section-main-article color-{{ section.settings.color_scheme }}" id="MainArticle-{{ section.id }}" data-section-id="{{ section.id }}">
-  <div class="page-width page-width--narrow section-spacing">
-    <header class="article-header text-center" style="margin-bottom: 2.5rem;">
-      <h1 class="article-title">{{ article.title | escape }}</h1>
-      <div class="article-meta text-muted" style="margin-top: 0.5rem;">
-        <span>{{ article.published_at | date: '%B %d, %Y' }}</span>
-        {%- if article.author != blank -%}
-          <span>&bull;</span>
-          <span>{{ article.author }}</span>
-        {%- endif -%}
+{%- comment -%}
+  Main Article Section - E-sellers Professional (v4.9.0)
+{%- endcomment -%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    background-color: {{ section.settings.bg_color }};
+    color: {{ section.settings.text_color }};
+    --section-heading-color: {{ section.settings.heading_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  .article-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .article__header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .article__featured-img {
+    width: 100%;
+    border-radius: var(--card-radius, 16px);
+    margin-bottom: 40px;
+    object-fit: cover;
+  }
+
+  .article__content {
+    font-size: 1.7rem;
+    line-height: 1.8;
+  }
+
+  .article__content p {
+    margin-bottom: 24px;
+  }
+
+  .article__content h2,
+  .article__content h3 {
+    margin-top: 36px;
+    margin-bottom: 16px;
+  }
+{%- endstyle -%}
+
+<article class="page-width">
+  <div class="article-wrapper">
+    <!-- Header -->
+    <header class="article__header">
+      <div style="font-size: 1.3rem; color: #71717a; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;">
+        {{ article.published_at | date: "%B %d, %Y" }} &bull; By {{ article.author }}
       </div>
+      <h1 class="h1">{{ article.title | escape }}</h1>
     </header>
 
+    <!-- Featured Image -->
     {%- if article.image -%}
-      <div class="article-featured-image" style="margin-bottom: 2.5rem; border-radius: var(--radius-card); overflow: hidden;">
-        <img
-          src="{{ article.image | image_url: width: 1200 }}"
-          alt="{{ article.image.alt | default: article.title | escape }}"
-          width="{{ article.image.width }}"
-          height="{{ article.image.height }}"
-          loading="eager"
-          style="width: 100%; height: auto; display: block;"
-        >
-      </div>
+      <img
+        src="{{ article.image | image_url: width: 1200 }}"
+        srcset="
+          {{ article.image | image_url: width: 600 }} 600w,
+          {{ article.image | image_url: width: 900 }} 900w,
+          {{ article.image | image_url: width: 1200 }} 1200w
+        "
+        sizes="(min-width: 990px) 800px, 100vw"
+        alt="{{ article.image.alt | default: article.title | escape }}"
+        class="article__featured-img"
+        loading="eager"
+        width="{{ article.image.width }}"
+        height="{{ article.image.height }}"
+      >
     {%- endif -%}
 
-    <div class="article-content rte">
+    <!-- Body -->
+    <div class="article__content">
       {{ article.content }}
     </div>
 
-    {% # Comments Section (if enabled) %}
-    {%- if blog.comments_enabled? -%}
-      <section class="article-comments" id="comments" style="margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--color-border);">
-        {%- if article.comments_count > 0 -%}
-          <h2 class="h3" style="margin-bottom: 1.5rem;">{{ 'blog.comments_count' | t: count: article.comments_count }}</h2>
-          {%- paginate article.comments by 5 -%}
-            <div class="comments-list">
-              {%- for comment in article.comments -%}
-                <div class="comment-item" style="padding: 1.25rem 0; border-bottom: 1px solid var(--color-border);">
-                  <div class="comment-author" style="font-weight: 700;">{{ comment.author }}</div>
-                  <div class="comment-date text-muted" style="font-size: 0.82rem; margin-bottom: 0.5rem;">{{ comment.created_at | date: '%B %d, %Y' }}</div>
-                  <div class="comment-content rte">{{ comment.content }}</div>
-                </div>
-              {%- endfor -%}
-            </div>
-            {%- if paginate.pages > 1 -%}
-              <div class="collection-pagination" style="margin-top: 2rem;">
-                {{ paginate | default_pagination }}
-              </div>
-            {%- endif -%}
-          {%- endpaginate -%}
-        {%- endif -%}
-
-        {% # Comment form %}
-        <div class="comment-form-wrap" style="margin-top: 3rem;">
-          <h3 class="h4" style="margin-bottom: 1rem;">{{ 'blog.comment_form_title' | t }}</h3>
-
-          {%- form 'new_comment', article, id: 'comment_form' -%}
-            {%- if form.posted_successfully? -%}
-              <p class="form-success" style="color: #10B981; margin-bottom: 1rem;">
-                {%- if blog.moderated? -%}
-                  Your comment was submitted successfully and will be published after review.
-                {%- else -%}
-                  Your comment was posted successfully!
-                {%- endif -%}
-              </p>
-            {%- endif -%}
-
-            {%- if form.errors -%}
-              <p class="form-error" style="color: #EF4444; margin-bottom: 1rem;">
-                Please adjust your inputs to submit your comment.
-              </p>
-            {%- endif -%}
-
-            <div class="field">
-              <label for="CommentFormAuthor" class="field__label">{{ 'blog.comment_form_name' | t }} *</label>
-              <input type="text" name="comment[author]" id="CommentFormAuthor" class="field__input" value="{{ form.author }}" required>
-            </div>
-
-            <div class="field">
-              <label for="CommentFormEmail" class="field__label">{{ 'blog.comment_form_email' | t }} *</label>
-              <input type="email" name="comment[email]" id="CommentFormEmail" class="field__input" value="{{ form.email }}" required>
-            </div>
-
-            <div class="field">
-              <label for="CommentFormBody" class="field__label">{{ 'blog.comment_form_body' | t }} *</label>
-              <textarea rows="5" name="comment[body]" id="CommentFormBody" class="field__textarea" required>{{ form.body }}</textarea>
-            </div>
-
-            <button type="submit" class="button button--primary">
-              {{ 'blog.comment_form_submit' | t }}
-            </button>
-          {%- endform -%}
-        </div>
-      </section>
-    {%- endif -%}
+    <!-- Back to Blog Link -->
+    <div style="margin-top: 48px; padding-top: 24px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+      <a href="{{ blog.url }}" class="link" style="font-weight: 600; font-size: 1.5rem;">
+        &larr; Back to {{ blog.title }}
+      </a>
+      <div style="display: flex; gap: 12px; align-items: center; color: #71717a;">
+        <span>{{ 'general.share.share' | t }}:</span>
+        <a href="https://www.facebook.com/sharer.php?u={{ shop.url | append: article.url }}" target="_blank" rel="noopener" aria-label="Share on Facebook">{% render 'icon', name: 'facebook' %}</a>
+        <a href="https://twitter.com/share?url={{ shop.url | append: article.url }}&text={{ article.title | url_param_escape }}" target="_blank" rel="noopener" aria-label="Share on Twitter">{% render 'icon', name: 'twitter' %}</a>
+      </div>
+    </div>
   </div>
 </article>
 
 {% schema %}
 {
-  "name": "Article content",
+  "name": "Article Content",
   "settings": [
     {
-      "type": "select",
-      "id": "color_scheme",
-      "label": "Color scheme",
-      "options": [
-        { "value": "scheme-1", "label": "Scheme 1" },
-        { "value": "scheme-2", "label": "Scheme 2" },
-        { "value": "scheme-3", "label": "Scheme 3" },
-        { "value": "scheme-4", "label": "Scheme 4" }
-      ],
-      "default": "scheme-1"
+      "type": "header",
+      "content": "Section Colors (Independent)"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 60
     }
   ]
 }

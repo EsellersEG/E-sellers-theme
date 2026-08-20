@@ -1,302 +1,102 @@
-{%- paginate collection.products by section.settings.products_per_page -%}
-  <section
-    class="section-main-collection color-{{ section.settings.color_scheme }}"
-    id="MainCollection-{{ section.id }}"
-    data-section-id="{{ section.id }}"
-  >
-    <div class="page-width section-spacing">
-      {% # Collection Header Banner %}
-      <div class="collection-header">
-        <h1 class="collection-header__title">{{ collection.title | escape }}</h1>
-        {%- if collection.description != blank and section.settings.show_description -%}
-          <div class="collection-header__description rte">{{ collection.description }}</div>
-        {%- endif -%}
-      </div>
+{%- comment -%}
+  Main Collection Section - E-sellers Professional (v4.9.0)
+{%- endcomment -%}
 
-      {% # Collection Toolbar (Filter toggles & Sorting) %}
-      <div class="collection-toolbar">
-        <div class="collection-toolbar__count">
-          {{ 'collections.product_count' | t: count: collection.products_count }}
-        </div>
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    background-color: {{ section.settings.bg_color }};
+    color: {{ section.settings.text_color }};
+    --section-heading-color: {{ section.settings.heading_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
 
-        <div class="collection-toolbar__controls">
-          <form id="CollectionSortForm" class="collection-sort-form">
-            <label for="SortBy" class="visually-hidden">{{ 'collections.sort_by_label' | t }}</label>
-            <select name="sort_by" id="SortBy" class="field__select collection-sort-select" onchange="this.form.submit()">
-              {%- for option in collection.sort_options -%}
-                <option
-                  value="{{ option.value }}"
-                  {% if option.value == collection.sort_by %}selected="selected"{% endif %}
-                >
-                  {{ option.name }}
-                </option>
-              {%- endfor -%}
-            </select>
-          </form>
-        </div>
-      </div>
-
-      {% # Main Content (Filters Sidebar + Product Grid) %}
-      <div class="collection-content">
-        {%- if section.settings.enable_filtering and collection.filters.size > 0 -%}
-          <aside class="collection-filters">
-            <form id="CollectionFiltersForm" class="filters-form">
-              <div class="filters-header">
-                <span class="filters-title">{{ 'collections.filter_by_label' | t }}</span>
-                {%- if collection.filters.size > 0 -%}
-                  <a href="{{ collection.url }}?sort_by={{ collection.sort_by }}" class="filters-clear">
-                    {{ 'collections.clear_all' | t }}
-                  </a>
-                {%- endif -%}
-              </div>
-
-              {%- for filter in collection.filters -%}
-                <details class="filter-group" open>
-                  <summary class="filter-group__summary">
-                    <span>{{ filter.label | escape }}</span>
-                    <svg class="filter-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                  </summary>
-
-                  <div class="filter-group__content">
-                    {%- case filter.type -%}
-                      {%- when 'list' or 'boolean' -%}
-                        <ul class="filter-list">
-                          {%- for value in filter.values -%}
-                            <li class="filter-item">
-                              <label class="filter-checkbox-label">
-                                <input
-                                  type="checkbox"
-                                  name="{{ value.param_name }}"
-                                  value="{{ value.value }}"
-                                  {% if value.active %}checked{% endif %}
-                                  {% if value.count == 0 and value.active == false %}disabled{% endif %}
-                                  onchange="this.form.submit()"
-                                >
-                                <span>{{ value.label | escape }} ({{ value.count }})</span>
-                              </label>
-                            </li>
-                          {%- endfor -%}
-                        </ul>
-
-                      {%- when 'price_range' -%}
-                        <div class="price-range-inputs">
-                          <div class="field">
-                            <label class="field__label" for="Filter-{{ filter.label }}-Min">Min</label>
-                            <input
-                              type="number"
-                              name="{{ filter.min_value.param_name }}"
-                              id="Filter-{{ filter.label }}-Min"
-                              class="field__input"
-                              placeholder="0"
-                              min="0"
-                              max="{{ filter.range_max | divided_by: 100.0 }}"
-                              value="{{ filter.min_value.value | divided_by: 100.0 }}"
-                            >
-                          </div>
-                          <span>-</span>
-                          <div class="field">
-                            <label class="field__label" for="Filter-{{ filter.label }}-Max">Max</label>
-                            <input
-                              type="number"
-                              name="{{ filter.max_value.param_name }}"
-                              id="Filter-{{ filter.label }}-Max"
-                              class="field__input"
-                              placeholder="{{ filter.range_max | divided_by: 100.0 }}"
-                              min="0"
-                              max="{{ filter.range_max | divided_by: 100.0 }}"
-                              value="{{ filter.max_value.value | divided_by: 100.0 }}"
-                            >
-                          </div>
-                        </div>
-                        <button type="submit" class="button button--secondary button--sm" style="margin-top: 0.5rem;">
-                          {{ 'collections.apply' | t }}
-                        </button>
-                    {%- endcase -%}
-                  </div>
-                </details>
-              {%- endfor -%}
-            </form>
-          </aside>
-        {%- endif -%}
-
-        {% # Product Grid %}
-        <div class="collection-products">
-          {%- if collection.products.size == 0 -%}
-            <div class="collection-empty text-center">
-              <p>{{ 'collections.empty' | t }}</p>
-              <a href="{{ routes.all_products_collection_url }}" class="button button--primary" style="margin-top: 1rem;">
-                {{ 'cart.continue_shopping' | t }}
-              </a>
-            </div>
-          {%- else -%}
-            <div class="grid grid--{{ section.settings.columns_desktop }}-col grid--gap-md">
-              {%- for product in collection.products -%}
-                <div class="grid__item">
-                  {% render 'product-card',
-                    product_card_product: product,
-                    media_aspect_ratio: section.settings.image_ratio,
-                    show_secondary_image: section.settings.show_secondary_image,
-                    show_vendor: section.settings.show_vendor,
-                    show_swatches: section.settings.show_swatches,
-                    show_quick_buy: section.settings.show_quick_buy
-                  %}
-                </div>
-              {%- endfor -%}
-            </div>
-
-            {%- if paginate.pages > 1 -%}
-              <div class="collection-pagination">
-                {{ paginate | default_pagination }}
-              </div>
-            {%- endif -%}
-          {%- endif -%}
-        </div>
-      </div>
-    </div>
-  </section>
-{%- endpaginate -%}
-
-<style>
-  .collection-header {
+  .collection__header {
     text-align: center;
-    margin-bottom: 2.5rem;
+    max-width: 800px;
+    margin: 0 auto 40px auto;
   }
-  .collection-header__title {
-    font-size: clamp(2rem, 4vw, 3rem);
-    margin-bottom: 0.5rem;
-  }
-  .collection-header__description {
-    max-width: 700px;
-    margin: 0 auto;
-    opacity: 0.85;
-  }
-  .collection-toolbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-bottom: 1.25rem;
-    margin-bottom: 2rem;
-    border-bottom: 1px solid var(--color-border);
-  }
-  .collection-toolbar__count {
-    font-size: 0.95rem;
-    font-weight: 500;
-  }
-  .collection-sort-select {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-    border-radius: var(--radius-button);
-  }
-  .collection-content {
+
+  .collection__grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
+    grid-template-columns: repeat({{ section.settings.columns_mobile }}, 1fr);
+    gap: var(--grid-gap, 24px);
   }
-  @media (min-width: 990px) {
-    .collection-content {
-      grid-template-columns: 260px 1fr;
-      align-items: start;
+
+  @media screen and (min-width: 750px) {
+    .collection__grid {
+      grid-template-columns: repeat({{ section.settings.columns_desktop }}, 1fr);
     }
   }
-  .collection-filters {
-    position: sticky;
-    top: 6rem;
-  }
-  .filters-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-  }
-  .filters-title {
-    font-weight: 700;
-    font-size: 1.05rem;
-  }
-  .filters-clear {
-    font-size: 0.85rem;
-    color: var(--color-accent);
-    text-decoration: underline;
-  }
-  .filter-group {
-    border-bottom: 1px solid var(--color-border);
-    padding: 1rem 0;
-  }
-  .filter-group__summary {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 0.95rem;
-  }
-  .filter-group__content {
-    padding-top: 0.75rem;
-  }
-  .filter-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  .filter-checkbox-label {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.9rem;
-    cursor: pointer;
-  }
-  .price-range-inputs {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .price-range-inputs .field {
-    margin-bottom: 0;
-  }
-  .collection-empty {
-    padding: 4rem 0;
-  }
-  .collection-pagination {
-    margin-top: 3rem;
-    display: flex;
-    justify-content: center;
-  }
-  .collection-pagination .page,
-  .collection-pagination .current,
-  .collection-pagination .next,
-  .collection-pagination .prev {
-    padding: 0.5rem 0.85rem;
-    margin: 0 0.25rem;
-    border-radius: var(--radius-button);
-    border: 1px solid var(--color-border);
-    text-decoration: none;
-    color: inherit;
-    font-weight: 600;
-  }
-  .collection-pagination .current {
-    background-color: var(--color-text);
-    color: var(--color-bg);
-    border-color: var(--color-text);
-  }
-</style>
+{%- endstyle -%}
+
+<div class="page-width">
+  <!-- Collection Header -->
+  <div class="collection__header">
+    <h1 class="collection__title h1">{{ collection.title | escape }}</h1>
+    {%- if section.settings.show_description and collection.description != blank -%}
+      <div class="collection__description" style="font-size: 1.6rem; color: #71717a; margin-top: 12px; line-height: 1.6;">
+        {{ collection.description }}
+      </div>
+    {%- endif -%}
+  </div>
+
+  {%- paginate collection.products by section.settings.products_per_page -%}
+    <!-- Faceted Filters & Sorting -->
+    {% render 'facet-filters', results: collection, enable_filtering: section.settings.enable_filtering, enable_sorting: section.settings.enable_sorting %}
+
+    {%- if collection.products.size == 0 -%}
+      <div style="text-align: center; padding: 64px 20px;">
+        <p class="h3">{{ 'sections.collection_template.empty' | t | default: 'No products found in this collection.' }}</p>
+        <a href="{{ routes.all_products_collection_url }}" class="button button--primary" style="margin-top: 16px;">
+          {{ 'cart.continue_shopping' | t }}
+        </a>
+      </div>
+    {%- else -%}
+      <!-- Product Grid -->
+      <div class="collection__grid">
+        {%- for product in collection.products -%}
+          {% render 'card-product', card_product: product, show_vendor: settings.show_vendor, show_rating: settings.show_rating, show_quick_add: settings.enable_quick_add %}
+        {%- endfor -%}
+      </div>
+
+      <!-- Pagination -->
+      {%- if paginate.pages > 1 -%}
+        {% render 'pagination', paginate: paginate %}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endpaginate -%}
+</div>
 
 {% schema %}
 {
-  "name": "Collection products",
+  "name": "Collection Grid",
   "settings": [
     {
-      "type": "select",
-      "id": "color_scheme",
-      "label": "Color scheme",
-      "options": [
-        { "value": "scheme-1", "label": "Scheme 1" },
-        { "value": "scheme-2", "label": "Scheme 2" },
-        { "value": "scheme-3", "label": "Scheme 3" },
-        { "value": "scheme-4", "label": "Scheme 4" }
-      ],
-      "default": "scheme-1"
+      "type": "header",
+      "content": "Section Colors (Independent)"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Layout & Grid"
     },
     {
       "type": "range",
@@ -304,66 +104,69 @@
       "min": 8,
       "max": 36,
       "step": 4,
-      "label": "Products per page",
-      "default": 16
+      "default": 16,
+      "label": "Products per page"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4,
+      "label": "Desktop columns"
     },
     {
       "type": "select",
-      "id": "columns_desktop",
-      "label": "Columns on desktop",
+      "id": "columns_mobile",
       "options": [
-        { "value": "3", "label": "3 columns" },
-        { "value": "4", "label": "4 columns" },
-        { "value": "5", "label": "5 columns" }
+        { "value": "1", "label": "1 column" },
+        { "value": "2", "label": "2 columns" }
       ],
-      "default": "4"
+      "default": "2",
+      "label": "Mobile columns"
     },
     {
       "type": "checkbox",
       "id": "show_description",
-      "label": "Show collection description",
-      "default": true
+      "default": true,
+      "label": "Show collection description"
     },
     {
       "type": "checkbox",
       "id": "enable_filtering",
-      "label": "Enable filtering",
-      "default": true
-    },
-    {
-      "type": "select",
-      "id": "image_ratio",
-      "label": "Product image ratio",
-      "options": [
-        { "value": "portrait", "label": "Portrait (3:4)" },
-        { "value": "square", "label": "Square (1:1)" },
-        { "value": "adapt", "label": "Adapt to image" }
-      ],
-      "default": "portrait"
+      "default": true,
+      "label": "Enable faceted filtering"
     },
     {
       "type": "checkbox",
-      "id": "show_secondary_image",
-      "label": "Show second image on hover",
-      "default": true
+      "id": "enable_sorting",
+      "default": true,
+      "label": "Enable sorting dropdown"
     },
     {
-      "type": "checkbox",
-      "id": "show_vendor",
-      "label": "Show product vendor",
-      "default": false
+      "type": "header",
+      "content": "Section Spacing"
     },
     {
-      "type": "checkbox",
-      "id": "show_swatches",
-      "label": "Show color swatches",
-      "default": true
+      "type": "range",
+      "id": "padding_top",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 40
     },
     {
-      "type": "checkbox",
-      "id": "show_quick_buy",
-      "label": "Show quick add button",
-      "default": true
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 60
     }
   ]
 }

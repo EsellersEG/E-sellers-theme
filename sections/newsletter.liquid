@@ -1,0 +1,197 @@
+{%- comment -%}
+  Standalone Newsletter Section - E-sellers Professional (v4.9.0)
+{%- endcomment -%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    background-color: {{ section.settings.bg_color }};
+    color: {{ section.settings.text_color }};
+    --section-heading-color: {{ section.settings.heading_color }};
+    --newsletter-btn-bg: {{ section.settings.btn_bg_color }};
+    --newsletter-btn-text: {{ section.settings.btn_text_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  .newsletter-section {
+    max-width: 680px;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .newsletter-section__form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 500px;
+    margin-top: 12px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .newsletter-section__form {
+      flex-direction: row;
+      gap: 8px;
+    }
+  }
+
+  .newsletter-section__input {
+    flex: 1;
+    padding: 14px 20px;
+    font-size: 1.5rem;
+    border: 1.5px solid #e2e8f0;
+    border-radius: var(--input-radius, 8px);
+    background-color: #ffffff;
+    color: #121212;
+    outline: none;
+  }
+
+  .newsletter-section__btn {
+    background-color: var(--newsletter-btn-bg);
+    color: var(--newsletter-btn-text);
+    padding: 14px 28px;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+{%- endstyle -%}
+
+<div class="page-width">
+  <div class="newsletter-section">
+    {%- if section.settings.subheading != blank -%}
+      <p style="font-size: 1.3rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #71717a; margin: 0;">
+        {{ section.settings.subheading | escape }}
+      </p>
+    {%- endif -%}
+
+    {%- if section.settings.heading != blank -%}
+      <h2 class="h2" style="margin: 0;">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+
+    {%- if section.settings.text != blank -%}
+      <div style="font-size: 1.6rem; line-height: 1.6; opacity: 0.9;">
+        {{ section.settings.text }}
+      </div>
+    {%- endif -%}
+
+    {%- form 'customer', class: 'newsletter-section__form' -%}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      <input
+        type="email"
+        name="contact[email]"
+        class="newsletter-section__input"
+        value="{{ form.email }}"
+        placeholder="{{ 'sections.newsletter.email_placeholder' | t }}"
+        required
+        aria-label="{{ 'sections.newsletter.email_placeholder' | t }}"
+      >
+      <button type="submit" class="button newsletter-section__btn" aria-label="{{ 'sections.newsletter.button_label' | t }}">
+        {{ section.settings.button_label | default: 'Subscribe' }}
+      </button>
+
+      {%- if form.posted_successfully? -%}
+        <div style="width: 100%; color: #16a34a; font-weight: 600; font-size: 1.4rem; margin-top: 8px;">
+          {{ 'sections.newsletter.success' | t }}
+        </div>
+      {%- endif -%}
+    {%- endform -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Join The Inner Circle"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Unlock 15% Off Your First Order"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Be the first to hear about private sales, exclusive releases, and limited-edition product drops.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Claim Offer"
+    },
+    {
+      "type": "header",
+      "content": "Section Colors (Independent)"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#a1a1aa"
+    },
+    {
+      "type": "color",
+      "id": "btn_bg_color",
+      "label": "Button background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "btn_text_color",
+      "label": "Button text color",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter"
+    }
+  ]
+}
+{% endschema %}

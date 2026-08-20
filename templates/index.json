@@ -1,40 +1,300 @@
 {
   "sections": {
-    "hero": {
-      "type": "hero-banner",
+    "banner": {
+      "type": "image-banner",
+      "blocks": {
+        "subheading": {
+          "type": "subheading",
+          "settings": {
+            "text": "New Season Arrival"
+          }
+        },
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "text": "Engineered for Performance & Style"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Discover the next generation of premium essentials crafted with uncompromising attention to detail and sustainable materials.</p>"
+          }
+        },
+        "buttons": {
+          "type": "buttons",
+          "settings": {
+            "button_1_label": "Shop Best Sellers",
+            "button_1_link": "/collections/all",
+            "button_2_label": "Explore Brand",
+            "button_2_link": "/pages/about"
+          }
+        }
+      },
+      "block_order": [
+        "subheading",
+        "heading",
+        "text",
+        "buttons"
+      ],
       "settings": {
-        "color_scheme": "scheme-4",
-        "subheading": "Engineered for Performance",
-        "heading": "Elevate Your Everyday Ritual",
-        "text": "<p>Discover scientifically proven formulations designed to transform and nourish.</p>",
-        "content_max_width": 650,
-        "text_alignment": "center",
-        "vertical_alignment": "middle",
-        "button_1_label": "Shop collection",
-        "button_1_link": "/collections/all",
-        "button_2_label": "Explore routine",
-        "button_2_link": "#"
+        "banner_height_desktop": 650,
+        "banner_height_mobile": 450,
+        "desktop_content_position": "center",
+        "desktop_content_alignment": "center",
+        "text_align": "center",
+        "content_max_width": 720,
+        "heading_color": "#ffffff",
+        "text_color": "#ffffff",
+        "overlay_color": "#000000",
+        "overlay_opacity": 40,
+        "btn1_bg": "#ffffff",
+        "btn1_text": "#121212",
+        "btn2_bg": "transparent",
+        "btn2_text": "#ffffff"
+      }
+    },
+    "ticker": {
+      "type": "marquee-ticker",
+      "blocks": {
+        "msg1": {
+          "type": "text",
+          "settings": {
+            "text": "⚡ FREE WORLDWIDE EXPRESS DELIVERY OVER $100",
+            "icon": "truck"
+          }
+        },
+        "msg2": {
+          "type": "text",
+          "settings": {
+            "text": "★ 50,000+ VERIFIED 5-STAR REVIEWS",
+            "icon": "star"
+          }
+        },
+        "msg3": {
+          "type": "text",
+          "settings": {
+            "text": "🛡️ 30-DAY RISK-FREE SATISFACTION GUARANTEE",
+            "icon": "shield"
+          }
+        },
+        "msg4": {
+          "type": "text",
+          "settings": {
+            "text": "🌿 100% SUSTAINABLE & ETHICAL CRAFTSMANSHIP",
+            "icon": "check"
+          }
+        }
+      },
+      "block_order": [
+        "msg1",
+        "msg2",
+        "msg3",
+        "msg4"
+      ],
+      "settings": {
+        "bg_color": "#121212",
+        "text_color": "#ffffff",
+        "icon_color": "#f59e0b",
+        "speed": 22,
+        "font_size": 14,
+        "padding_top": 14,
+        "padding_bottom": 14
       }
     },
     "featured_collection": {
       "type": "featured-collection",
       "settings": {
-        "color_scheme": "scheme-1",
-        "subheading": "Curated Selection",
-        "title": "Featured Best Sellers",
-        "products_to_show": 4,
-        "columns_desktop": "4",
+        "subheading": "Curated Catalog",
+        "heading": "Trending Products",
+        "description": "<p>Our most popular items engineered for supreme comfort, longevity, and modern aesthetics.</p>",
+        "products_to_show": 8,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
         "show_view_all": true,
-        "image_ratio": "portrait",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_swatches": true,
-        "show_quick_buy": true
+        "bg_color": "#ffffff",
+        "text_color": "#121212",
+        "heading_color": "#121212",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "features": {
+      "type": "multicolumn",
+      "blocks": {
+        "col1": {
+          "type": "column",
+          "settings": {
+            "icon": "truck",
+            "heading": "Express Worldwide Shipping",
+            "text": "<p>Complimentary tracked expedited delivery on all orders over $100.</p>"
+          }
+        },
+        "col2": {
+          "type": "column",
+          "settings": {
+            "icon": "shield",
+            "heading": "Military-Grade Security",
+            "text": "<p>256-bit encrypted checkout with Shop Pay, Apple Pay, and PayPal.</p>"
+          }
+        },
+        "col3": {
+          "type": "column",
+          "settings": {
+            "icon": "star",
+            "heading": "Artisanal Quality",
+            "text": "<p>Engineered using premium grade materials tested for durability.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "col1",
+        "col2",
+        "col3"
+      ],
+      "settings": {
+        "subheading": "The E-sellers Difference",
+        "heading": "Why Thousands Choose Us",
+        "columns_desktop": 3,
+        "columns_mobile": "1",
+        "bg_color": "#f8fafc",
+        "card_bg_color": "#ffffff",
+        "heading_color": "#121212",
+        "text_color": "#475569",
+        "icon_color": "#005bd3",
+        "padding_top": 70,
+        "padding_bottom": 70
+      }
+    },
+    "comparison": {
+      "type": "before-after-slider",
+      "settings": {
+        "subheading": "Proven Quality",
+        "heading": "See The Difference",
+        "label_before": "Standard",
+        "label_after": "E-sellers Pro",
+        "aspect_ratio": "16 / 9",
+        "max_width": 960,
+        "bg_color": "#ffffff",
+        "heading_color": "#121212",
+        "text_color": "#121212",
+        "handle_color": "#ffffff",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "story": {
+      "type": "rich-text",
+      "blocks": {
+        "subhead": {
+          "type": "subheading",
+          "settings": {
+            "text": "Our Mission"
+          }
+        },
+        "head": {
+          "type": "heading",
+          "settings": {
+            "text": "Crafting Products That Stand The Test Of Time"
+          }
+        },
+        "body": {
+          "type": "text",
+          "settings": {
+            "text": "<p>We founded E-sellers with a single mission: to eliminate compromise. Every single product in our catalog undergoes rigorous quality testing to ensure unmatched durability, timeless aesthetics, and effortless everyday performance.</p>"
+          }
+        },
+        "btn": {
+          "type": "button",
+          "settings": {
+            "button_label": "Learn More About Us",
+            "button_link": "/pages/about"
+          }
+        }
+      },
+      "block_order": [
+        "subhead",
+        "head",
+        "body",
+        "btn"
+      ],
+      "settings": {
+        "alignment": "center",
+        "content_width": 780,
+        "bg_color": "#f8fafc",
+        "heading_color": "#121212",
+        "text_color": "#334155",
+        "padding_top": 70,
+        "padding_bottom": 70
+      }
+    },
+    "faq": {
+      "type": "collapsible-content",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "heading": "How long does shipping take?",
+            "content": "<p>Orders are dispatched within 24 hours. Standard delivery takes 3-5 business days, with express 1-2 day options available.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "heading": "What is your 30-day money-back guarantee?",
+            "content": "<p>If you're not 100% satisfied with your purchase, simply contact us within 30 days for an effortless return and full refund.</p>"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "heading": "Do you ship internationally?",
+            "content": "<p>Yes! We ship worldwide with all duties and taxes calculated upfront at checkout so there are no surprises on delivery.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3"
+      ],
+      "settings": {
+        "subheading": "Questions & Answers",
+        "heading": "Frequently Asked Questions",
+        "max_width": 800,
+        "bg_color": "#ffffff",
+        "card_bg_color": "#f8fafc",
+        "heading_color": "#121212",
+        "text_color": "#334155",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "newsletter_signup": {
+      "type": "newsletter",
+      "settings": {
+        "subheading": "VIP Perks",
+        "heading": "Get 15% Off Your First Order",
+        "text": "<p>Join our newsletter community for early access to sales, exclusive VIP product drops, and member-only promotions.</p>",
+        "button_label": "Claim Discount",
+        "bg_color": "#121212",
+        "heading_color": "#ffffff",
+        "text_color": "#a1a1aa",
+        "btn_bg_color": "#ffffff",
+        "btn_text_color": "#121212",
+        "padding_top": 80,
+        "padding_bottom": 80
       }
     }
   },
   "order": [
-    "hero",
-    "featured_collection"
+    "banner",
+    "ticker",
+    "featured_collection",
+    "features",
+    "comparison",
+    "story",
+    "faq",
+    "newsletter_signup"
   ]
 }

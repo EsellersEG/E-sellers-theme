@@ -1,47 +1,101 @@
-<section class="section-main-404 color-{{ section.settings.color_scheme }}" id="Main404-{{ section.id }}" data-section-id="{{ section.id }}">
-  <div class="page-width section-spacing text-center">
-    <div style="max-width: 600px; margin: 0 auto;">
-      <span class="text-subheading" style="font-size: 1.25rem;">404</span>
-      <h1 class="h1" style="margin-bottom: 1rem;">{{ '404.title' | t }}</h1>
-      <p class="text-muted" style="margin-bottom: 2rem;">{{ '404.subtext' | t }}</p>
+{%- comment -%}
+  Main 404 Section - E-sellers Professional (v4.9.0)
+{%- endcomment -%}
 
-      <form action="{{ routes.search_url }}" method="get" role="search" class="search-form-404" style="margin-bottom: 2rem;">
-        <div class="field" style="display: flex; gap: 0.5rem;">
-          <input
-            type="search"
-            name="q"
-            placeholder="{{ 'search.placeholder' | t }}"
-            class="field__input"
-            required
-          >
-          <button type="submit" class="button button--secondary">
-            {{ 'search.submit' | t }}
-          </button>
-        </div>
-      </form>
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    background-color: {{ section.settings.bg_color }};
+    color: {{ section.settings.text_color }};
+    --section-heading-color: {{ section.settings.heading_color }};
+    --section-btn-bg: {{ section.settings.btn_bg_color }};
+    --section-btn-text: {{ section.settings.btn_text_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
 
-      <a href="{{ routes.root_url }}" class="button button--primary button--lg">
-        {{ '404.back_to_shopping' | t }}
-      </a>
-    </div>
+  .template-404 {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+{%- endstyle -%}
+
+<div class="page-width">
+  <div class="template-404">
+    <span style="font-size: 8rem; font-weight: 900; line-height: 1; opacity: 0.2;">404</span>
+    <h1 class="h1" style="margin: 0;">{{ 'templates.404.title' | t }}</h1>
+    <p style="font-size: 1.6rem; color: #71717a;">{{ 'templates.404.subtext' | t }}</p>
+    <a href="{{ routes.root_url }}" class="button button--primary" style="padding: 16px 36px; font-size: 1.6rem; margin-top: 12px;">
+      {{ 'templates.404.button' | t }} &rarr;
+    </a>
   </div>
-</section>
+</div>
 
 {% schema %}
 {
-  "name": "404 not found",
+  "name": "404 Page",
   "settings": [
     {
-      "type": "select",
-      "id": "color_scheme",
-      "label": "Color scheme",
-      "options": [
-        { "value": "scheme-1", "label": "Scheme 1" },
-        { "value": "scheme-2", "label": "Scheme 2" },
-        { "value": "scheme-3", "label": "Scheme 3" },
-        { "value": "scheme-4", "label": "Scheme 4" }
-      ],
-      "default": "scheme-1"
+      "type": "header",
+      "content": "Section Colors (Independent)"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "btn_bg_color",
+      "label": "Button background",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "btn_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 40,
+      "max": 140,
+      "step": 10,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 40,
+      "max": 140,
+      "step": 10,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 100
     }
   ]
 }

@@ -6,27 +6,20 @@
         "text": {
           "type": "text",
           "settings": {
-            "text": "Premium Formulation",
-            "text_style": "text-subheading"
+            "text": "Premium Quality"
           }
         },
         "title": {
-          "type": "title",
-          "settings": {}
+          "type": "title"
+        },
+        "rating": {
+          "type": "rating"
         },
         "price": {
-          "type": "price",
-          "settings": {}
-        },
-        "installments": {
-          "type": "installments",
-          "settings": {}
+          "type": "price"
         },
         "variant_picker": {
-          "type": "variant_picker",
-          "settings": {
-            "picker_type": "swatch"
-          }
+          "type": "variant_picker"
         },
         "buy_buttons": {
           "type": "buy_buttons",
@@ -34,40 +27,65 @@
             "show_dynamic_checkout": true
           }
         },
-        "pickup_availability": {
-          "type": "pickup_availability",
-          "settings": {}
+        "trust_badges": {
+          "type": "trust_badges"
         },
         "description": {
-          "type": "description",
-          "settings": {}
+          "type": "description"
         },
-        "collapsible_tab": {
+        "tab_shipping": {
           "type": "collapsible_tab",
           "settings": {
-            "heading": "Shipping & returns",
-            "content": "<p>Free standard shipping on all orders over $100. Returns accepted within 30 days of delivery.</p>"
+            "heading": "Free Shipping & Returns",
+            "content": "<p>Complimentary 3-5 day express delivery on orders over $100. Easy 30-day hassle-free returns on all purchases.</p>"
           }
+        },
+        "share": {
+          "type": "share"
         }
       },
       "block_order": [
         "text",
         "title",
+        "rating",
         "price",
-        "installments",
         "variant_picker",
         "buy_buttons",
-        "pickup_availability",
+        "trust_badges",
         "description",
-        "collapsible_tab"
+        "tab_shipping",
+        "share"
       ],
       "settings": {
-        "color_scheme": "scheme-1",
-        "enable_video_looping": false
+        "bg_color": "#ffffff",
+        "text_color": "#121212",
+        "heading_color": "#121212",
+        "btn_bg_color": "#121212",
+        "btn_text_color": "#ffffff",
+        "enable_sticky_gallery": true,
+        "padding_top": 40,
+        "padding_bottom": 60
+      }
+    },
+    "related_products": {
+      "type": "featured-collection",
+      "settings": {
+        "subheading": "Complete The Look",
+        "heading": "You May Also Like",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "show_view_all": false,
+        "bg_color": "#f8fafc",
+        "text_color": "#121212",
+        "heading_color": "#121212",
+        "padding_top": 60,
+        "padding_bottom": 60
       }
     }
   },
   "order": [
-    "main"
+    "main",
+    "related_products"
   ]
 }

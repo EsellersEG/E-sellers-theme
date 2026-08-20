@@ -1,48 +1,117 @@
 <!doctype html>
-<html lang="{{ request.locale.iso_code }}">
+<html class="no-js" lang="{{ request.locale.iso_code }}" dir="{% if request.locale.iso_code == 'ar' or request.locale.iso_code == 'he' %}rtl{% else %}ltr{% endif %}">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#121212">
     <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
 
     {%- if settings.favicon != blank -%}
       <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
     {%- endif -%}
 
-    {% # Inlined CSS Variables %}
-    {% render 'css-variables' %}
+    {%- capture seo_title -%}
+      {{ page_title }}
+      {%- if current_tags -%}
+        {%- assign meta_tags = current_tags | join: ', ' %} &ndash; {{ 'general.meta.tags' | t: tags: meta_tags -}}
+      {%- endif -%}
+      {%- if current_page != 1 -%}
+        &ndash; {{ 'general.meta.page' | t: page: current_page }}
+      {%- endif -%}
+      {%- assign escaped_page_title = page_title | escape -%}
+      {%- unless escaped_page_title contains shop.name -%}
+        &ndash; {{ shop.name }}
+      {%- endunless -%}
+    {%- endcapture -%}
+    <title>{{ seo_title | strip }}</title>
 
-    {% comment %} Font preloading {% endcomment %}
-    {% unless settings.heading_font.system? %}
-      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
-      {{ settings.heading_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
-    {% endunless %}
-    {% unless settings.body_font.system? %}
-      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
-      {{ settings.body_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
-    {% endunless %}
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
 
-    {% # Stylesheets %}
-    {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
+    {%- comment -%} Social Media Meta Tags {%- endcomment -%}
+    <meta property="og:site_name" content="{{ shop.name }}">
+    <meta property="og:url" content="{{ canonical_url }}">
+    <meta property="og:title" content="{{ page_title | escape }}">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="{{ page_description | default: shop.description | escape }}">
+    {%- if page_image -%}
+      <meta property="og:image" content="http:{{ page_image | image_url: width: 1200 }}">
+      <meta property="og:image:secure_url" content="https:{{ page_image | image_url: width: 1200 }}">
+      <meta property="og:image:width" content="1200">
+      <meta property="og:image:height" content="630">
+    {%- endif -%}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ page_title | escape }}">
+    <meta name="twitter:description" content="{{ page_description | default: shop.description | escape }}">
+
+    {%- comment -%} Typography Setup {%- endcomment -%}
+    {%- liquid
+      assign header_font = settings.type_header_font
+      assign body_font = settings.type_body_font
+      assign body_font_bold = body_font | font_modify: 'weight', 'bold'
+      assign body_font_italic = body_font | font_modify: 'style', 'italic'
+    -%}
+
+    {%- style -%}
+      {{ header_font | font_face: font_display: 'swap' }}
+      {{ body_font | font_face: font_display: 'swap' }}
+      {{ body_font_bold | font_face: font_display: 'swap' }}
+      {{ body_font_italic | font_face: font_display: 'swap' }}
+
+      :root {
+        --font-heading-family: {{ header_font.family }}, {{ header_font.fallback_families }};
+        --font-heading-style: {{ header_font.style }};
+        --font-heading-weight: {{ header_font.weight }};
+        --font-heading-scale: {{ settings.heading_scale | divided_by: 100.0 }};
+        --font-heading-transform: {{ settings.heading_text_transform }};
+
+        --font-body-family: {{ body_font.family }}, {{ body_font.fallback_families }};
+        --font-body-style: {{ body_font.style }};
+        --font-body-weight: {{ body_font.weight }};
+        --font-body-scale: {{ settings.body_scale | divided_by: 100.0 }};
+
+        --page-width: {{ settings.page_width }}px;
+        --grid-gap: {{ settings.grid_gap }}px;
+        --card-radius: {{ settings.card_corner_radius }}px;
+        --button-radius: {{ settings.button_corner_radius }}px;
+        --input-radius: {{ settings.input_corner_radius }}px;
+        --badge-radius: {{ settings.badge_corner_radius }}px;
+
+        --color-base-text: #121212;
+        --color-base-background: #ffffff;
+        --color-btn-primary-bg: #121212;
+        --color-btn-primary-text: #ffffff;
+      }
+    {%- endstyle -%}
+
     {{ 'base.css' | asset_url | stylesheet_tag }}
 
-    {% # Meta tags, Title, SEO & Social %}
-    {% render 'meta-tags' %}
+    <script>
+      document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+      window.theme = {
+        routes: {
+          root: '{{ routes.root_url }}',
+          cart: '{{ routes.cart_url }}',
+          cart_add: '{{ routes.cart_add_url }}',
+          cart_change: '{{ routes.cart_change_url }}',
+          cart_update: '{{ routes.cart_update_url }}',
+          predictive_search_url: '{{ routes.predictive_search_url }}'
+        },
+        moneyFormat: {{ shop.money_format | json }},
+        cartType: {{ settings.cart_type | json }}
+      };
+    </script>
+
+    <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
 
     {{ content_for_header }}
-
-    <script>
-      window.Shopify = window.Shopify || {};
-      window.Shopify.routes = window.Shopify.routes || {};
-      window.Shopify.routes.root = '{{ routes.root_url }}';
-    </script>
-    <script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
   </head>
 
-  <body class="color-scheme-1">
-    <a class="skip-to-content visually-hidden" href="#MainContent">
+  <body class="template-{{ template.name | handle }}">
+    <a class="skip-to-content-link" href="#MainContent">
       {{ 'general.accessibility.skip_to_text' | t }}
     </a>
 
@@ -54,8 +123,16 @@
 
     {% sections 'footer-group' %}
 
-    {% # Drawers and Modals %}
-    {% render 'predictive-search' %}
-    {% render 'cart-drawer' %}
+    {%- if settings.cart_type == 'drawer' and template != 'cart' -%}
+      {% section 'cart-drawer' %}
+    {%- endif -%}
+
+    {% section 'predictive-search' %}
+
+    <ul hidden>
+      <li id="a11y-refresh-page-message">{{ 'general.accessibility.loading' | t }}</li>
+    </ul>
+
+    {%- render 'schema-structured-data' -%}
   </body>
 </html>

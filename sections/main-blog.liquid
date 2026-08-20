@@ -1,119 +1,184 @@
-{%- paginate blog.articles by 9 -%}
-  <section class="section-main-blog color-{{ section.settings.color_scheme }}" id="MainBlog-{{ section.id }}" data-section-id="{{ section.id }}">
-    <div class="page-width section-spacing">
-      <div class="blog-header text-center" style="margin-bottom: 3rem;">
-        <h1 class="blog-title">{{ blog.title | escape }}</h1>
-      </div>
+{%- comment -%}
+  Main Blog Section - E-sellers Professional (v4.9.0)
+{%- endcomment -%}
 
-      <div class="grid grid--3-col grid--gap-lg">
-        {%- for article in blog.articles -%}
-          <article class="article-card">
-            {%- if article.image -%}
-              <a href="{{ article.url }}" class="article-card__media-link">
-                <img
-                  src="{{ article.image | image_url: width: 700 }}"
-                  alt="{{ article.image.alt | default: article.title | escape }}"
-                  width="350"
-                  height="220"
-                  loading="lazy"
-                  class="article-card__image"
-                >
-              </a>
-            {%- endif -%}
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    background-color: {{ section.settings.bg_color }};
+    color: {{ section.settings.text_color }};
+    --section-heading-color: {{ section.settings.heading_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
 
-            <div class="article-card__info">
-              <div class="article-card__meta text-muted">
-                <span>{{ article.published_at | date: '%B %d, %Y' }}</span>
-                {%- if article.author != blank -%}
-                  <span>&bull;</span>
-                  <span>{{ article.author }}</span>
-                {%- endif -%}
-              </div>
+  .blog__grid {
+    display: grid;
+    grid-template-columns: repeat({{ section.settings.columns_desktop }}, 1fr);
+    gap: var(--grid-gap, 24px);
+  }
 
-              <h2 class="article-card__title">
-                <a href="{{ article.url }}">{{ article.title | escape }}</a>
-              </h2>
+  @media screen and (max-width: 749px) {
+    .blog__grid {
+      grid-template-columns: 1fr;
+    }
+  }
 
-              <p class="article-card__excerpt">
-                {{ article.excerpt_or_content | strip_html | truncate: 120 }}
-              </p>
-
-              <a href="{{ article.url }}" class="article-card__read-more">
-                {{ 'blog.read_more' | t }} &rarr;
-              </a>
-            </div>
-          </article>
-        {%- endfor -%}
-      </div>
-
-      {%- if paginate.pages > 1 -%}
-        <div class="collection-pagination" style="margin-top: 3rem;">
-          {{ paginate | default_pagination }}
-        </div>
-      {%- endif -%}
-    </div>
-  </section>
-{%- endpaginate -%}
-
-<style>
-  .article-card {
+  .blog-card {
+    border-radius: var(--card-radius, 12px);
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
     display: flex;
     flex-direction: column;
-    height: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
-  .article-card__media-link {
-    border-radius: var(--radius-card);
+
+  .blog-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+  }
+
+  .blog-card__media {
+    position: relative;
+    padding-bottom: 60%;
     overflow: hidden;
-    margin-bottom: 1rem;
-    display: block;
+    background-color: #f1f5f9;
   }
-  .article-card__image {
+
+  .blog-card__media img {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: 220px;
+    height: 100%;
     object-fit: cover;
-    transition: transform var(--duration-slow) var(--ease-standard);
   }
-  .article-card__media-link:hover .article-card__image {
-    transform: scale(1.03);
-  }
-  .article-card__meta {
-    font-size: 0.82rem;
+
+  .blog-card__content {
+    padding: 24px;
     display: flex;
-    gap: 0.35rem;
-    margin-bottom: 0.5rem;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
   }
-  .article-card__title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-  }
-  .article-card__excerpt {
-    font-size: 0.95rem;
-    opacity: 0.85;
-    margin-bottom: 1rem;
-  }
-  .article-card__read-more {
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: var(--color-accent);
-  }
-</style>
+{%- endstyle -%}
+
+<div class="page-width">
+  <div style="text-align: center; margin-bottom: 48px;">
+    <h1 class="h1">{{ blog.title | escape }}</h1>
+  </div>
+
+  {%- paginate blog.articles by section.settings.articles_per_page -%}
+    <div class="blog__grid">
+      {%- for article in blog.articles -%}
+        <article class="blog-card">
+          {%- if article.image -%}
+            <div class="blog-card__media">
+              <a href="{{ article.url }}">
+                <img
+                  src="{{ article.image | image_url: width: 600 }}"
+                  alt="{{ article.image.alt | default: article.title | escape }}"
+                  loading="lazy"
+                  width="{{ article.image.width }}"
+                  height="{{ article.image.height }}"
+                >
+              </a>
+            </div>
+          {%- endif -%}
+
+          <div class="blog-card__content">
+            <span style="font-size: 1.2rem; color: #71717a; text-transform: uppercase; letter-spacing: 0.05em;">
+              {{ article.published_at | date: "%B %d, %Y" }}
+            </span>
+            <h2 class="h4" style="margin: 0;">
+              <a href="{{ article.url }}" style="text-decoration: none; color: inherit;">
+                {{ article.title | escape }}
+              </a>
+            </h2>
+            <p style="font-size: 1.4rem; color: #71717a; line-height: 1.6; margin-top: 4px;">
+              {{ article.excerpt_or_content | strip_html | truncatewords: 24 }}
+            </p>
+            <a href="{{ article.url }}" class="link" style="font-weight: 600; font-size: 1.4rem; margin-top: auto; padding-top: 8px;">
+              Read more &rarr;
+            </a>
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+
+    {%- if paginate.pages > 1 -%}
+      {% render 'pagination', paginate: paginate %}
+    {%- endif -%}
+  {%- endpaginate -%}
+</div>
 
 {% schema %}
 {
-  "name": "Blog posts",
+  "name": "Blog Posts",
   "settings": [
     {
-      "type": "select",
-      "id": "color_scheme",
-      "label": "Color scheme",
-      "options": [
-        { "value": "scheme-1", "label": "Scheme 1" },
-        { "value": "scheme-2", "label": "Scheme 2" },
-        { "value": "scheme-3", "label": "Scheme 3" },
-        { "value": "scheme-4", "label": "Scheme 4" }
-      ],
-      "default": "scheme-1"
+      "type": "range",
+      "id": "articles_per_page",
+      "min": 3,
+      "max": 18,
+      "step": 3,
+      "default": 6,
+      "label": "Posts per page"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3,
+      "label": "Desktop columns"
+    },
+    {
+      "type": "header",
+      "content": "Section Colors (Independent)"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 60
     }
   ]
 }

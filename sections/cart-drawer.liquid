@@ -1,0 +1,216 @@
+{%- comment -%}
+  AJAX Cart Drawer Section - E-sellers Professional (v4.9.0)
+{%- endcomment -%}
+
+{{ 'component-cart-drawer.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'component-cart-drawer.js' | asset_url }}" defer="defer"></script>
+
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    --drawer-bg: {{ section.settings.bg_color }};
+    --drawer-text: {{ section.settings.text_color }};
+    --drawer-border: {{ section.settings.border_color }};
+    --shipping-bar-bg: {{ section.settings.shipping_bar_bg }};
+    --drawer-footer-bg: {{ section.settings.footer_bg }};
+  }
+{%- endstyle -%}
+
+<cart-drawer id="CartDrawer" class="cart-drawer" role="dialog" aria-modal="true" aria-label="{{ 'cart.drawer_title' | t }}" aria-hidden="true">
+  <div class="cart-drawer__overlay"></div>
+  
+  <div class="cart-drawer__inner">
+    <!-- Header -->
+    <div class="cart-drawer__header">
+      <h2 class="cart-drawer__title">
+        {{ 'cart.drawer_title' | t }}
+        <span class="cart-drawer__count">({{ cart.item_count }})</span>
+      </h2>
+      <button type="button" class="cart-drawer__close" aria-label="{{ 'general.accessibility.close' | t }}">
+        {% render 'icon', name: 'close' %}
+      </button>
+    </div>
+
+    <!-- Free Shipping Goal Bar -->
+    {%- if settings.enable_free_shipping_bar -%}
+      {%- liquid
+        assign threshold = settings.free_shipping_threshold | times: 100
+        assign current_total = cart.total_price
+        if current_total >= threshold
+          assign is_free = true
+          assign progress_percent = 100
+        else
+          assign is_free = false
+          assign remaining = threshold | minus: current_total
+          assign progress_percent = current_total | times: 100.0 | divided_by: threshold
+        endif
+      -%}
+
+      <div class="cart-drawer__shipping-bar">
+        <div class="cart-drawer__shipping-text">
+          {%- if is_free -%}
+            <span>{{ settings.free_shipping_text_success }}</span>
+          {%- else -%}
+            {%- assign remaining_money = remaining | money -%}
+            <span>{{ settings.free_shipping_text_progress | replace: '[amount]', remaining_money }}</span>
+          {%- endif -%}
+        </div>
+        <div class="cart-drawer__progress-track">
+          <div class="cart-drawer__progress-fill" style="width: {{ progress_percent }}%;"></div>
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if cart.item_count == 0 -%}
+      <!-- Empty Cart State -->
+      <div class="cart-drawer__empty">
+        <div class="cart-drawer__empty-icon">
+          {% render 'icon', name: 'cart' %}
+        </div>
+        <p class="h3">{{ 'cart.empty' | t }}</p>
+        <a href="{{ routes.all_products_collection_url }}" class="button button--primary">
+          {{ 'cart.continue_shopping' | t }}
+        </a>
+      </div>
+    {%- else -%}
+      <!-- Line Items List -->
+      <div class="cart-drawer__items">
+        {%- for item in cart.items -%}
+          <div class="cart-item">
+            <!-- Product Image -->
+            {%- if item.image -%}
+              <img
+                src="{{ item.image | image_url: width: 160 }}"
+                alt="{{ item.title | escape }}"
+                class="cart-item__image"
+                loading="lazy"
+                width="80"
+                height="96"
+              >
+            {%- endif -%}
+
+            <!-- Details -->
+            <div class="cart-item__details">
+              <a href="{{ item.url }}" class="cart-item__title">
+                {{ item.product.title | escape }}
+              </a>
+
+              {%- unless item.product.has_only_default_variant -%}
+                <span class="cart-item__variant">{{ item.variant.title }}</span>
+              {%- endunless -%}
+
+              <!-- Price -->
+              <div class="cart-item__price">
+                {%- if item.original_line_price != item.final_line_price -%}
+                  <s style="color: #71717a; margin-right: 6px;">{{ item.original_line_price | money }}</s>
+                  <span style="color: #dc2626;">{{ item.final_line_price | money }}</span>
+                {%- else -%}
+                  <span>{{ item.final_line_price | money }}</span>
+                {%- endif -%}
+              </div>
+
+              <!-- Actions (Quantity Stepper & Remove) -->
+              <div class="cart-item__actions">
+                <div class="cart-quantity-wrapper">
+                  <button type="button" class="cart-quantity-btn" name="minus" data-line="{{ forloop.index }}" aria-label="{{ 'products.product.quantity.decrease' | t: product: item.title | escape }}">
+                    {% render 'icon', name: 'minus' %}
+                  </button>
+                  <input
+                    type="number"
+                    class="cart-quantity-input"
+                    value="{{ item.quantity }}"
+                    min="0"
+                    readonly
+                    aria-label="{{ 'products.product.quantity.input_label' | t: product: item.title | escape }}"
+                  >
+                  <button type="button" class="cart-quantity-btn" name="plus" data-line="{{ forloop.index }}" aria-label="{{ 'products.product.quantity.increase' | t: product: item.title | escape }}">
+                    {% render 'icon', name: 'plus' %}
+                  </button>
+                </div>
+
+                <button type="button" class="cart-item__remove" data-line="{{ forloop.index }}" aria-label="{{ 'cart.remove' | t }}">
+                  {% render 'icon', name: 'trash' %}
+                </button>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+
+      <!-- Footer & Checkout Form -->
+      <div class="cart-drawer__footer">
+        {%- if settings.show_cart_note -%}
+          <details style="border: 1px solid var(--drawer-border); border-radius: var(--input-radius, 8px); padding: 8px 12px; background: rgba(0,0,0,0.02);">
+            <summary style="cursor: pointer; font-size: 1.3rem; font-weight: 600;">
+              {{ 'cart.note' | t }}
+            </summary>
+            <textarea
+              id="CartDrawer-Note"
+              rows="3"
+              placeholder="{{ 'cart.note_placeholder' | t }}"
+              style="margin-top: 8px; width: 100%; border: 1px solid var(--drawer-border); border-radius: 4px; padding: 8px; font-size: 1.3rem; background: #fff;"
+            >{{ cart.note }}</textarea>
+          </details>
+        {%- endif -%}
+
+        <!-- Subtotal -->
+        <div class="cart-drawer__subtotal-row">
+          <span>{{ 'cart.subtotal' | t }}</span>
+          <span>{{ cart.total_price | money_with_currency }}</span>
+        </div>
+
+        <p class="cart-drawer__notice">
+          {{ 'cart.taxes_and_shipping_at_checkout' | t }}
+        </p>
+
+        <!-- Checkout Button Form -->
+        <form action="{{ routes.cart_url }}" method="post" id="CartDrawer-Form">
+          <button type="submit" name="checkout" class="button button--primary cart-drawer__checkout-btn">
+            {{ 'cart.checkout' | t }} &rarr;
+          </button>
+        </form>
+      </div>
+    {%- endif -%}
+  </div>
+</cart-drawer>
+
+{% schema %}
+{
+  "name": "Cart Drawer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Colors (Independent)"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Drawer background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#e2e8f0"
+    },
+    {
+      "type": "color",
+      "id": "shipping_bar_bg",
+      "label": "Shipping bar background",
+      "default": "#f8fafc"
+    },
+    {
+      "type": "color",
+      "id": "footer_bg",
+      "label": "Footer background",
+      "default": "#ffffff"
+    }
+  ]
+}
+{% endschema %}

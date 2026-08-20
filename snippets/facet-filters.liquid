@@ -1,0 +1,159 @@
+{%- comment -%}
+  Faceted Filters Snippet - E-sellers Professional (v4.9.0)
+  Accepts:
+  - results: {Object} Collection or Search Liquid object
+  - enable_filtering: {Boolean}
+  - enable_sorting: {Boolean}
+{%- endcomment -%}
+
+<div class="facets-wrapper" style="margin-bottom: 32px;">
+  <form id="FacetFiltersForm" class="facets__form" style="display: flex; flex-direction: column; gap: 20px;">
+    {%- if results.terms -%}
+      <input type="hidden" name="q" value="{{ results.terms | escape }}">
+      <input name="options[prefix]" type="hidden" value="last">
+    {%- endif -%}
+
+    <div class="facets__top-bar" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding-bottom: 16px; border-bottom: 1px solid #e2e8f0;">
+      <!-- Product Count -->
+      <div class="facets__product-count" style="font-size: 1.4rem; font-weight: 600; color: #71717a;">
+        <span>{{ 'products.facets.product_count_simple' | t: count: results.products_count }}</span>
+      </div>
+
+      <!-- Sorting Select -->
+      {%- if enable_sorting -%}
+        <div class="facets__sorting" style="display: flex; align-items: center; gap: 8px;">
+          <label for="SortBy" style="font-size: 1.3rem; font-weight: 600; color: #71717a;">
+            {{ 'products.facets.sort_by_label' | t }}
+          </label>
+          <select
+            name="sort_by"
+            id="SortBy"
+            class="select__select"
+            style="padding: 8px 12px; font-size: 1.3rem; width: auto;"
+            onchange="this.form.submit()"
+          >
+            {%- assign sort_by = results.sort_by | default: results.default_sort_by -%}
+            {%- for option in results.sort_options -%}
+              <option value="{{ option.value }}" {% if option.value == sort_by %}selected="selected"{% endif %}>
+                {{ option.name | escape }}
+              </option>
+            {%- endfor -%}
+          </select>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <!-- Active Filters Row -->
+    {%- assign has_active_filter = false -%}
+    {%- for filter in results.filters -%}
+      {%- if filter.active_values.size > 0 or filter.min_value.value or filter.max_value.value -%}
+        {%- assign has_active_filter = true -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- if has_active_filter -%}
+      <div class="facets__active-filters" style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
+        {%- for filter in results.filters -%}
+          {%- for value in filter.active_values -%}
+            <a
+              href="{{ value.url_to_remove }}"
+              class="badge badge--custom"
+              style="background: #f4f4f5; color: #121212; border: 1px solid #d4d4d8; padding: 6px 12px; display: inline-flex; align-items: center; gap: 6px; font-size: 1.2rem;"
+            >
+              <span>{{ filter.label }}: {{ value.label | escape }}</span>
+              {% render 'icon', name: 'close' %}
+            </a>
+          {%- endfor -%}
+
+          {%- if filter.type == 'price_range' -%}
+            {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+              <a
+                href="{{ filter.url_to_remove }}"
+                class="badge badge--custom"
+                style="background: #f4f4f5; color: #121212; border: 1px solid #d4d4d8; padding: 6px 12px; display: inline-flex; align-items: center; gap: 6px; font-size: 1.2rem;"
+              >
+                <span>
+                  {{ filter.min_value.value | default: 0 | money }} - {{ filter.max_value.value | default: filter.range_max | money }}
+                </span>
+                {% render 'icon', name: 'close' %}
+              </a>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        <a href="{{ results.url }}" class="link" style="font-size: 1.3rem; margin-left: 8px; color: #dc2626;">
+          {{ 'products.facets.clear_all' | t }}
+        </a>
+      </div>
+    {%- endif -%}
+
+    <!-- Filter Dropdown Accordions / Pills -->
+    {%- if enable_filtering and results.filters.size > 0 -%}
+      <div class="facets__filters-list" style="display: flex; flex-wrap: wrap; gap: 16px;">
+        {%- for filter in results.filters -%}
+          <details class="facet-dropdown" style="position: relative;">
+            <summary style="cursor: pointer; padding: 8px 14px; border: 1px solid #e2e8f0; border-radius: var(--button-radius, 8px); font-size: 1.3rem; font-weight: 600; background: #ffffff; display: flex; align-items: center; gap: 6px; list-style: none;">
+              <span>{{ filter.label | escape }}</span>
+              {%- if filter.active_values.size > 0 -%}
+                <span class="badge badge--custom" style="background: #121212; color: #ffffff; font-size: 1.1rem; padding: 2px 6px;">{{ filter.active_values.size }}</span>
+              {%- endif -%}
+              {% render 'icon', name: 'chevron-down' %}
+            </summary>
+
+            <div class="facet-dropdown__panel" style="position: absolute; top: 100%; left: 0; min-width: 220px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: var(--card-radius, 12px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); padding: 16px; z-index: 50; margin-top: 6px;">
+              {%- case filter.type -%}
+                {%- when 'list' -%}
+                  <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; max-height: 240px; overflow-y: auto;">
+                    {%- for value in filter.values -%}
+                      <li>
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 1.3rem; cursor: pointer;">
+                          <input
+                            type="checkbox"
+                            name="{{ value.param_name }}"
+                            value="{{ value.value }}"
+                            {% if value.active %}checked{% endif %}
+                            {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                            onchange="this.form.submit()"
+                          >
+                          <span {% if value.count == 0 and value.active == false %}style="color: #a1a1aa;"{% endif %}>
+                            {{ value.label | escape }} ({{ value.count }})
+                          </span>
+                        </label>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+
+                {%- when 'price_range' -%}
+                  <div style="display: flex; gap: 8px; align-items: center;">
+                    <input
+                      type="number"
+                      name="{{ filter.min_value.param_name }}"
+                      placeholder="0"
+                      min="0"
+                      max="{{ filter.range_max | divided_by: 100.0 }}"
+                      value="{{ filter.min_value.value | divided_by: 100.0 }}"
+                      style="width: 80px; padding: 6px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 1.3rem;"
+                    >
+                    <span>-</span>
+                    <input
+                      type="number"
+                      name="{{ filter.max_value.param_name }}"
+                      placeholder="{{ filter.range_max | divided_by: 100.0 }}"
+                      min="0"
+                      max="{{ filter.range_max | divided_by: 100.0 }}"
+                      value="{{ filter.max_value.value | divided_by: 100.0 }}"
+                      style="width: 80px; padding: 6px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 1.3rem;"
+                    >
+                    <button type="submit" class="button button--primary" style="padding: 6px 12px; font-size: 1.2rem;">
+                      {{ 'products.facets.apply' | t }}
+                    </button>
+                  </div>
+              {%- endcase -%}
+            </div>
+          </details>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </form>
+</div>

@@ -1,0 +1,173 @@
+{%- comment -%}
+  Main Account Dashboard Section - E-sellers Professional (v4.9.0)
+{%- endcomment -%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    background-color: {{ section.settings.bg_color }};
+    color: {{ section.settings.text_color }};
+    --section-heading-color: {{ section.settings.heading_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  .account-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  @media screen and (min-width: 990px) {
+    .account-grid {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+
+  .account-orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+  }
+
+  .account-orders-table th {
+    text-align: left;
+    padding: 12px 0;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #71717a;
+    text-transform: uppercase;
+  }
+
+  .account-orders-table td {
+    padding: 16px 0;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 1.4rem;
+  }
+{%- endstyle -%}
+
+<div class="page-width">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; border-bottom: 1px solid #e2e8f0; padding-bottom: 20px;">
+    <h1 class="h2" style="margin: 0;">{{ 'customer.account.title' | t }}</h1>
+    <a href="{{ routes.account_logout_url }}" class="button button--secondary" style="padding: 10px 20px; font-size: 1.4rem;">
+      {{ 'customer.account.logout' | t }}
+    </a>
+  </div>
+
+  <div class="account-grid">
+    <!-- Order History -->
+    <div>
+      <h2 class="h3">{{ 'customer.orders.title' | t }}</h2>
+
+      {%- paginate customer.orders by 10 -%}
+        {%- if customer.orders.size > 0 -%}
+          <table class="account-orders-table">
+            <thead>
+              <tr>
+                <th>Order</th>
+                <th>Date</th>
+                <th>Payment</th>
+                <th>Fulfillment</th>
+                <th style="text-align: right;">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {%- for order in customer.orders -%}
+                <tr>
+                  <td>
+                    <a href="{{ order.customer_url }}" class="link" style="font-weight: 700;">
+                      {{ order.name }}
+                    </a>
+                  </td>
+                  <td>{{ order.created_at | date: "%B %d, %Y" }}</td>
+                  <td>{{ order.financial_status_label }}</td>
+                  <td>{{ order.fulfillment_status_label }}</td>
+                  <td style="text-align: right; font-weight: 700;">{{ order.total_price | money_with_currency }}</td>
+                </tr>
+              {%- endfor -%}
+            </tbody>
+          </table>
+          {%- if paginate.pages > 1 -%}
+            {% render 'pagination', paginate: paginate %}
+          {%- endif -%}
+        {%- else -%}
+          <p style="color: #71717a; font-size: 1.5rem; margin-top: 16px;">{{ 'customer.orders.none' | t }}</p>
+        {%- endif -%}
+      {%- endpaginate -%}
+    </div>
+
+    <!-- Account Details & Address Summary -->
+    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--card-radius, 12px); padding: 24px;">
+      <h2 class="h4" style="margin-bottom: 16px;">{{ 'customer.account.details' | t }}</h2>
+
+      <p style="font-size: 1.5rem; font-weight: 600; margin-bottom: 4px;">{{ customer.name }}</p>
+      <p style="font-size: 1.4rem; color: #71717a; margin-bottom: 16px;">{{ customer.email }}</p>
+
+      {%- if customer.default_address -%}
+        <div style="font-size: 1.4rem; color: #475569; line-height: 1.6; border-top: 1px solid #e2e8f0; padding-top: 12px;">
+          {{ customer.default_address | format_address }}
+        </div>
+      {%- endif -%}
+
+      <div style="margin-top: 20px;">
+        <a href="{{ routes.account_addresses_url }}" class="link" style="font-weight: 700; font-size: 1.4rem;">
+          {{ 'customer.account.view_addresses' | t: count: customer.addresses_count }} &rarr;
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Customer Account",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Colors (Independent)"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 60
+    }
+  ]
+}
+{% endschema %}

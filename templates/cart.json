@@ -3,8 +3,13 @@
     "main": {
       "type": "main-cart",
       "settings": {
-        "color_scheme": "scheme-1",
-        "show_cart_note": true
+        "bg_color": "#ffffff",
+        "heading_color": "#121212",
+        "text_color": "#121212",
+        "btn_bg_color": "#121212",
+        "btn_text_color": "#ffffff",
+        "padding_top": 40,
+        "padding_bottom": 60
       }
     }
   },

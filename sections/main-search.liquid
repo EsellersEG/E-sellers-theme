@@ -1,93 +1,191 @@
-{%- paginate search.results by 16 -%}
-  <section class="section-main-search color-{{ section.settings.color_scheme }}" id="MainSearch-{{ section.id }}" data-section-id="{{ section.id }}">
-    <div class="page-width section-spacing">
-      <div class="search-header text-center">
-        <h1 class="search-header__title">{{ 'search.title' | t }}</h1>
+{%- comment -%}
+  Main Search Section - E-sellers Professional (v4.9.0)
+{%- endcomment -%}
 
-        <form action="{{ routes.search_url }}" method="get" role="search" class="search-page-form">
-          <div class="field" style="max-width: 500px; margin: 1.5rem auto 0; display: flex; gap: 0.5rem;">
-            <input
-              type="search"
-              name="q"
-              value="{{ search.terms | escape }}"
-              placeholder="{{ 'search.placeholder' | t }}"
-              class="field__input"
-            >
-            <button type="submit" class="button button--primary">
-              {{ 'search.submit' | t }}
-            </button>
-          </div>
-        </form>
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    background-color: {{ section.settings.bg_color }};
+    color: {{ section.settings.text_color }};
+    --section-heading-color: {{ section.settings.heading_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
 
-        {%- if search.performed -%}
-          <p class="search-results-count text-muted" style="margin-top: 1rem;">
-            {%- if search.results_count == 0 -%}
-              {{ 'search.no_results_html' | t: terms: search.terms }}
-            {%- else -%}
-              {{ 'search.results_for_html' | t: terms: search.terms, count: search.results_count }}
-            {%- endif -%}
-          </p>
-        {%- endif -%}
-      </div>
+  .search__header {
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto 40px auto;
+  }
 
-      {%- if search.performed and search.results_count > 0 -%}
-        <div class="grid grid--4-col grid--gap-md" style="margin-top: 3rem;">
+  .search__grid {
+    display: grid;
+    grid-template-columns: repeat({{ section.settings.columns_mobile }}, 1fr);
+    gap: var(--grid-gap, 24px);
+  }
+
+  @media screen and (min-width: 750px) {
+    .search__grid {
+      grid-template-columns: repeat({{ section.settings.columns_desktop }}, 1fr);
+    }
+  }
+{%- endstyle -%}
+
+<div class="page-width">
+  <div class="search__header">
+    <h1 class="h1">
+      {%- if search.performed -%}
+        {{ 'general.search.results_with_count' | t: count: search.results_count, terms: search.terms }}
+      {%- else -%}
+        {{ 'general.search.search' | t }}
+      {%- endif -%}
+    </h1>
+
+    <form action="{{ routes.search_url }}" method="get" role="search" style="display: flex; gap: 8px; margin-top: 24px;">
+      <input
+        type="search"
+        name="q"
+        value="{{ search.terms | escape }}"
+        placeholder="{{ 'general.search.placeholder' | t }}"
+        class="field__input"
+        style="font-size: 1.6rem;"
+      >
+      <button type="submit" class="button button--primary">
+        {{ 'general.search.submit' | t }}
+      </button>
+    </form>
+  </div>
+
+  {%- if search.performed -%}
+    {%- paginate search.results by section.settings.products_per_page -%}
+      {% render 'facet-filters', results: search, enable_filtering: section.settings.enable_filtering, enable_sorting: section.settings.enable_sorting %}
+
+      {%- if search.results.size == 0 -%}
+        <div style="text-align: center; padding: 48px 20px;">
+          <p class="h3">{{ 'general.search.no_results' | t: terms: search.terms }}</p>
+        </div>
+      {%- else -%}
+        <div class="search__grid">
           {%- for item in search.results -%}
-            <div class="grid__item">
-              {%- case item.object_type -%}
-                {%- when 'product' -%}
-                  {% render 'product-card', product_card_product: item %}
-                {%- when 'article' -%}
-                  <div class="article-search-card color-scheme-2">
-                    <h3 class="h4"><a href="{{ item.url }}">{{ item.title | escape }}</a></h3>
-                    <p class="text-muted">{{ item.published_at | date: '%B %d, %Y' }}</p>
-                    <p>{{ item.content | strip_html | truncate: 120 }}</p>
-                  </div>
-                {%- when 'page' -%}
-                  <div class="page-search-card color-scheme-2">
-                    <h3 class="h4"><a href="{{ item.url }}">{{ item.title | escape }}</a></h3>
-                    <p>{{ item.content | strip_html | truncate: 120 }}</p>
-                  </div>
-              {%- endcase -%}
-            </div>
+            {%- case item.object_type -%}
+              {%- when 'product' -%}
+                {% render 'card-product', card_product: item, show_vendor: settings.show_vendor, show_rating: settings.show_rating, show_quick_add: settings.enable_quick_add %}
+              {%- when 'article' -%}
+                <div class="card-article" style="border: 1px solid #e2e8f0; border-radius: var(--card-radius, 12px); overflow: hidden; padding: 20px; background: #ffffff;">
+                  <span class="badge badge--custom" style="background: #f4f4f5; color: #71717a; margin-bottom: 8px;">Article</span>
+                  <h3 class="h4"><a href="{{ item.url }}" style="text-decoration: none; color: inherit;">{{ item.title | escape }}</a></h3>
+                  <p style="font-size: 1.4rem; color: #71717a;">{{ item.excerpt_or_content | strip_html | truncatewords: 20 }}</p>
+                </div>
+              {%- when 'page' -%}
+                <div class="card-page" style="border: 1px solid #e2e8f0; border-radius: var(--card-radius, 12px); overflow: hidden; padding: 20px; background: #ffffff;">
+                  <span class="badge badge--custom" style="background: #f4f4f5; color: #71717a; margin-bottom: 8px;">Page</span>
+                  <h3 class="h4"><a href="{{ item.url }}" style="text-decoration: none; color: inherit;">{{ item.title | escape }}</a></h3>
+                  <p style="font-size: 1.4rem; color: #71717a;">{{ item.content | strip_html | truncatewords: 20 }}</p>
+                </div>
+            {%- endcase -%}
           {%- endfor -%}
         </div>
 
         {%- if paginate.pages > 1 -%}
-          <div class="collection-pagination">
-            {{ paginate | default_pagination }}
-          </div>
+          {% render 'pagination', paginate: paginate %}
         {%- endif -%}
       {%- endif -%}
-    </div>
-  </section>
-{%- endpaginate -%}
-
-<style>
-  .article-search-card,
-  .page-search-card {
-    padding: 1.5rem;
-    border-radius: var(--radius-card);
-    height: 100%;
-    border: 1px solid var(--color-border);
-  }
-</style>
+    {%- endpaginate -%}
+  {%- endif -%}
+</div>
 
 {% schema %}
 {
-  "name": "Search results",
+  "name": "Search Results",
   "settings": [
     {
+      "type": "header",
+      "content": "Section Colors (Independent)"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Layout & Grid"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 36,
+      "step": 4,
+      "default": 16,
+      "label": "Results per page"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4,
+      "label": "Desktop columns"
+    },
+    {
       "type": "select",
-      "id": "color_scheme",
-      "label": "Color scheme",
+      "id": "columns_mobile",
       "options": [
-        { "value": "scheme-1", "label": "Scheme 1" },
-        { "value": "scheme-2", "label": "Scheme 2" },
-        { "value": "scheme-3", "label": "Scheme 3" },
-        { "value": "scheme-4", "label": "Scheme 4" }
+        { "value": "1", "label": "1 column" },
+        { "value": "2", "label": "2 columns" }
       ],
-      "default": "scheme-1"
+      "default": "2",
+      "label": "Mobile columns"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "default": true,
+      "label": "Enable faceted filtering"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "default": true,
+      "label": "Enable sorting dropdown"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 60
     }
   ]
 }

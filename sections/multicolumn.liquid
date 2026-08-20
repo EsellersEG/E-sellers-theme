@@ -1,0 +1,332 @@
+{%- comment -%}
+  Multicolumn / Feature Grid Section - E-sellers Professional (v4.9.0)
+{%- endcomment -%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    background-color: {{ section.settings.bg_color }};
+    color: {{ section.settings.text_color }};
+    --section-heading-color: {{ section.settings.heading_color }};
+    --card-bg: {{ section.settings.card_bg_color }};
+    --icon-color: {{ section.settings.icon_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  .multicolumn__header {
+    text-align: {{ section.settings.heading_alignment }};
+    margin-bottom: 48px;
+  }
+
+  .multicolumn__grid {
+    display: grid;
+    grid-template-columns: repeat({{ section.settings.columns_mobile }}, 1fr);
+    gap: var(--grid-gap, 24px);
+  }
+
+  @media screen and (min-width: 750px) {
+    .multicolumn__grid {
+      grid-template-columns: repeat({{ section.settings.columns_desktop }}, 1fr);
+    }
+  }
+
+  .multicolumn-card {
+    background-color: var(--card-bg);
+    border: 1px solid {{ section.settings.card_border_color }};
+    border-radius: var(--card-radius, 12px);
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: {{ section.settings.column_alignment }};
+    text-align: {{ section.settings.column_alignment }};
+    gap: 16px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .multicolumn-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+  }
+
+  .multicolumn-card__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 54px;
+    height: 54px;
+    border-radius: 12px;
+    background-color: rgba(0, 0, 0, 0.04);
+    color: var(--icon-color);
+  }
+
+  .multicolumn-card__icon svg {
+    width: 28px;
+    height: 28px;
+  }
+{%- endstyle -%}
+
+<div class="page-width">
+  {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
+    <div class="multicolumn__header">
+      {%- if section.settings.subheading != blank -%}
+        <p style="font-size: 1.3rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #71717a; margin-bottom: 8px;">
+          {{ section.settings.subheading | escape }}
+        </p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="h2" style="margin: 0;">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div class="multicolumn__grid">
+    {%- for block in section.blocks -%}
+      <div class="multicolumn-card" {{ block.shopify_attributes }}>
+        {%- if block.settings.image != blank -%}
+          <img
+            src="{{ block.settings.image | image_url: width: 300 }}"
+            alt="{{ block.settings.heading | escape }}"
+            style="max-width: {{ block.settings.image_width }}px; height: auto; border-radius: 8px;"
+            loading="lazy"
+            width="{{ block.settings.image.width }}"
+            height="{{ block.settings.image.height }}"
+          >
+        {%- elsif block.settings.icon != 'none' -%}
+          <div class="multicolumn-card__icon">
+            {% render 'icon', name: block.settings.icon %}
+          </div>
+        {%- endif -%}
+
+        {%- if block.settings.heading != blank -%}
+          <h3 class="h4" style="margin: 0;">{{ block.settings.heading | escape }}</h3>
+        {%- endif -%}
+
+        {%- if block.settings.text != blank -%}
+          <div style="font-size: 1.4rem; line-height: 1.6; color: inherit; opacity: 0.85;">
+            {{ block.settings.text }}
+          </div>
+        {%- endif -%}
+
+        {%- if block.settings.button_label != blank -%}
+          <a href="{{ block.settings.button_link | default: '#' }}" class="link" style="font-weight: 600; font-size: 1.4rem; margin-top: auto;">
+            {{ block.settings.button_label | escape }} &rarr;
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Multicolumn / Features",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Why Choose Us"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Engineered for Excellence"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center",
+      "label": "Heading alignment"
+    },
+    {
+      "type": "select",
+      "id": "column_alignment",
+      "options": [
+        { "value": "flex-start", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "flex-end", "label": "Right" }
+      ],
+      "default": "center",
+      "label": "Content alignment"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3,
+      "label": "Desktop columns"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "options": [
+        { "value": "1", "label": "1 column" },
+        { "value": "2", "label": "2 columns" }
+      ],
+      "default": "1",
+      "label": "Mobile columns"
+    },
+    {
+      "type": "header",
+      "content": "Section Colors (Independent)"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#f8fafc"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card border color",
+      "default": "#e2e8f0"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#475569"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon color",
+      "default": "#005bd3"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "column",
+      "name": "Column",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "truck", "label": "Truck (Fast Shipping)" },
+            { "value": "shield", "label": "Shield (Security)" },
+            { "value": "star", "label": "Star (Premium Quality)" },
+            { "value": "check", "label": "Check (Guarantee)" }
+          ],
+          "default": "truck",
+          "label": "Icon"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Custom image (overrides icon)"
+        },
+        {
+          "type": "range",
+          "id": "image_width",
+          "min": 40,
+          "max": 200,
+          "step": 10,
+          "unit": "px",
+          "label": "Image width",
+          "default": 60
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Worldwide Express Shipping"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Description",
+          "default": "<p>Fast, tracked delivery right to your doorstep with guaranteed delivery windows.</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Multicolumn / Features",
+      "blocks": [
+        {
+          "type": "column",
+          "settings": {
+            "icon": "truck",
+            "heading": "Free Global Shipping",
+            "text": "<p>Enjoy complimentary expedited shipping on all orders over $100 worldwide.</p>"
+          }
+        },
+        {
+          "type": "column",
+          "settings": {
+            "icon": "shield",
+            "heading": "Secure Payments",
+            "text": "<p>256-bit encrypted checkout with Shop Pay, Apple Pay, PayPal, and major cards.</p>"
+          }
+        },
+        {
+          "type": "column",
+          "settings": {
+            "icon": "star",
+            "heading": "Premium Craftsmanship",
+            "text": "<p>Handcrafted using ethically sourced, high-grade materials built to last a lifetime.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

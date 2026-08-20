@@ -3,7 +3,13 @@
     "main": {
       "type": "main-page",
       "settings": {
-        "color_scheme": "scheme-1"
+        "alignment": "center",
+        "max_width": 800,
+        "bg_color": "#ffffff",
+        "heading_color": "#121212",
+        "text_color": "#121212",
+        "padding_top": 40,
+        "padding_bottom": 60
       }
     }
   },

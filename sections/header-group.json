@@ -1,34 +1,44 @@
 {
-  "type": "header",
   "name": "Header group",
+  "type": "header",
   "sections": {
     "announcement-bar": {
       "type": "announcement-bar",
       "blocks": {
-        "announcement-1": {
+        "announcement_msg": {
           "type": "announcement",
           "settings": {
-            "text": "Free worldwide shipping on all orders over $100"
+            "text": "⚡ FREE Express Shipping on all orders over $100!"
           }
         }
       },
       "block_order": [
-        "announcement-1"
+        "announcement_msg"
       ],
       "settings": {
-        "color_scheme": "scheme-4",
-        "auto_rotate": true,
-        "change_interval": 5
+        "bg_color": "#121212",
+        "text_color": "#ffffff",
+        "link_color": "#ffffff",
+        "border_color": "transparent",
+        "font_size": 13,
+        "show_social": false
       }
     },
     "header": {
       "type": "header",
       "settings": {
-        "color_scheme": "scheme-1",
-        "enable_sticky": true,
-        "logo_width": 130,
+        "logo_width": 140,
+        "logo_width_mobile": 110,
         "menu": "main-menu",
-        "customer_account_menu": "customer-account-main-menu"
+        "enable_sticky": true,
+        "bg_color": "#ffffff",
+        "text_color": "#121212",
+        "hover_color": "#005bd3",
+        "border_color": "#e2e8f0",
+        "cart_badge_bg": "#dc2626",
+        "cart_badge_text": "#ffffff",
+        "padding_top": 16,
+        "padding_bottom": 16
       }
     }
   },

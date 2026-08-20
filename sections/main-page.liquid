@@ -1,27 +1,112 @@
-<section class="section-main-page color-{{ section.settings.color_scheme }}" id="MainPage-{{ section.id }}" data-section-id="{{ section.id }}">
-  <div class="page-width page-width--narrow section-spacing">
-    <h1 class="page-title text-center" style="margin-bottom: 2rem;">{{ page.title | escape }}</h1>
-    <div class="page-content rte">
+{%- comment -%}
+  Main Page Section - E-sellers Professional (v4.9.0)
+{%- endcomment -%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    background-color: {{ section.settings.bg_color }};
+    color: {{ section.settings.text_color }};
+    --section-heading-color: {{ section.settings.heading_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  .main-page {
+    max-width: {{ section.settings.max_width }}px;
+    margin: 0 auto;
+  }
+
+  .main-page__header {
+    text-align: {{ section.settings.alignment }};
+    margin-bottom: 32px;
+  }
+
+  .main-page__content {
+    font-size: 1.6rem;
+    line-height: 1.8;
+  }
+{%- endstyle -%}
+
+<div class="page-width">
+  <article class="main-page">
+    <div class="main-page__header">
+      <h1 class="h1">{{ page.title | escape }}</h1>
+    </div>
+    <div class="main-page__content">
       {{ page.content }}
     </div>
-  </div>
-</section>
+  </article>
+</div>
 
 {% schema %}
 {
-  "name": "Page content",
+  "name": "Page Content",
   "settings": [
     {
       "type": "select",
-      "id": "color_scheme",
-      "label": "Color scheme",
+      "id": "alignment",
       "options": [
-        { "value": "scheme-1", "label": "Scheme 1" },
-        { "value": "scheme-2", "label": "Scheme 2" },
-        { "value": "scheme-3", "label": "Scheme 3" },
-        { "value": "scheme-4", "label": "Scheme 4" }
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
       ],
-      "default": "scheme-1"
+      "default": "center",
+      "label": "Title alignment"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 600,
+      "max": 1000,
+      "step": 50,
+      "unit": "px",
+      "label": "Content max width",
+      "default": 800
+    },
+    {
+      "type": "header",
+      "content": "Section Colors (Independent)"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 60
     }
   ]
 }

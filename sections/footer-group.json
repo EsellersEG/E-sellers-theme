@@ -1,42 +1,52 @@
 {
-  "type": "footer",
   "name": "Footer group",
+  "type": "footer",
   "sections": {
     "footer": {
       "type": "footer",
       "blocks": {
-        "menu": {
+        "footer_about": {
+          "type": "text",
+          "settings": {
+            "heading": "About E-sellers",
+            "subtext": "<p>E-sellers Professional is engineered for high conversion, speed, and unforgettable brand experiences.</p>"
+          }
+        },
+        "footer_links": {
           "type": "link_list",
           "settings": {
             "heading": "Quick links",
             "menu": "footer"
           }
         },
-        "text": {
-          "type": "text",
-          "settings": {
-            "heading": "About our store",
-            "subtext": "<p>Discover premium products designed with care and crafted for everyday excellence.</p>"
-          }
-        },
-        "newsletter": {
+        "footer_newsletter": {
           "type": "newsletter",
           "settings": {
             "heading": "Stay in the loop",
-            "subtext": "<p>Subscribe to receive special offers, free giveaways, and once-in-a-lifetime deals.</p>"
+            "subtext": "Subscribe to receive special offers, free giveaways, and once-in-a-lifetime deals.",
+            "button_label": "Subscribe"
           }
         }
       },
       "block_order": [
-        "menu",
-        "text",
-        "newsletter"
+        "footer_about",
+        "footer_links",
+        "footer_newsletter"
       ],
       "settings": {
-        "color_scheme": "scheme-4",
+        "bg_color": "#121212",
+        "text_color": "#a1a1aa",
+        "heading_color": "#ffffff",
+        "hover_color": "#ffffff",
+        "border_color": "#27272a",
+        "btn_bg_color": "#ffffff",
+        "btn_text_color": "#121212",
         "show_payment_icons": true,
-        "show_social_icons": true,
-        "enable_follow_on_shop": true
+        "show_social": true,
+        "enable_country_selector": true,
+        "enable_language_selector": true,
+        "padding_top": 64,
+        "padding_bottom": 40
       }
     }
   },
