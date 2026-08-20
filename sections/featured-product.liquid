@@ -1,0 +1,295 @@
+{%- comment -%}
+  Featured Product Section - E-sellers Professional (v4.9.0)
+{%- endcomment -%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    background-color: {{ section.settings.bg_color }};
+  }
+
+  .featured-product {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: {{ section.settings.gap }}px;
+    align-items: start;
+  }
+
+  @media screen and (max-width: 749px) {
+    .featured-product {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .featured-product__media {
+    position: relative;
+    border-radius: {{ section.settings.image_radius }}px;
+    overflow: hidden;
+    background: #f8fafc;
+  }
+
+  .featured-product__media img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+  }
+
+  .featured-product__info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .featured-product__vendor {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: {{ section.settings.text_color }};
+    opacity: 0.7;
+  }
+
+  .featured-product__title {
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    font-weight: 700;
+    color: {{ section.settings.heading_color }};
+    margin: 0;
+  }
+
+  .featured-product__price {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: {{ section.settings.text_color }};
+  }
+
+  .featured-product__description {
+    color: {{ section.settings.text_color }};
+    line-height: 1.6;
+  }
+
+  .featured-product__form {
+    margin-top: 16px;
+  }
+
+  .featured-product__submit {
+    width: 100%;
+    padding: 16px;
+    background: {{ section.settings.btn_bg_color }};
+    color: {{ section.settings.btn_text_color }};
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+
+  .featured-product__submit:hover {
+    opacity: 0.85;
+  }
+{%- endstyle -%}
+
+<div class="page-width">
+  <div class="featured-product">
+    {%- assign product = section.settings.product -%}
+
+    <div class="featured-product__media">
+      {%- if product != blank and product.featured_media != blank -%}
+        <img
+          src="{{ product.featured_media | image_url: width: 900 }}"
+          alt="{{ product.featured_media.alt | escape }}"
+          loading="lazy"
+          width="{{ product.featured_media.width }}"
+          height="{{ product.featured_media.height }}"
+        >
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      {%- endif -%}
+    </div>
+
+    <div class="featured-product__info">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'text' -%}
+            <span class="featured-product__vendor" {{ block.shopify_attributes }}>
+              {%- if product != blank -%}{{ product.vendor }}{%- else -%}Brand Name{%- endif -%}
+            </span>
+            
+          {%- when 'title' -%}
+            <h2 class="featured-product__title" {{ block.shopify_attributes }}>
+              {%- if product != blank -%}
+                {{ product.title }}
+              {%- else -%}
+                Example Product Title
+              {%- endif -%}
+            </h2>
+
+          {%- when 'price' -%}
+            <div class="featured-product__price" {{ block.shopify_attributes }}>
+              {%- if product != blank -%}
+                {{ product.price | money }}
+              {%- else -%}
+                $99.00
+              {%- endif -%}
+            </div>
+
+          {%- when 'description' -%}
+            <div class="featured-product__description" {{ block.shopify_attributes }}>
+              {%- if product != blank -%}
+                {{ product.description | truncatewords: 30 }}
+              {%- else -%}
+                <p>This is an example product description. Pair a product with text to highlight features, benefits, or unique selling points.</p>
+              {%- endif -%}
+            </div>
+
+          {%- when 'buy_buttons' -%}
+            <div class="featured-product__form" {{ block.shopify_attributes }}>
+              {%- if product != blank -%}
+                {%- form 'product', product -%}
+                  <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                  <button type="submit" class="featured-product__submit" {% unless product.available %}disabled{% endunless %}>
+                    {% if product.available %}Add to Cart{% else %}Sold Out{% endif %}
+                  </button>
+                {%- endform -%}
+              {%- else -%}
+                <button type="button" class="featured-product__submit" disabled>Add to Cart</button>
+              {%- endif -%}
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Featured product",
+  "tag": "section",
+  "class": "section--featured-product",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 24,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Column gap",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "image_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Image corner radius",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#334155"
+    },
+    {
+      "type": "color",
+      "id": "btn_bg_color",
+      "label": "Button background",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "btn_text_color",
+      "label": "Button text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "Text",
+      "limit": 1
+    },
+    {
+      "type": "title",
+      "name": "Title",
+      "limit": 1
+    },
+    {
+      "type": "price",
+      "name": "Price",
+      "limit": 1
+    },
+    {
+      "type": "description",
+      "name": "Description",
+      "limit": 1
+    },
+    {
+      "type": "buy_buttons",
+      "name": "Buy buttons",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured product",
+      "blocks": [
+        { "type": "text" },
+        { "type": "title" },
+        { "type": "price" },
+        { "type": "description" },
+        { "type": "buy_buttons" }
+      ]
+    }
+  ]
+}
+{% endschema %}
