@@ -8,57 +8,6 @@
     "theme_support_email": "info@e-sellers.net"
   },
   {
-    "name": "Colors",
-    "settings": [
-      {
-        "type": "color_scheme_group",
-        "id": "color_schemes",
-        "name": "Color schemes",
-        "definition": [
-          {
-            "header": "Scheme"
-          },
-          {
-            "type": "color",
-            "id": "background",
-            "label": "Background",
-            "default": "#FFFFFF"
-          },
-          {
-            "type": "color",
-            "id": "text",
-            "label": "Text",
-            "default": "#121212"
-          },
-          {
-            "type": "color",
-            "id": "button",
-            "label": "Solid button background",
-            "default": "#121212"
-          },
-          {
-            "type": "color",
-            "id": "button_label",
-            "label": "Solid button label",
-            "default": "#FFFFFF"
-          },
-          {
-            "type": "color",
-            "id": "outline_button",
-            "label": "Outline button",
-            "default": "#121212"
-          },
-          {
-            "type": "color",
-            "id": "shadow",
-            "label": "Shadow",
-            "default": "#121212"
-          }
-        ]
-      }
-    ]
-  },
-  {
     "name": "Favicon & Brand",
     "settings": [
       {

@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "name": "Header group",
   "type": "header",
@@ -27,18 +36,9 @@
     "header": {
       "type": "header",
       "settings": {
-        "logo_width": 140,
-        "logo_width_mobile": 110,
-        "menu": "main-menu",
         "enable_sticky": true,
-        "bg_color": "#ffffff",
-        "text_color": "#121212",
-        "hover_color": "#005bd3",
-        "border_color": "#e2e8f0",
-        "cart_badge_bg": "#dc2626",
-        "cart_badge_text": "#ffffff",
-        "padding_top": 16,
-        "padding_bottom": 16
+        "logo_width": 140,
+        "menu": "main-menu"
       }
     }
   },
