@@ -1,0 +1,8 @@
+{
+  "name": "Overlay group",
+  "type": "custom.overlay",
+  "sections": {
+  },
+  "order": [
+  ]
+}
