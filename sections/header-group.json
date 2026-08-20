@@ -11,39 +11,82 @@
   "name": "Header group",
   "type": "header",
   "sections": {
-    "announcement-bar": {
-      "type": "announcement-bar",
-      "blocks": {
-        "announcement_msg": {
-          "type": "announcement",
-          "settings": {
-            "text": "⚡ FREE Express Shipping on all orders over $100!"
-          }
-        }
-      },
-      "block_order": [
-        "announcement_msg"
-      ],
-      "settings": {
-        "bg_color": "#121212",
-        "text_color": "#ffffff",
-        "link_color": "#ffffff",
-        "border_color": "transparent",
-        "font_size": 13,
-        "show_social": false
-      }
-    },
     "header": {
       "type": "header",
       "settings": {
-        "enable_sticky": true,
         "logo_width": 140,
-        "menu": "main-menu"
+        "menu": "main-menu",
+        "bg_color": "#ffffff",
+        "text_color": "#121212",
+        "border_color": "#e2e8f0",
+        "padding_top": 20,
+        "padding_bottom": 20
+      }
+    },
+    "collection_icons_8xVRUP": {
+      "type": "collection-icons",
+      "name": "Collection Icons",
+      "settings": {
+        "section_background": "#ffffff",
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "mobile_padding_top": 28,
+        "mobile_padding_bottom": 28,
+        "columns_desktop": 5,
+        "columns_tablet": 4,
+        "card_gap": 10,
+        "mobile_card_gap": 8,
+        "container_width": 90,
+        "mobile_container_width": 95,
+        "card_background": "#ffffff",
+        "card_border_color": "#e0e0e0",
+        "card_border_width": 0,
+        "card_border_radius": 8,
+        "card_1_enabled": true,
+        "card_1_link": "",
+        "card_2_enabled": true,
+        "card_2_link": "",
+        "card_3_enabled": true,
+        "card_3_link": "",
+        "card_4_enabled": true,
+        "card_4_link": "",
+        "card_5_enabled": true,
+        "card_5_link": "",
+        "card_6_enabled": true,
+        "card_6_link": "",
+        "card_7_enabled": true,
+        "card_7_link": "",
+        "card_8_enabled": true,
+        "card_8_link": "",
+        "card_9_enabled": true,
+        "card_9_link": "",
+        "card_10_enabled": true,
+        "card_10_link": "",
+        "card_11_enabled": false,
+        "card_11_link": "",
+        "card_12_enabled": false,
+        "card_12_link": "",
+        "card_13_enabled": false,
+        "card_13_link": "",
+        "card_14_enabled": false,
+        "card_14_link": "",
+        "card_15_enabled": false,
+        "card_15_link": "",
+        "card_16_enabled": false,
+        "card_16_link": "",
+        "card_17_enabled": false,
+        "card_17_link": "",
+        "card_18_enabled": false,
+        "card_18_link": "",
+        "card_19_enabled": false,
+        "card_19_link": "",
+        "card_20_enabled": false,
+        "card_20_link": ""
       }
     }
   },
   "order": [
-    "announcement-bar",
-    "header"
+    "header",
+    "collection_icons_8xVRUP"
   ]
 }
