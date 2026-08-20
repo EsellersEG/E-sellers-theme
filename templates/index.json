@@ -9,29 +9,14 @@
  */
 {
   "sections": {
-    "featured_collection": {
-      "type": "featured-collection",
+    "collection_list": {
+      "type": "es-collection-list",
       "settings": {
-        "collection": "",
-        "subheading": "Curated Selection",
-        "heading": "Trending This Week",
-        "description": "<p>Discover the most loved items tailored for your lifestyle.</p>",
-        "heading_alignment": "center",
-        "products_to_show": 4,
-        "columns_desktop": 4,
-        "columns_mobile": "2",
-        "show_view_all": true,
-        "bg_color": "#ffffff",
-        "text_color": "#121212",
-        "heading_color": "#121212",
-        "btn_bg_color": "#121212",
-        "btn_text_color": "#ffffff",
-        "padding_top": 60,
-        "padding_bottom": 60
+        "title": "Collection list"
       }
     }
   },
   "order": [
-    "featured_collection"
+    "collection_list"
   ]
 }
