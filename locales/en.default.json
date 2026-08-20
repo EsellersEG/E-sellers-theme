@@ -173,6 +173,72 @@
     },
     "collection_template": {
       "empty": "No products found in this collection."
+    },
+    "image-with-text": {
+      "name": "Image with text",
+      "presets": {
+        "name": "Image with text"
+      }
+    },
+    "image-banner": {
+      "name": "Image banner",
+      "presets": {
+        "name": "Image banner"
+      }
+    },
+    "collage": {
+      "name": "Collage",
+      "presets": {
+        "name": "Collage"
+      }
+    },
+    "multirow": {
+      "name": "Multirow",
+      "presets": {
+        "name": "Multirow"
+      }
+    },
+    "slideshow": {
+      "name": "Slideshow",
+      "presets": {
+        "name": "Slideshow"
+      }
+    },
+    "video": {
+      "name": "Video",
+      "presets": {
+        "name": "Video"
+      }
+    },
+    "featured-product": {
+      "name": "Featured product",
+      "presets": {
+        "name": "Featured product"
+      }
+    },
+    "rich-text": {
+      "name": "Rich text",
+      "presets": {
+        "name": "Rich text"
+      }
+    },
+    "multicolumn": {
+      "name": "Multicolumn",
+      "presets": {
+        "name": "Multicolumn"
+      }
+    },
+    "collapsible-content": {
+      "name": "Collapsible content",
+      "presets": {
+        "name": "Collapsible content"
+      }
+    },
+    "email-signup": {
+      "name": "Email signup",
+      "presets": {
+        "name": "Email signup"
+      }
     }
   },
   "customer": {
