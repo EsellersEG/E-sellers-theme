@@ -11,12 +11,604 @@
   "sections": {
     "collection_list": {
       "type": "es-collection-list",
+      "blocks": {
+        "collection_BF4DBY": {
+          "type": "collection",
+          "settings": {
+            "collection": "",
+            "subheading": "",
+            "title": "",
+            "url": "",
+            "heading_tag": "h2",
+            "text_position": "place-self-center text-center",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 30
+          }
+        },
+        "collection_7yDgVG": {
+          "type": "collection",
+          "settings": {
+            "collection": "",
+            "subheading": "",
+            "title": "",
+            "url": "",
+            "heading_tag": "h2",
+            "text_position": "place-self-center text-center",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 30
+          }
+        },
+        "collection_RLmPRT": {
+          "type": "collection",
+          "settings": {
+            "collection": "",
+            "subheading": "",
+            "title": "",
+            "url": "",
+            "heading_tag": "h2",
+            "text_position": "place-self-center text-center",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 30
+          }
+        }
+      },
+      "block_order": [
+        "collection_BF4DBY",
+        "collection_7yDgVG",
+        "collection_RLmPRT"
+      ],
       "settings": {
-        "title": "Collection list"
+        "full_width": false,
+        "stack_collections": false,
+        "collections_per_row": 3,
+        "subheading": "",
+        "title": "Collection list",
+        "content": "",
+        "link_url": "",
+        "link_text": "View all",
+        "background": "",
+        "background_gradient": "",
+        "text_color": "#121212",
+        "heading_color": "#121212",
+        "heading_gradient": "",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "es2_featured_product_TX7JT6": {
+      "type": "es2-featured-product",
+      "blocks": {
+        "vendor_XMgPbx": {
+          "type": "vendor",
+          "settings": {}
+        },
+        "title_dhrE9X": {
+          "type": "title",
+          "settings": {
+            "heading_tag": "h2"
+          }
+        },
+        "price_9Nrenm": {
+          "type": "price",
+          "settings": {}
+        },
+        "description_td897F": {
+          "type": "description",
+          "settings": {}
+        },
+        "variant_picker_kCUNn9": {
+          "type": "variant_picker",
+          "settings": {}
+        },
+        "quantity_selector_nciFTP": {
+          "type": "quantity_selector",
+          "settings": {}
+        },
+        "buy_buttons_MWXtKg": {
+          "type": "buy_buttons",
+          "settings": {
+            "atc_button_background": "#121212",
+            "atc_button_text_color": "#ffffff"
+          }
+        },
+        "offer_qj3pNR": {
+          "type": "offer",
+          "settings": {
+            "title": "Free Shipping & Returns",
+            "content": "<p>Orders ship within 24 hours with full tracking.</p>",
+            "background": "#eaf2ed",
+            "text_color": "#00a341"
+          }
+        }
+      },
+      "block_order": [
+        "vendor_XMgPbx",
+        "title_dhrE9X",
+        "price_9Nrenm",
+        "description_td897F",
+        "variant_picker_kCUNn9",
+        "quantity_selector_nciFTP",
+        "buy_buttons_MWXtKg",
+        "offer_qj3pNR"
+      ],
+      "name": "E-sellers 2",
+      "settings": {
+        "full_width": false,
+        "product": "",
+        "desktop_media_width": 50,
+        "background": "",
+        "background_gradient": "",
+        "text_color": "#121212",
+        "button_background": "#121212",
+        "button_text_color": "#ffffff"
+      }
+    },
+    "es_account_banner_zezAan": {
+      "type": "es-account-banner",
+      "name": "E-sellers Account Banner",
+      "settings": {
+        "image_size": "md",
+        "text_color": "#ffffff",
+        "overlay_color": "#000000",
+        "overlay_opacity": 40
+      }
+    },
+    "es_apps_xEY46P": {
+      "type": "es-apps",
+      "name": "E-sellers Apps",
+      "settings": {
+        "full_width": false,
+        "remove_vertical_spacing": false,
+        "remove_horizontal_spacing": false,
+        "background": "",
+        "background_gradient": "",
+        "text_color": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "es_blog_posts_mri4GW": {
+      "type": "es-blog-posts",
+      "blocks": {
+        "blog_jUH3x7": {
+          "type": "blog",
+          "settings": {
+            "blog": "",
+            "posts_count": 3
+          }
+        }
+      },
+      "block_order": [
+        "blog_jUH3x7"
+      ],
+      "name": "E-sellers Blog Posts",
+      "settings": {
+        "subheading": "From the journal",
+        "title": "Latest news & stories",
+        "content": "<p>Discover the latest articles, trends, insights, and brand updates.</p>",
+        "header_alignment": "left",
+        "link_url": "",
+        "link_text": "View all posts",
+        "posts_per_row": 3,
+        "grid_gap": 24,
+        "stack_mobile": false,
+        "full_width": false,
+        "card_style": "boxed",
+        "show_image": true,
+        "image_ratio": "landscape",
+        "show_category": true,
+        "show_date": true,
+        "show_read_time": true,
+        "show_author": false,
+        "show_comments_count": false,
+        "show_excerpt": true,
+        "excerpt_length": 24,
+        "show_read_more": true,
+        "read_more_text": "Read article",
+        "background": "",
+        "background_gradient": "",
+        "text_color": "#121212",
+        "heading_color": "",
+        "heading_gradient": "",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "es_collection_list_8Wdiz9": {
+      "type": "es-collection-list",
+      "blocks": {
+        "collection_FcnwHw": {
+          "type": "collection",
+          "settings": {
+            "collection": "",
+            "subheading": "",
+            "title": "",
+            "url": "",
+            "heading_tag": "h2",
+            "text_position": "place-self-center text-center",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 30
+          }
+        },
+        "collection_FYMV3K": {
+          "type": "collection",
+          "settings": {
+            "collection": "",
+            "subheading": "",
+            "title": "",
+            "url": "",
+            "heading_tag": "h2",
+            "text_position": "place-self-center text-center",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 30
+          }
+        },
+        "collection_HWDWbB": {
+          "type": "collection",
+          "settings": {
+            "collection": "",
+            "subheading": "",
+            "title": "",
+            "url": "",
+            "heading_tag": "h2",
+            "text_position": "place-self-center text-center",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 30
+          }
+        }
+      },
+      "block_order": [
+        "collection_FcnwHw",
+        "collection_FYMV3K",
+        "collection_HWDWbB"
+      ],
+      "name": "E-sellers Collection List",
+      "settings": {
+        "full_width": false,
+        "stack_collections": false,
+        "collections_per_row": 3,
+        "subheading": "",
+        "title": "Collection list",
+        "content": "",
+        "link_url": "",
+        "link_text": "View all",
+        "background": "",
+        "background_gradient": "",
+        "text_color": "#121212",
+        "heading_color": "#121212",
+        "heading_gradient": "",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "es_contact_xKKFKp": {
+      "type": "es-contact",
+      "blocks": {
+        "dropdown_TDWWef": {
+          "type": "dropdown",
+          "settings": {
+            "title": "Topic",
+            "values": "Order inquiry, Shipping & returns, Product advice, Other",
+            "required": false
+          }
+        }
+      },
+      "block_order": [
+        "dropdown_TDWWef"
+      ],
+      "name": "E-sellers Contact Form",
+      "settings": {
+        "full_width": false,
+        "subheading": "Get in touch",
+        "title": "Have a question? We're here to help.",
+        "content": "<p>Fill out the form below or send us an email. Our team typically replies within 24 hours.</p>",
+        "text_position": "start",
+        "contact_form_size": "large",
+        "background": "#ffffff",
+        "background_gradient": "",
+        "text_color": "#121212",
+        "heading_color": "#0f172a",
+        "heading_gradient": "",
+        "contact_background": "#f8fafc",
+        "contact_text_color": "#0f172a",
+        "button_background": "#0f172a",
+        "button_text_color": "#ffffff",
+        "padding_top": 56,
+        "padding_bottom": 56
+      }
+    },
+    "es_custom_html_d84WVV": {
+      "type": "es-custom-html",
+      "name": "E-sellers Custom HTML",
+      "settings": {
+        "full_width": false,
+        "max_width": 1400,
+        "remove_vertical_spacing": false,
+        "remove_horizontal_spacing": false,
+        "html": "<div style=\"text-align: center; padding: 40px; background: #f8fafc; border-radius: 12px;\">\n<h3>Custom HTML Section</h3>\n<p>Write or paste your custom HTML, embedded widgets, or scripts here.</p>\n</div>",
+        "background": "",
+        "background_gradient": "",
+        "text_color": "#121212",
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "es_faq_jTRH7X": {
+      "type": "es-faq",
+      "blocks": {
+        "item_biUc9X": {
+          "type": "item",
+          "settings": {
+            "title": "What is your return policy?",
+            "content": "<p>We offer hassle-free 30-day returns on all unused and unopened products in their original packaging.</p>"
+          }
+        },
+        "item_HbFdAa": {
+          "type": "item",
+          "settings": {
+            "title": "Do you ship internationally?",
+            "content": "<p>Yes, we offer insured worldwide shipping with live parcel tracking provided upon fulfillment.</p>"
+          }
+        },
+        "item_aypLGk": {
+          "type": "item",
+          "settings": {
+            "title": "How can I track my order?",
+            "content": "<p>Once your order ships, you will receive a tracking link via email and SMS to track your package in real time.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "item_biUc9X",
+        "item_HbFdAa",
+        "item_aypLGk"
+      ],
+      "name": "E-sellers FAQ",
+      "settings": {
+        "full_width": false,
+        "subheading": "Got Questions?",
+        "title": "Frequently Asked Questions",
+        "content": "<p>Find quick answers to common questions regarding shipping, returns, and ordering.</p>",
+        "text_position": "start",
+        "team_avatar_width": 160,
+        "support_hours": "Our support team is available Monday to Friday: 8am - 8:30pm.",
+        "answer_time": "Average answer time: Under 2 hours",
+        "button_text": "Contact Support",
+        "button_url": "",
+        "background": "",
+        "background_gradient": "",
+        "text_color": "#121212",
+        "heading_color": "#0f172a",
+        "heading_gradient": "",
+        "accordion_background": "#ffffff",
+        "accordion_text_color": "#121212",
+        "button_background": "#0f172a",
+        "button_text_color": "#ffffff",
+        "padding_top": 56,
+        "padding_bottom": 56
+      }
+    },
+    "es_blog_posts_g6ANnc": {
+      "type": "es-blog-posts",
+      "blocks": {
+        "article_w4MqDW": {
+          "type": "article",
+          "settings": {
+            "article": "",
+            "background": "",
+            "text_color": ""
+          }
+        }
+      },
+      "block_order": [
+        "article_w4MqDW"
+      ],
+      "name": "E-sellers Featured Post",
+      "settings": {
+        "subheading": "Editor's Pick",
+        "title": "Featured Story",
+        "content": "<p>Discover the latest articles, trends, insights, and brand updates.</p>",
+        "header_alignment": "left",
+        "link_url": "",
+        "link_text": "View all posts",
+        "posts_per_row": 3,
+        "grid_gap": 24,
+        "stack_mobile": false,
+        "full_width": false,
+        "card_style": "boxed",
+        "show_image": true,
+        "image_ratio": "landscape",
+        "show_category": true,
+        "show_date": true,
+        "show_read_time": true,
+        "show_author": false,
+        "show_comments_count": false,
+        "show_excerpt": true,
+        "excerpt_length": 24,
+        "show_read_more": true,
+        "read_more_text": "Read article",
+        "background": "",
+        "background_gradient": "",
+        "text_color": "#121212",
+        "heading_color": "",
+        "heading_gradient": "",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "es_image_link_blocks_gxLUMt": {
+      "type": "es-image-link-blocks",
+      "blocks": {
+        "item_GNwJKU": {
+          "type": "item",
+          "settings": {
+            "stretch_image": true,
+            "link_text": "New Arrivals",
+            "link_url": "",
+            "background": "",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 25
+          }
+        },
+        "item_6am99H": {
+          "type": "item",
+          "settings": {
+            "stretch_image": true,
+            "link_text": "Best Sellers",
+            "link_url": "",
+            "background": "",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 25
+          }
+        },
+        "item_XzHtww": {
+          "type": "item",
+          "settings": {
+            "stretch_image": true,
+            "link_text": "Special Offers",
+            "link_url": "",
+            "background": "",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 25
+          }
+        },
+        "item_k4bCHU": {
+          "type": "item",
+          "settings": {
+            "stretch_image": true,
+            "link_text": "Staff Picks",
+            "link_url": "",
+            "background": "",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 25
+          }
+        }
+      },
+      "block_order": [
+        "item_GNwJKU",
+        "item_6am99H",
+        "item_XzHtww",
+        "item_k4bCHU"
+      ],
+      "name": "E-sellers Image Link Blocks",
+      "settings": {
+        "full_width": false,
+        "block_size": "medium",
+        "subheading": "Curated Collections",
+        "title": "Shop by Category",
+        "content": "",
+        "link_url": "",
+        "link_text": "View all",
+        "background": "",
+        "background_gradient": "",
+        "text_color": "#121212",
+        "heading_color": "#0f172a",
+        "heading_gradient": "",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "es_media_with_text_tcEbVA": {
+      "type": "es-media-with-text",
+      "blocks": {
+        "image_QQDRNf": {
+          "type": "image",
+          "settings": {
+            "media_position": "start",
+            "subheading": "Elevated Details",
+            "title": "Design Engineered for Every Occasion",
+            "content": "<p>Share your brand story, craft details, or manufacturing process with engaging visual storytelling.</p>",
+            "link_text": "Learn more",
+            "link_url": "",
+            "background": "#f8fafc",
+            "text_color": "#0f172a",
+            "text_gradient": "",
+            "button_background": "#0f172a",
+            "button_text_color": "#ffffff"
+          }
+        }
+      },
+      "block_order": [
+        "image_QQDRNf"
+      ],
+      "name": "E-sellers Media with Text",
+      "settings": {
+        "full_width": false,
+        "spacing": "medium",
+        "background": "#ffffff",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "es_images_and_text_scrolling_nx4PX8": {
+      "type": "es-images-and-text-scrolling",
+      "blocks": {
+        "item_jCBkWd": {
+          "type": "item",
+          "settings": {
+            "title": "01. Pure Craftsmanship",
+            "content": "<p>Carefully engineered from raw elements into precision goods made to elevate everyday rituals.</p>"
+          }
+        },
+        "item_YWqway": {
+          "type": "item",
+          "settings": {
+            "title": "02. Tested for Longevity",
+            "content": "<p>Undergoes rigorous stress testing to meet the uncompromising standards of our community.</p>"
+          }
+        },
+        "item_chjqEN": {
+          "type": "item",
+          "settings": {
+            "title": "03. Direct to Your Door",
+            "content": "<p>Packaged in biodegradable protective casing and delivered seamlessly with express worldwide transit.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "item_jCBkWd",
+        "item_YWqway",
+        "item_chjqEN"
+      ],
+      "name": "E-sellers Story Scrolling",
+      "settings": {
+        "full_width": false,
+        "image_position": "end",
+        "show_counter": true,
+        "stack_on_mobile": false,
+        "background": "#ffffff",
+        "background_gradient": "",
+        "text_color": "#121212",
+        "heading_color": "#0f172a",
+        "heading_gradient": "",
+        "padding_top": 60,
+        "padding_bottom": 60
       }
     }
   },
   "order": [
-    "collection_list"
+    "collection_list",
+    "es2_featured_product_TX7JT6",
+    "es_account_banner_zezAan",
+    "es_apps_xEY46P",
+    "es_blog_posts_mri4GW",
+    "es_collection_list_8Wdiz9",
+    "es_contact_xKKFKp",
+    "es_custom_html_d84WVV",
+    "es_faq_jTRH7X",
+    "es_blog_posts_g6ANnc",
+    "es_image_link_blocks_gxLUMt",
+    "es_media_with_text_tcEbVA",
+    "es_images_and_text_scrolling_nx4PX8"
   ]
 }

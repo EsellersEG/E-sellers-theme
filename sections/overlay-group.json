@@ -13,6 +13,7 @@
   "sections": {
     "cart_drawer": {
       "type": "cart-drawer",
+      "disabled": true,
       "settings": {
         "free_shipping_threshold": 100,
         "show_cart_note": true
