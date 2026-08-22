@@ -11,7 +11,15 @@
   "name": "Overlay group",
   "type": "custom.overlay",
   "sections": {
+    "cart_drawer": {
+      "type": "cart-drawer",
+      "settings": {
+        "free_shipping_threshold": 100,
+        "show_cart_note": true
+      }
+    }
   },
   "order": [
+    "cart_drawer"
   ]
 }

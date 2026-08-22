@@ -4,33 +4,42 @@
 
 {%- style -%}
   #shopify-section-{{ section.id }} {
-    background-color: {{ section.settings.bg_color }};
-    border-bottom: 1px solid {{ section.settings.border_color }};
-    padding-top: {{ section.settings.padding_top }}px;
-    padding-bottom: {{ section.settings.padding_bottom }}px;
+    background-color: {{ section.settings.bg_color | default: '#ffffff' }};
+    border-bottom: 1px solid {{ section.settings.border_color | default: '#e2e8f0' }};
+    padding-top: {{ section.settings.padding_top | default: 20 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | default: 20 }}px;
     position: sticky;
     top: 0;
     z-index: 100;
+    transition: box-shadow 0.2s ease;
   }
 
   .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 24px;
   }
 
   .header__logo {
     display: flex;
     align-items: center;
     text-decoration: none;
-    color: {{ section.settings.text_color }};
+    color: {{ section.settings.text_color | default: '#121212' }};
     font-size: 1.5rem;
     font-weight: 700;
+    letter-spacing: -0.02em;
   }
 
   .header__logo-img {
-    max-width: {{ section.settings.logo_width }}px;
+    max-width: {{ section.settings.logo_width | default: 120 }}px;
     height: auto;
+    display: block;
+  }
+
+  .header__nav {
+    display: flex;
+    align-items: center;
   }
 
   .header__menu {
@@ -43,10 +52,10 @@
 
   .header__menu-link {
     text-decoration: none;
-    color: {{ section.settings.text_color }};
-    font-size: 1rem;
-    font-weight: 500;
-    transition: opacity 0.2s ease;
+    color: {{ section.settings.text_color | default: '#121212' }};
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: color 0.2s ease, opacity 0.2s ease;
   }
 
   .header__menu-link:hover {
@@ -60,11 +69,12 @@
   }
 
   .header__icon {
-    color: {{ section.settings.text_color }};
+    color: {{ section.settings.text_color | default: '#121212' }};
     text-decoration: none;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
+    position: relative;
     transition: opacity 0.2s ease;
   }
 
@@ -73,9 +83,27 @@
   }
 
   .header__icon svg {
-    width: 24px;
-    height: 24px;
-    fill: currentColor;
+    width: 22px;
+    height: 22px;
+  }
+
+  .cart-count-bubble {
+    position: absolute;
+    top: -6px;
+    right: -10px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    border-radius: 999px;
+    background-color: #0f172a;
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    line-height: 18px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .header__menu-mobile-toggle {
@@ -83,18 +111,19 @@
     background: none;
     border: none;
     cursor: pointer;
-    color: {{ section.settings.text_color }};
+    color: {{ section.settings.text_color | default: '#121212' }};
+    padding: 4px;
   }
 
   @media screen and (max-width: 989px) {
     .header__menu {
-      display: none; /* Hide desktop menu on mobile */
+      display: none;
     }
 
     .header__menu-mobile-toggle {
-      display: block; /* Show hamburger on mobile */
+      display: inline-flex;
     }
-    
+
     .header__logo {
       flex: 1;
       justify-content: center;
@@ -104,15 +133,16 @@
 
 <header class="page-width">
   <div class="header">
-    
-    <!-- Mobile Hamburger Menu -->
+    <!-- Mobile Hamburger Toggle -->
     <button class="header__menu-mobile-toggle" aria-label="Open menu">
-      <svg viewBox="0 0 24 24" width="24" height="24">
-        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" fill="currentColor"/>
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
       </svg>
     </button>
 
-    <!-- Logo -->
+    <!-- Brand Logo -->
     <a href="{{ routes.root_url }}" class="header__logo">
       {%- if section.settings.logo != blank -%}
         <img
@@ -120,7 +150,7 @@
           alt="{{ shop.name | escape }}"
           class="header__logo-img"
           loading="eager"
-          width="{{ section.settings.logo_width }}"
+          width="{{ section.settings.logo_width | default: 120 }}"
           height="{{ section.settings.logo.height }}"
         >
       {%- else -%}
@@ -128,14 +158,14 @@
       {%- endif -%}
     </a>
 
-    <!-- Desktop Navigation -->
+    <!-- Desktop Navigation Menu -->
     {%- if section.settings.menu != blank -%}
-      <nav class="header__nav">
-        <ul class="header__menu">
+      <nav class="header__nav" aria-label="Primary Navigation">
+        <ul class="header__menu" role="list">
           {%- for link in section.settings.menu.links -%}
             <li>
               <a href="{{ link.url }}" class="header__menu-link">
-                {{ link.title }}
+                {{ link.title | escape }}
               </a>
             </li>
           {%- endfor -%}
@@ -143,29 +173,28 @@
       </nav>
     {%- endif -%}
 
-    <!-- Icons (Search, Account, Cart) -->
+    <!-- Action Icons (Search, Account, Cart) -->
     <div class="header__icons">
       <a href="{{ routes.search_url }}" class="header__icon" aria-label="Search">
-        <svg viewBox="0 0 24 24" width="24" height="24">
-          <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/>
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
       </a>
 
       {%- if shop.customer_accounts_enabled -%}
         <a href="{{ routes.account_url }}" class="header__icon" aria-label="Account">
-          <svg viewBox="0 0 24 24" width="24" height="24">
-            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="currentColor"/>
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
           </svg>
         </a>
       {%- endif -%}
 
       <a href="{{ routes.cart_url }}" class="header__icon" id="cart-icon-bubble" aria-label="Cart">
-        <svg viewBox="0 0 24 24" width="24" height="24">
-          <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" fill="currentColor"/>
-        </svg>
+        {% render 'cart-icon-bubble' %}
       </a>
     </div>
-
   </div>
 </header>
 

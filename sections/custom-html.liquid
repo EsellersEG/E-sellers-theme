@@ -1,0 +1,30 @@
+{%- comment -%}
+  Custom HTML Section Alias
+{%- endcomment -%}
+
+{%- if section.settings.html != blank -%}
+  <div class="custom-html-section">
+    {{ section.settings.html }}
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Custom HTML",
+  "tag": "section",
+  "class": "shopify-section--custom-html",
+  "settings": [
+    {
+      "type": "html",
+      "id": "html",
+      "label": "HTML",
+      "default": "<p style=\"text-align: center\">Write or copy/paste HTML code</p>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom HTML"
+    }
+  ]
+}
+{% endschema %}

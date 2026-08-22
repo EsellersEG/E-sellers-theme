@@ -32,8 +32,7 @@
           "type": "newsletter",
           "settings": {
             "heading": "Stay in the loop",
-            "subtext": "Subscribe to receive special offers, free giveaways, and once-in-a-lifetime deals.",
-            "button_label": "Subscribe"
+            "subtext": "Subscribe to receive special offers, free giveaways, and once-in-a-lifetime deals."
           }
         }
       },
@@ -48,12 +47,6 @@
         "heading_color": "#ffffff",
         "hover_color": "#ffffff",
         "border_color": "#27272a",
-        "btn_bg_color": "#ffffff",
-        "btn_text_color": "#121212",
-        "show_payment_icons": true,
-        "show_social": true,
-        "enable_country_selector": true,
-        "enable_language_selector": true,
         "padding_top": 64,
         "padding_bottom": 40
       }

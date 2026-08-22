@@ -1,0 +1,315 @@
+{%- comment -%}
+  Main Collection Product Grid Section - E-sellers Professional (v4.9.0)
+{%- endcomment -%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top | default: 36 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | default: 56 }}px;
+    background-color: {{ section.settings.background | default: '#ffffff' }};
+  }
+
+  .es-collection-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* Vertical Filter Layout */
+  .es-collection-container--vertical {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 36px;
+    align-items: start;
+  }
+
+  @media screen and (max-width: 989px) {
+    .es-collection-container--vertical {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+  }
+
+  /* Toolbar */
+  .es-collection-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 18px;
+    background: #f8fafc;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .es-collection-count {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #475569;
+    margin: 0;
+  }
+
+  .es-collection-sort {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .es-collection-sort__label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #334155;
+  }
+
+  .es-collection-sort__select {
+    padding: 7px 12px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    font-size: 0.875rem;
+    color: #0f172a;
+    outline: none;
+    cursor: pointer;
+  }
+
+  /* Product Grid */
+  .es-product-grid {
+    display: grid;
+    grid-template-columns: repeat({{ section.settings.columns_desktop | default: 4 }}, minmax(0, 1fr));
+    gap: 20px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  @media screen and (max-width: 1024px) {
+    .es-product-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .es-product-grid {
+      grid-template-columns: repeat({{ section.settings.columns_mobile | default: 2 }}, minmax(0, 1fr));
+      gap: 12px;
+    }
+  }
+
+  .es-collection-empty {
+    text-align: center;
+    padding: 60px 20px;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+  }
+
+  .es-collection-empty__heading {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    color: #0f172a;
+  }
+{%- endstyle -%}
+
+<div class="page-width" id="ProductGridContainer">
+  {%- paginate collection.products by section.settings.products_per_page -%}
+    
+    <div class="es-collection-container {% if section.settings.filter_type == 'vertical' %}es-collection-container--vertical{% endif %}">
+      
+      <!-- Filters Sidebar (if vertical) -->
+      {%- if section.settings.enable_filtering and section.settings.filter_type == 'vertical' -%}
+        <aside class="es-collection-sidebar" id="main-collection-filters">
+          {% render 'facet-filters', results: collection, enable_filtering: true, enable_sorting: false %}
+        </aside>
+      {%- endif -%}
+
+      <!-- Main Product Area -->
+      <div class="es-collection-main">
+        <!-- Toolbar -->
+        <div class="es-collection-toolbar">
+          <p class="es-collection-count">
+            {{ 'templates.search.results_with_count' | t: count: collection.products_count | default: collection.products_count | append: ' products' }}
+          </p>
+
+          {%- if section.settings.enable_sorting -%}
+            <div class="es-collection-sort">
+              <label class="es-collection-sort__label" for="SortBy">
+                {{ 'products.facets.sort_by_label' | t | default: 'Sort by:' }}
+              </label>
+              {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+              <select
+                name="sort_by"
+                id="SortBy"
+                class="es-collection-sort__select"
+                onchange="window.location.search = '?sort_by=' + this.value;"
+              >
+                {%- for option in collection.sort_options -%}
+                  <option value="{{ option.value }}" {% if option.value == sort_by %}selected="selected"{% endif %}>
+                    {{ option.name }}
+                  </option>
+                {%- endfor -%}
+              </select>
+            </div>
+          {%- endif -%}
+        </div>
+
+        {%- if collection.products.size == 0 -%}
+          <div class="es-collection-empty">
+            <h2 class="es-collection-empty__heading">
+              {{ 'sections.collection_template.empty' | t | default: 'No products found' }}
+            </h2>
+            <p style="color: #64748b; margin: 0 0 20px 0;">
+              Try clearing some filters or browse our full catalog.
+            </p>
+            <a href="{{ routes.all_products_collection_url }}" style="display: inline-block; padding: 10px 22px; background: #0f172a; color: #ffffff; border-radius: 6px; font-weight: 600; text-decoration: none;">
+              {{ 'general.continue_shopping' | t | default: 'Browse Catalog' }}
+            </a>
+          </div>
+        {%- else -%}
+          <ul class="es-product-grid" id="product-grid" data-id="{{ section.id }}">
+            {%- for product in collection.products -%}
+              <li class="es-product-grid__item">
+                {% render 'card-product',
+                  card_product: product,
+                  show_vendor: section.settings.show_vendor,
+                  show_rating: section.settings.show_rating,
+                  show_quick_add: section.settings.quick_add,
+                  section_id: section.id
+                %}
+              </li>
+            {%- endfor -%}
+          </ul>
+
+          {%- if paginate.pages > 1 -%}
+            <div style="margin-top: 40px; display: flex; justify-content: center;">
+              {% render 'pagination', paginate: paginate %}
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+
+    </div>
+
+  {%- endpaginate -%}
+</div>
+
+{% schema %}
+{
+  "name": "Product grid",
+  "tag": "section",
+  "class": "shopify-section--main-collection-grid",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 16,
+      "label": "Products per page"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4,
+      "label": "Columns on desktop"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "default": "2",
+      "label": "Columns on mobile",
+      "options": [
+        { "value": "1", "label": "1 column" },
+        { "value": "2", "label": "2 columns" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "filter_type",
+      "label": "Filter layout",
+      "options": [
+        { "value": "horizontal", "label": "Horizontal toolbar" },
+        { "value": "vertical", "label": "Vertical sidebar" }
+      ],
+      "default": "horizontal"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "default": true,
+      "label": "Enable filtering"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "default": true,
+      "label": "Enable sorting dropdown"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "default": true,
+      "label": "Show secondary image on hover"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "Show product vendor"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "default": false,
+      "label": "Show product rating"
+    },
+    {
+      "type": "select",
+      "id": "quick_add",
+      "default": "standard",
+      "label": "Quick add button style",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "standard", "label": "Standard" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colors & Spacing"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 56
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,38 @@
+{%- comment -%}
+  Collection Banner Section Alias
+{%- endcomment -%}
+
+{% render 'horizontal-product', product: section.settings.featured_product, size: 'sm' %}
+
+{% schema %}
+{
+  "name": "Collection banner",
+  "tag": "section",
+  "class": "shopify-section--collection-banner",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_collection_title",
+      "label": "Show collection title",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_description",
+      "label": "Show collection description",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_image",
+      "label": "Show collection image",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection banner"
+    }
+  ]
+}
+{% endschema %}

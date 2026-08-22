@@ -107,15 +107,36 @@ class CartDrawer extends HTMLElement {
 
   async renderDrawer() {
     try {
-      const response = await fetch(`${window.Shopify?.routes?.root || '/'}?section_id=cart-drawer`);
-      const html = await response.text();
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, 'text/html');
-      const newDrawerInner = doc.querySelector('.cart-drawer__inner');
-      
-      if (newDrawerInner && this.inner) {
-        this.inner.innerHTML = newDrawerInner.innerHTML;
-        this.bindEvents();
+      const response = await fetch(`${window.Shopify?.routes?.root || '/'}?sections=cart-drawer,header`);
+      const data = await response.json().catch(() => null);
+
+      if (data && data['cart-drawer']) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(data['cart-drawer'], 'text/html');
+        const newDrawerInner = doc.querySelector('.cart-drawer__inner');
+        if (newDrawerInner && this.inner) {
+          this.inner.innerHTML = newDrawerInner.innerHTML;
+          this.bindEvents();
+        }
+
+        if (data['header']) {
+          const headerDoc = parser.parseFromString(data['header'], 'text/html');
+          const newBubble = headerDoc.querySelector('#cart-icon-bubble');
+          const currentBubble = document.querySelector('#cart-icon-bubble');
+          if (newBubble && currentBubble) {
+            currentBubble.innerHTML = newBubble.innerHTML;
+          }
+        }
+      } else {
+        const fallbackRes = await fetch(`${window.Shopify?.routes?.root || '/'}?section_id=cart-drawer`);
+        const html = await fallbackRes.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const newDrawerInner = doc.querySelector('.cart-drawer__inner');
+        if (newDrawerInner && this.inner) {
+          this.inner.innerHTML = newDrawerInner.innerHTML;
+          this.bindEvents();
+        }
       }
     } catch (error) {
       console.error('Failed to re-render cart drawer:', error);

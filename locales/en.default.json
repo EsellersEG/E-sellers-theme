@@ -28,6 +28,12 @@
       "share_url": "Link",
       "success_message": "Link copied to clipboard"
     },
+    "cart": {
+      "view": {
+        "one": "View cart ({{ count }})",
+        "other": "View cart ({{ count }})"
+      }
+    },
     "continue_shopping": "Continue shopping",
     "view_all": "View all",
     "search": {
@@ -147,6 +153,11 @@
     }
   },
   "sections": {
+    "cart": {
+      "new_estimated_total": "Estimated total",
+      "checkout": "Proceed to Checkout",
+      "remove_title": "Remove {{ title }}"
+    },
     "header": {
       "menu": "Main Navigation",
       "account": "Account",

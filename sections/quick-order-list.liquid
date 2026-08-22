@@ -1,0 +1,47 @@
+{%- comment -%}
+  Quick Order List Section Alias
+{%- endcomment -%}
+
+{% render 'quick-order-list',
+  product: product,
+  show_image: section.settings.show_image,
+  show_sku: section.settings.show_sku,
+  show_inventory: section.settings.show_inventory
+%}
+
+{% schema %}
+{
+  "name": "Quick order list",
+  "tag": "section",
+  "class": "shopify-section--quick-order-list",
+  "limit": 1,
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "label": "Show variant image",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sku",
+      "label": "Show SKU",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_inventory",
+      "label": "Show inventory status",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Quick order list"
+    }
+  ]
+}
+{% endschema %}
