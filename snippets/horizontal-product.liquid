@@ -1,37 +1,56 @@
-{%- comment -%}
-  Horizontal Product Snippet - E-sellers Professional (v4.9.0)
-  Accepts:
-  - product: {Object} Shopify Product Liquid object
-  - size: {String} 'sm' | 'md' (default: 'sm')
-  - output_link: {Boolean} (default: true)
-{%- endcomment -%}
-
-{%- if product != blank -%}
-  <div class="es-horizontal-product es-horizontal-product--{{ size | default: 'sm' }}" style="display: flex; align-items: center; gap: 12px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 10px 14px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12); color: #0f172a; text-decoration: none;">
-    <div class="es-horizontal-product__image-wrapper" style="width: 50px; height: 50px; border-radius: 8px; overflow: hidden; background: #f1f5f9; flex-shrink: 0;">
-      {%- if product.featured_image != blank -%}
-        {{ product.featured_image | image_url: width: 120 | image_tag:
+{% raw %}Liquid syntax error (snippets/horizontal-product line 13): Expected end_of_string but found comma in "{{ product.featured_image | image_url: width: 120 | image_tag:
           loading: 'lazy',
           alt: product.featured_image.alt | default: product.title | escape,
           style: 'width: 100%; height: 100%; object-fit: cover;'
-        }}
-      {%- endif -%}
-    </div>
+        }}"{% endraw %}{% comment %}
 
-    <div class="es-horizontal-product__details" style="flex: 1; min-width: 0;">
-      <h4 class="es-horizontal-product__title" style="font-size: 0.875rem; font-weight: 600; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: inherit;">
-        {{ product.title | escape }}
-      </h4>
-      <div class="es-horizontal-product__price" style="font-size: 0.8rem; font-weight: 700; color: #0f172a; margin-top: 2px;">
-        {{ product.price | money }}
-        {%- if product.compare_at_price > product.price -%}
-          <s style="color: #94a3b8; font-size: 0.75rem; margin-left: 4px;">{{ product.compare_at_price | money }}</s>
-        {%- endif -%}
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |
+    {%- comment -%}
+      Horizontal Product Snippet - E-sellers Professional (v4.9.0)
+      Accepts:
+      - product: {Object} Shopify Product Liquid object
+      - size: {String} 'sm' | 'md' (default: 'sm')
+      - output_link: {Boolean} (default: true)
+    {%- endcomment -%}
+
+    {%- if product != blank -%}
+      <div class="es-horizontal-product es-horizontal-product--{{ size | default: 'sm' }}" style="display: flex; align-items: center; gap: 12px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 10px 14px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12); color: #0f172a; text-decoration: none;">
+        <div class="es-horizontal-product__image-wrapper" style="width: 50px; height: 50px; border-radius: 8px; overflow: hidden; background: #f1f5f9; flex-shrink: 0;">
+          {%- if product.featured_image != blank -%}
+            {{ product.featured_image | image_url: width: 120 | image_tag:
+              loading: 'lazy',
+              alt: product.featured_image.alt | default: product.title | escape,
+              style: 'width: 100%; height: 100%; object-fit: cover;'
+            }}
+          {%- endif -%}
+        </div>
+
+        <div class="es-horizontal-product__details" style="flex: 1; min-width: 0;">
+          <h4 class="es-horizontal-product__title" style="font-size: 0.875rem; font-weight: 600; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: inherit;">
+            {{ product.title | escape }}
+          </h4>
+          <div class="es-horizontal-product__price" style="font-size: 0.8rem; font-weight: 700; color: #0f172a; margin-top: 2px;">
+            {{ product.price | money }}
+            {%- if product.compare_at_price > product.price -%}
+              <s style="color: #94a3b8; font-size: 0.75rem; margin-left: 4px;">{{ product.compare_at_price | money }}</s>
+            {%- endif -%}
+          </div>
+        </div>
+
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: #64748b; flex-shrink: 0;">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
       </div>
-    </div>
-
-    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: #64748b; flex-shrink: 0;">
-      <polyline points="9 18 15 12 9 6"></polyline>
-    </svg>
-  </div>
-{%- endif -%}
+    {%- endif -%}
+  to: |-
+    {% raw %}Liquid syntax error (snippets/horizontal-product line 13): Expected end_of_string but found comma in "{{ product.featured_image | image_url: width: 120 | image_tag:
+              loading: 'lazy',
+              alt: product.featured_image.alt | default: product.title | escape,
+              style: 'width: 100%; height: 100%; object-fit: cover;'
+            }}"{% endraw %}
+  position: 0..366
+{% endcomment %}
