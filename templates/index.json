@@ -658,6 +658,50 @@
         "padding_top": 60,
         "padding_bottom": 60
       }
+    },
+    "es_buy_together_Y9FTPj": {
+      "type": "es-buy-together",
+      "blocks": {
+        "bundle_FNiNbR": {
+          "type": "bundle",
+          "settings": {
+            "show_bundle_title": true,
+            "bundle_title": "Full Size + Free Mini",
+            "product_1": "asset-pack-112838279170-example-product-2",
+            "product_2": "asset-pack-112838213634-example-product-4"
+          }
+        },
+        "bundle_x6844H": {
+          "type": "bundle",
+          "settings": {
+            "show_bundle_title": true,
+            "bundle_title": "Full Size + Free Mini",
+            "product_1": "asset-pack-112838279170-example-product-1",
+            "product_2": "asset-pack-112838279170-example-product-3"
+          }
+        }
+      },
+      "block_order": [
+        "bundle_FNiNbR",
+        "bundle_x6844H"
+      ],
+      "name": "Buy together",
+      "settings": {
+        "title": "The Perfect Pair ✨",
+        "subtitle": "Get the travel companion gift free when you buy the full size.",
+        "default_total_label": "Bundle Price:",
+        "default_button_label": "Claim My Free Gift",
+        "desktop_width_percent": 100,
+        "background_color": "#ffffff",
+        "product_card_bg": "#f8fafc",
+        "text_color": "#0f172a",
+        "savings_color": "#059669",
+        "button_bg": "#0f172a",
+        "button_text_color": "#ffffff",
+        "button_hover_bg": "#1e293b",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
     }
   },
   "order": [
@@ -675,6 +719,7 @@
     "es_blog_posts_g6ANnc",
     "es_image_link_blocks_gxLUMt",
     "es_media_with_text_tcEbVA",
-    "es_images_and_text_scrolling_nx4PX8"
+    "es_images_and_text_scrolling_nx4PX8",
+    "es_buy_together_Y9FTPj"
   ]
 }
