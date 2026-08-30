@@ -9,13 +9,77 @@
  */
 {
   "sections": {
+    "slideshow_WimqBh": {
+      "type": "slideshow",
+      "name": "Slideshow",
+      "settings": {}
+    },
+    "es_slideshow_pFKCrk": {
+      "type": "es-slideshow",
+      "blocks": {
+        "image_eCH7bK": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/115799628e9e5272702016488fe6ac0e.png",
+            "mobile_image": "shopify://shop_images/cd6fcef978966091460327181eff5c50.png",
+            "content_max_width": 780,
+            "desktop_text_position": "pos-middle-center",
+            "mobile_text_position": "pos-middle-center",
+            "subheading": "New Season Arrival",
+            "title": "Modern Luxury & Innovation",
+            "heading_tag": "h0",
+            "button_text": "Explore Collection",
+            "button_link": "",
+            "text_color": "#ffffff",
+            "button_background": "#ffffff",
+            "button_text_color": "#0f172a",
+            "overlay_color": "#000000",
+            "overlay_opacity": 30
+          }
+        },
+        "image_T4YtP7": {
+          "type": "image",
+          "disabled": true,
+          "settings": {
+            "content_max_width": 780,
+            "desktop_text_position": "pos-middle-center",
+            "mobile_text_position": "pos-middle-center",
+            "subheading": "Signature Craftsmanship",
+            "title": "Engineered for Everyday Excellence",
+            "heading_tag": "h0",
+            "button_text": "Shop Now",
+            "button_link": "",
+            "text_color": "#ffffff",
+            "button_background": "#ffffff",
+            "button_text_color": "#0f172a",
+            "overlay_color": "#000000",
+            "overlay_opacity": 30
+          }
+        }
+      },
+      "block_order": [
+        "image_eCH7bK",
+        "image_T4YtP7"
+      ],
+      "name": "Slideshow",
+      "settings": {
+        "full_width": true,
+        "allow_transparent_header": true,
+        "image_size": "auto",
+        "controls_type": "dots",
+        "autoplay": true,
+        "cycle_speed": 6,
+        "background": "#0f172a",
+        "background_gradient": ""
+      }
+    },
     "collection_list": {
       "type": "es-collection-list",
       "blocks": {
         "collection_BF4DBY": {
           "type": "collection",
           "settings": {
-            "collection": "",
+            "collection": "automated-collection",
             "subheading": "",
             "title": "",
             "url": "",
@@ -29,7 +93,7 @@
         "collection_7yDgVG": {
           "type": "collection",
           "settings": {
-            "collection": "",
+            "collection": "automated-collection",
             "subheading": "",
             "title": "",
             "url": "",
@@ -43,7 +107,7 @@
         "collection_RLmPRT": {
           "type": "collection",
           "settings": {
-            "collection": "",
+            "collection": "asset-pack-112838213634-example-products",
             "subheading": "",
             "title": "",
             "url": "",
@@ -137,7 +201,7 @@
       "name": "E-sellers 2",
       "settings": {
         "full_width": false,
-        "product": "",
+        "product": "gift-card",
         "desktop_media_width": 50,
         "background": "",
         "background_gradient": "",
@@ -597,6 +661,8 @@
     }
   },
   "order": [
+    "slideshow_WimqBh",
+    "es_slideshow_pFKCrk",
     "collection_list",
     "es2_featured_product_TX7JT6",
     "es_account_banner_zezAan",
