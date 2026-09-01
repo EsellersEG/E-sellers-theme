@@ -372,3 +372,18 @@ img, svg, video {
 .marquee-track:hover {
   animation-play-state: paused;
 }
+
+/* --------------------------------------------------------------------------
+   10. PRODUCT CARD TITLE (2-ROW CLAMP & EQUAL 2-ROW HEIGHT)
+   -------------------------------------------------------------------------- */
+.card-product__title,
+.card-product__title a {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+  line-height: 1.3;
+  min-height: calc(1.3em * 2);
+}
