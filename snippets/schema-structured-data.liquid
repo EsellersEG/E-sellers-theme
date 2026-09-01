@@ -19,6 +19,7 @@
 }
 </script>
 
+{%- assign default_search_url = shop.url | append: routes.search_url | append: '?q={search_term_string}' -%}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -26,7 +27,7 @@
   "name": {{ shop.name | json }},
   "potentialAction": {
     "@type": "SearchAction",
-    "target": {{ potential_action_target | default: shop.url | append: routes.search_url | append: "?q={search_term_string}" | json }},
+    "target": {{ potential_action_target | default: default_search_url | json }},
     "query-input": "required name=search_term_string"
   },
   "url": {{ shop.url | json }}

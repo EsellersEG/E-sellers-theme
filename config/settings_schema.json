@@ -13,16 +13,22 @@
       {
         "type": "color_scheme_group",
         "id": "color_schemes",
-        "name": "Color schemes",
+        "label": "Color schemes",
         "definition": [
           {
-            "header": "Scheme"
+            "type": "header",
+            "content": "Scheme"
           },
           {
             "type": "color",
             "id": "background",
             "label": "Background",
             "default": "#FFFFFF"
+          },
+          {
+            "type": "color_background",
+            "id": "background_gradient",
+            "label": "Background gradient"
           },
           {
             "type": "color",
@@ -54,7 +60,22 @@
             "label": "Shadow",
             "default": "#121212"
           }
-        ]
+        ],
+        "role": {
+          "text": "text",
+          "background": {
+            "solid": "background",
+            "gradient": "background_gradient"
+          },
+          "links": "text",
+          "icons": "text",
+          "primary_button": "button",
+          "on_primary_button": "button_label",
+          "primary_button_border": "button",
+          "secondary_button": "background",
+          "on_secondary_button": "text",
+          "secondary_button_border": "outline_button"
+        }
       }
     ]
   },

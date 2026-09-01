@@ -175,10 +175,12 @@
             {%- if block.settings.left_type == 'image' -%}
               <div class="es-hair-card__left-image">
                 {%- if block.settings.left_image != blank -%}
+                  {%- assign cat_logo_alt = block.settings.left_image.alt | default: 'Category logo' | escape -%}
+                  {%- capture cat_logo_style -%}max-height: {{ block.settings.image_height }}px;{%- endcapture -%}
                   {{ block.settings.left_image | image_url: width: 300 | image_tag:
                     loading: 'lazy',
-                    alt: block.settings.left_image.alt | default: 'Category logo' | escape,
-                    style: 'max-height: ' | append: block.settings.image_height | append: 'px;'
+                    alt: cat_logo_alt,
+                    style: cat_logo_style
                   }}
                 {%- else -%}
                   <span style="font-size: 0.85rem; color: #94a3b8; font-weight: 600;">Logo</span>

@@ -191,10 +191,11 @@
 
           {%- if row1_idx < total_blocks -%}
             {%- assign block1 = section.blocks[row1_idx] -%}
+            {%- assign b1_alt = block1.settings.image.alt | default: 'Icon' | escape -%}
             <a href="{{ block1.settings.link | default: '#' }}" class="es-ci-card" {{ block1.shopify_attributes }}>
               <div class="es-ci-card__media">
                 {%- if block1.settings.image != blank -%}
-                  {{ block1.settings.image | image_url: width: 400 | image_tag: loading: 'lazy', class: 'es-ci-card__image', alt: block1.settings.image.alt | default: 'Icon' }}
+                  {{ block1.settings.image | image_url: width: 400 | image_tag: loading: 'lazy', class: 'es-ci-card__image', alt: b1_alt }}
                 {%- else -%}
                   <div class="es-ci-card__placeholder"><span>{{ block1.settings.title | default: 'Icon' }}</span></div>
                 {%- endif -%}
@@ -204,10 +205,11 @@
 
           {%- if row2_idx < total_blocks -%}
             {%- assign block2 = section.blocks[row2_idx] -%}
+            {%- assign b2_alt = block2.settings.image.alt | default: 'Icon' | escape -%}
             <a href="{{ block2.settings.link | default: '#' }}" class="es-ci-card" {{ block2.shopify_attributes }}>
               <div class="es-ci-card__media">
                 {%- if block2.settings.image != blank -%}
-                  {{ block2.settings.image | image_url: width: 400 | image_tag: loading: 'lazy', class: 'es-ci-card__image', alt: block2.settings.image.alt | default: 'Icon' }}
+                  {{ block2.settings.image | image_url: width: 400 | image_tag: loading: 'lazy', class: 'es-ci-card__image', alt: b2_alt }}
                 {%- else -%}
                   <div class="es-ci-card__placeholder"><span>{{ block2.settings.title | default: 'Icon' }}</span></div>
                 {%- endif -%}
@@ -222,7 +224,7 @@
 
 {% schema %}
 {
-  "name": "E-sellers Collection Icons",
+  "name": "ES Collection Icons",
   "class": "shopify-section--es-collection-icons",
   "tag": "section",
   "disabled_on": {

@@ -283,7 +283,7 @@
 
           {%- if form.posted_successfully? -%}
             <div class="es-login-success" role="status">
-              {{ 'customer.recover_password.success_message' | t | default: 'We\'ve sent you an email with a link to update your password.' }}
+              {{ 'customer.recover_password.success_message' | t | default: "We've sent you an email with a link to update your password." }}
             </div>
           {%- else -%}
             <div class="es-login-field">

@@ -1,0 +1,162 @@
+{%- comment -%}
+  Main Collection Section - E-sellers Professional (v4.9.0)
+{%- endcomment -%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    background-color: {{ section.settings.bg_color | default: '#ffffff' }};
+    padding-top: {{ section.settings.padding_top | default: 40 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | default: 60 }}px;
+  }
+
+  .main-collection__header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  .main-collection__title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: {{ section.settings.heading_color | default: '#121212' }};
+    margin: 0 0 12px;
+  }
+
+  .main-collection__description {
+    color: {{ section.settings.text_color | default: '#64748b' }};
+    font-size: 1.1rem;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .main-collection__grid {
+    display: grid;
+    grid-template-columns: repeat({{ section.settings.columns_desktop | default: 4 }}, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .main-collection__grid {
+      grid-template-columns: repeat({{ section.settings.columns_mobile | default: 2 }}, minmax(0, 1fr));
+      gap: 16px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="main-collection page-width">
+  <header class="main-collection__header">
+    <h1 class="main-collection__title">{{ collection.title }}</h1>
+    {%- if section.settings.show_description and collection.description != blank -%}
+      <div class="main-collection__description rte">
+        {{ collection.description }}
+      </div>
+    {%- endif -%}
+  </header>
+
+  {%- paginate collection.products by section.settings.products_per_page -%}
+    <div class="main-collection__grid">
+      {%- for product in collection.products -%}
+        {% render 'card-product', card_product: product %}
+      {%- else -%}
+        <p style="grid-column: 1 / -1; text-align: center; color: #64748b; padding: 40px 0;">No products found in this collection.</p>
+      {%- endfor -%}
+    </div>
+
+    {%- if paginate.pages > 1 -%}
+      {% render 'pagination', paginate: paginate %}
+    {%- endif -%}
+  {%- endpaginate -%}
+</div>
+
+{% schema %}
+{
+  "name": "Main collection",
+  "tag": "section",
+  "class": "section--main-collection",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 16,
+      "label": "Products per page"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4,
+      "label": "Columns on desktop"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "options": [
+        { "value": "1", "label": "1 column" },
+        { "value": "2", "label": "2 columns" }
+      ],
+      "default": "2",
+      "label": "Columns on mobile"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "default": true,
+      "label": "Show collection description"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "default": true,
+      "label": "Enable filtering"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "default": true,
+      "label": "Enable sorting"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#121212"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 60
+    }
+  ]
+}
+{% endschema %}

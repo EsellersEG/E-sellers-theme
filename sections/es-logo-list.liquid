@@ -121,11 +121,14 @@
         {%- endif -%}
 
           {%- if block.settings.logo != blank -%}
+            {%- assign logo_alt = block.settings.logo.alt | default: 'Brand logo' | escape -%}
+            {%- assign logo_max_width = block.settings.logo_width | default: 120 -%}
+            {%- capture logo_custom_style -%}max-width: {{ logo_max_width }}px;{%- endcapture -%}
             {{ block.settings.logo | image_url: width: 600 | image_tag:
               loading: 'lazy',
               class: 'es-logo-card__image',
-              alt: block.settings.logo.alt | default: 'Brand logo' | escape,
-              style: 'max-width: ' | append: block.settings.logo_width | default: 120 | append: 'px;'
+              alt: logo_alt,
+              style: logo_custom_style
             }}
           {%- else -%}
             <div class="es-logo-card__placeholder">
