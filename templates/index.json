@@ -14,6 +14,43 @@
       "name": "Slideshow",
       "settings": {}
     },
+    "es_bib_personalizer_mR6QNx": {
+      "type": "es-bib-personalizer",
+      "name": "Baby bib personalizer",
+      "settings": {
+        "product": "asset-pack-112838279170-example-product-1",
+        "eyebrow": "Custom Embroidery Studio",
+        "title": "Design Your Personalized Baby Bib",
+        "subtitle": "Choose a gentle organic fabric, customize with baby's name or initials, and watch your embroidered heirloom come to life in real-time.",
+        "header_alignment": "center",
+        "step_1_title": "Choose Bib Color",
+        "step_2_title": "Enter Name or Initials",
+        "step_3_title": "Select Embroidery Font",
+        "step_4_title": "Select Thread Color",
+        "default_name": "Oliver",
+        "max_characters": 14,
+        "input_placeholder": "e.g. Oliver, Emma, Baby Noah",
+        "input_hint": "Double-check spelling before ordering",
+        "add_to_cart_text": "Add Custom Bib to Cart",
+        "preview_position": "right",
+        "max_width": 1320,
+        "card_radius": 20,
+        "padding_top": 60,
+        "padding_bottom": 60,
+        "section_background": "#fafafa",
+        "background_gradient": "",
+        "card_background": "#ffffff",
+        "border_color": "#e2e8f0",
+        "heading_color": "#0f172a",
+        "heading_gradient": "",
+        "text_color": "#1e293b",
+        "badge_background": "#fff1f2",
+        "badge_text_color": "#e11d48",
+        "button_background": "#0f172a",
+        "button_hover_background": "#334155",
+        "button_text_color": "#ffffff"
+      }
+    },
     "es_slideshow_pFKCrk": {
       "type": "es-slideshow",
       "blocks": {
@@ -706,6 +743,7 @@
   },
   "order": [
     "slideshow_WimqBh",
+    "es_bib_personalizer_mR6QNx",
     "es_slideshow_pFKCrk",
     "collection_list",
     "es2_featured_product_TX7JT6",
